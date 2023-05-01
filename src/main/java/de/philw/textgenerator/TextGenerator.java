@@ -1,12 +1,10 @@
 package de.philw.textgenerator;
 
-import de.philw.textgenerator.letters.Letters;
-import de.philw.textgenerator.letters.LettersBuilder;
-import de.philw.textgenerator.letters.TwoTimesTwoLetters;
+import de.philw.textgenerator.letters.*;
 import de.philw.textgenerator.utils.Direction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TextGenerator extends JavaPlugin {
@@ -25,12 +23,11 @@ public final class TextGenerator extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         Location start = new Location(Bukkit.getWorld("world"), -59, 73, 98);
 
-        Letters letters = new TwoTimesTwoLetters();
+        Letters letters = new ThreeTimesThreeLetters();
 
-        LettersBuilder.build(letters.getS("cobblestone", Direction.EAST), Direction.EAST, start);
+        LettersBuilder.build(letters.getT(Font.OAK, Direction.EAST), Direction.EAST, start);
     }
 
     @Override
@@ -44,5 +41,4 @@ public final class TextGenerator extends JavaPlugin {
         }
         return INSTANCE;
     }
-
 }
