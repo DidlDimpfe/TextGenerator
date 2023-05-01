@@ -1,0 +1,4 @@
+name: TextGenerator
+version: '${project.version}'
+main: de.philw.textgenerator.TextGenerator
+api-version: 1.19
