@@ -1,33 +1,24 @@
 package de.philw.textgenerator;
 
+import de.philw.textgenerator.command.TextGeneratorCommand;
 import de.philw.textgenerator.letters.*;
 import de.philw.textgenerator.utils.Direction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TextGenerator extends JavaPlugin {
 
-    /**
-     * Bukkit.getWorld("world").getBlockAt(-57, 66, 100).setType(Material.OAK_STAIRS);
-     * Block block = Bukkit.getWorld("world").getBlockAt(-57, 66, 100);
-     * Stairs directional = (Stairs) block.getBlockData();
-     * directional.setHalf(Bisected.Half.TOP);
-     * block.setBlockData(directional);
-     */
-
     private static TextGenerator INSTANCE;
-
-    public TextGenerator() {}
 
     @Override
     public void onEnable() {
-        Location start = new Location(Bukkit.getWorld("world"), -59, 73, 98);
-
-        Letters letters = new ThreeTimesThreeLetters();
-
-        LettersBuilder.build(letters.getT(Font.OAK, Direction.EAST), Direction.EAST, start);
+//        Location start = new Location(Bukkit.getWorld("world"), -59, 73, 98);
+//
+//        Letters letters = new ThreeByThreeLetters();
+//
+//        LettersBuilder.build(letters.getT(Font.OAK, Direction.EAST), Direction.EAST, start);
+        new TextGeneratorCommand();
     }
 
     @Override

@@ -56,6 +56,24 @@ public abstract class Letters {
 
     public abstract String[][] getZ(Font font, Direction rightDirection);
 
+    public abstract String[][] get1(Font font, Direction rightDirection);
+
+    public abstract String[][] get2(Font font, Direction rightDirection);
+
+    public abstract String[][] get3(Font font, Direction rightDirection);
+
+    public abstract String[][] get4(Font font, Direction rightDirection);
+
+    public abstract String[][] get5(Font font, Direction rightDirection);
+
+    public abstract String[][] get6(Font font, Direction rightDirection);
+
+    public abstract String[][] get7(Font font, Direction rightDirection);
+
+    public abstract String[][] get8(Font font, Direction rightDirection);
+
+    public abstract String[][] get9(Font font, Direction rightDirection);
+
     protected String getRightTopNothingStair(Font font, Direction rightDirection) {
         return "minecraft:" + font.toString().toLowerCase() + "_stairs[facing=" +
                 rightDirection.getOppositeDirection().toString().toLowerCase() + ",half=bottom,shape=straight,waterlogged=false]";
