@@ -1,11 +1,17 @@
 package de.philw.textgenerator;
 
 import de.philw.textgenerator.command.TextGeneratorCommand;
-import de.philw.textgenerator.letters.*;
+import de.philw.textgenerator.letters.big.LetterConverter;
 import de.philw.textgenerator.utils.Direction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public final class TextGenerator extends JavaPlugin {
 

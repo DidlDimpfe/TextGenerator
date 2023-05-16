@@ -1,4 +1,4 @@
-package de.philw.textgenerator.letters;
+package de.philw.textgenerator.letters.small;
 
 import de.philw.textgenerator.utils.Direction;
 import org.bukkit.Bukkit;

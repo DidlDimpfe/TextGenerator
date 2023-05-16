@@ -1,16 +1,18 @@
 package de.philw.textgenerator.command;
 
-import de.philw.textgenerator.letters.Font;
-import de.philw.textgenerator.letters.Letters;
-import de.philw.textgenerator.letters.LettersBuilder;
-import de.philw.textgenerator.letters.Size;
+import de.philw.textgenerator.letters.big.LetterConverter;
+import de.philw.textgenerator.letters.big.GenerateUtil;
+import de.philw.textgenerator.letters.small.Block;
 import de.philw.textgenerator.utils.Direction;
+import de.philw.textgenerator.utils.TextInstance;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,12 +25,7 @@ public class TextGeneratorCommand extends Command {
     // /textgenerator settings
     // /textgenerator setStart (<coordinates>)
 
-    private Location start;
-    private Direction direction;
-    private final Font font;
-    private final Size size;
-    private final int horizontalSpace;
-    private final int verticalSpace;
+    private final TextInstance textInstance;
     private final ArrayList<HashMap<Location, BlockData>> lastChanges;
 
 
@@ -36,10 +33,11 @@ public class TextGeneratorCommand extends Command {
         super("textgenerator", new String[]{"tg", "textgen", "tgen"}, "The command for the TextGenerator plugin",
                 "textgenerator.use");
         lastChanges = new ArrayList<>();
-        font = Font.QUARTZ;
-        size = Size.THREEBYTHREE;
-        horizontalSpace = 1;
-        verticalSpace = 1;
+        textInstance = TextInstance.getTextInstanceBuilder()
+                .withBlock(Block.QUARTZ)
+                .withFontSize(10)
+                .withFontName("SansSerif")
+                .withFontStyle(Font.BOLD).build();
     }
 
     @Override
@@ -53,10 +51,10 @@ public class TextGeneratorCommand extends Command {
         }
         if (args.length > 1 && args[0].equalsIgnoreCase("generate")) {
             StringBuilder builder = new StringBuilder();
-            for (int i = 1; i<args.length; i++) {
-                builder.append(args[i]).append(" ");
+            for (int index = 1; index < args.length; index++) {
+                builder.append(args[index]).append(" ");
             }
-            generate(player, builder.substring(0, builder.toString().length()-1).toLowerCase());
+            generate(player, builder.substring(0, builder.toString().length()-1));
         }
         if ((args.length == 1 || args.length == 4) && args[0].equalsIgnoreCase("setStart")) {
             if (args.length == 1) {
@@ -88,49 +86,34 @@ public class TextGeneratorCommand extends Command {
         player.sendMessage(ChatColor.GREEN + "/textgenerator undo");
     }
     private void generate(Player player, String toGenerate) {
-        if (start == null) {
+        if (textInstance.getStartLocation() == null) {
             player.sendMessage(ChatColor.RED + "Before you do this you have to set the start location with /textgenerator setStart (<coordinates>)");
             return;
         }
-        String sentencePattern = "[a-zA-Z_0-9 \\\\]+";
-        if (!toGenerate.matches(sentencePattern)) {
-            player.sendMessage(ChatColor.RED + "You only can use characters from a-z and numbers");
-            return;
-        }
-        Direction nowDirection = direction;
-        if (nowDirection == null) {
-            nowDirection = Direction.valueOf(player.getFacing().toString()).getRightDirection();
-        }
-        HashMap<Location, BlockData> oldBlocks = new HashMap<>();
-        String[] lines = toGenerate.split("\\\\n");
-        int toBottom = 0;
-        for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-            int toRight = 0;
-            int letterIndex = 0;
-            if (lineIndex != 0) toBottom += size.getNeededVerticalBlocks() + verticalSpace;
-            String line = lines[lineIndex];
-            String[] wordsInLine = line.split(" ");
-            for (int wordIndex = 0; wordIndex < wordsInLine.length; wordIndex++) {
-                String word = wordsInLine[wordIndex];
-                if (wordIndex != 0) toRight += horizontalSpace;
-                if (word.isEmpty()) continue;
-                for (Character letter: word.toCharArray()) {
-                    String[][] letterData = getLetterData(letter, nowDirection);
-                    if (letterIndex != 0) toRight += Objects.requireNonNull(letterData).length + horizontalSpace;
-                    Location letterStartLocation = editStartLocation(toRight, toBottom, nowDirection);
 
-                    LettersBuilder.build(Objects.requireNonNull(letterData), nowDirection, Objects.requireNonNull(letterStartLocation), oldBlocks);
-                    letterIndex++;
-                }
-            }
+        Direction nowDirection = textInstance.getDirection();
+        boolean deleteDirectionChange = false;
+        if (nowDirection == null) {
+            deleteDirectionChange = true;
+            textInstance.setDirection(Direction.valueOf(player.getFacing().toString()).getRightDirection());
         }
-        lastChanges.add(oldBlocks);
+
+        textInstance.setText(toGenerate);
+
+        BufferedImage textInPicture = LetterConverter.stringToBufferedImage(textInstance);
+
+        lastChanges.add(GenerateUtil.getAffectedBlocks(textInPicture, textInstance));
+
+        GenerateUtil.buildBlocks(textInPicture, textInstance);
+
+        if (deleteDirectionChange) textInstance.setDirection(null);
     }
 
     private void setStart(Player player) {
-        start = player.getLocation().getBlock().getLocation();
+        textInstance.setStartLocation(player.getLocation().getBlock().getLocation());
         player.sendMessage(ChatColor.GREEN + "StartLocation has been successfully set to " +
-                start.getX() + ", " + start.getY() + ", " + start.getZ());
+                textInstance.getStartLocation().getX() + ", " + textInstance.getStartLocation().getY() + ", " +
+                textInstance.getStartLocation().getZ());
     }
 
     private void setStart(Player player, String x, String y, String z) {
@@ -138,9 +121,10 @@ public class TextGeneratorCommand extends Command {
             player.sendMessage(ChatColor.RED + "The coordinates have to be integers.");
             return;
         }
-        start = new Location(player.getWorld(), Double.parseDouble(x), Double.parseDouble(y), Double.parseDouble(z));
+        textInstance.setStartLocation(new Location(player.getWorld(), Double.parseDouble(x), Double.parseDouble(y), Double.parseDouble(z)));
         player.sendMessage(ChatColor.GREEN + "StartLocation has been successfully set to " +
-                start.getX() + ", " + start.getY() + ", " + start.getZ());
+                textInstance.getStartLocation().getX() + ", " + textInstance.getStartLocation().getY() + ", " +
+                textInstance.getStartLocation().getZ());
     }
 
     private void setDirection(Player player, String direction) {
@@ -151,7 +135,7 @@ public class TextGeneratorCommand extends Command {
             return;
         }
 
-        this.direction = Direction.valueOf(direction.toUpperCase());
+        this.textInstance.setDirection(Direction.valueOf(direction.toUpperCase()));
         player.sendMessage(ChatColor.GREEN + "Successfully changed the direction to " + direction);
     }
 
@@ -177,91 +161,6 @@ public class TextGeneratorCommand extends Command {
         } catch(NumberFormatException e){
             return true;
         }
-    }
-
-    private Location editStartLocation(int toRight, int toBottom, Direction direction) {
-        if (direction == Direction.NORTH) return start.clone().subtract(0, toBottom, toRight);
-        if (direction == Direction.EAST) return start.clone().subtract(0, toBottom, 0).add(toRight, 0, 0);
-        if (direction == Direction.SOUTH) return start.clone().subtract(0, toBottom, 0).add(0, 0, toRight);
-        if (direction == Direction.WEST) return start.clone().subtract(toRight, toBottom, 0);
-        return null;
-    }
-
-    private String[][] getLetterData(Character character, Direction direction) {
-        Letters letters = size.getLetters();
-        switch (character) {
-            case 'a':
-                return letters.getA(font, direction);
-            case 'b':
-                return letters.getB(font, direction);
-            case 'c':
-                return letters.getC(font, direction);
-            case 'd':
-                return letters.getD(font, direction);
-            case 'e':
-                return letters.getE(font, direction);
-            case 'f':
-                return letters.getF(font, direction);
-            case 'g':
-                return letters.getG(font, direction);
-            case 'h':
-                return letters.getH(font, direction);
-            case 'i':
-                return letters.getI(font, direction);
-            case 'j':
-                return letters.getJ(font, direction);
-            case 'k':
-                return letters.getK(font, direction);
-            case 'l':
-                return letters.getL(font, direction);
-            case 'm':
-                return letters.getM(font, direction);
-            case 'n':
-                return letters.getN(font, direction);
-            case 'o':
-                return letters.getO(font, direction);
-            case 'p':
-                return letters.getP(font, direction);
-            case 'q':
-                return letters.getQ(font, direction);
-            case 'r':
-                return letters.getR(font, direction);
-            case 's':
-                return letters.getS(font, direction);
-            case 't':
-                return letters.getT(font, direction);
-            case 'u':
-                return letters.getU(font, direction);
-            case 'v':
-                return letters.getV(font, direction);
-            case 'w':
-                return letters.getW(font, direction);
-            case 'x':
-                return letters.getX(font, direction);
-            case 'y':
-                return letters.getY(font, direction);
-            case 'z':
-                return letters.getZ(font, direction);
-            case '1':
-                return letters.get1(font, direction);
-            case '2':
-                return letters.get2(font, direction);
-            case '3':
-                return letters.get3(font, direction);
-            case '4':
-                return letters.get4(font, direction);
-            case '5':
-                return letters.get5(font, direction);
-            case '6':
-                return letters.get6(font, direction);
-            case '7':
-                return letters.get7(font, direction);
-            case '8':
-                return letters.get8(font, direction);
-            case '9':
-                return letters.get9(font, direction);
-        }
-        return null;
     }
 
 }
