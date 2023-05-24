@@ -2,6 +2,7 @@ package de.philw.textgenerator;
 
 import de.philw.textgenerator.command.TextGeneratorCommand;
 import de.philw.textgenerator.letters.big.LetterConverter;
+import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.utils.Direction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,6 +20,8 @@ public final class TextGenerator extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        INSTANCE = this;
+        ConfigManager.setUpConfig();
 //        Location start = new Location(Bukkit.getWorld("world"), -59, 73, 98);
 //
 //        Letters letters = new ThreeByThreeLetters();
@@ -33,9 +36,6 @@ public final class TextGenerator extends JavaPlugin {
     }
 
     public static TextGenerator getInstance () {
-        if (INSTANCE == null) {
-            INSTANCE = new TextGenerator();
-        }
         return INSTANCE;
     }
 }

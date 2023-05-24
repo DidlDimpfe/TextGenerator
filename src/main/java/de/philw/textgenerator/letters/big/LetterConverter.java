@@ -19,8 +19,6 @@ public class LetterConverter {
 
         String[] lines = text.split("\\\\n");
 
-        if (!text.contains("\\\\n")) lines = new String[]{text};
-
         BufferedImage createGraphicsImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 
         Graphics2D graphicsTool = createGraphicsImage.createGraphics();

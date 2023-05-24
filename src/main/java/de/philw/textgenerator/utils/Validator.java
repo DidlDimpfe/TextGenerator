@@ -1,18 +1,16 @@
 package de.philw.textgenerator.utils;
 
-import de.philw.textgenerator.letters.small.Block;
+import de.philw.textgenerator.letters.Block;
 
 import java.awt.*;
 
 public class Validator {
 
     public static boolean isValidFont(String font) {
-        GraphicsEnvironment graphicsEnvironment;
-        graphicsEnvironment= GraphicsEnvironment.getLocalGraphicsEnvironment();
-        String []fonts=graphicsEnvironment.getAvailableFontFamilyNames();
-        for (int i = 0; i < fonts.length; i++) {
-            System.out.println(fonts[i]);
-            if(fonts[i].equals(font)){
+        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        String[] fonts = graphicsEnvironment.getAvailableFontFamilyNames();
+        for (String string: fonts) {
+            if (string.equals(font)) {
                 return true;
             }
         }
@@ -31,10 +29,7 @@ public class Validator {
     public static boolean isValidSize(String size) {
         if (!isInteger(size)) return false;
         int integer = Integer.parseInt(size);
-        if (integer > 5 && integer < 250) {
-            return true;
-        }
-        return false;
+        return integer > 5 && integer < 250;
     }
 
     public static boolean isInteger(String integer) {
@@ -44,6 +39,20 @@ public class Validator {
             return false;
         }
         return true;
+    }
+
+    public static boolean isValidFontStyle(String fontStyle) {
+        return fontStyle.equalsIgnoreCase("Bold") || fontStyle.equalsIgnoreCase("Italic")
+                || fontStyle.equalsIgnoreCase("BoldItalic") || fontStyle.equalsIgnoreCase("Plain");
+    }
+
+    public static boolean isValidBoolean(String bool) {
+        return bool.equalsIgnoreCase("true") || bool.equalsIgnoreCase("false");
+    }
+
+    public static boolean isValidSpaceBetweenEachLine(String spaceBetweenEachLine) {
+        if (!isInteger(spaceBetweenEachLine)) return false;
+        return Integer.parseInt(spaceBetweenEachLine) > 0;
     }
 
 }

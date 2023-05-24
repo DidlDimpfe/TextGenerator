@@ -1,6 +1,6 @@
 package de.philw.textgenerator.utils;
 
-import de.philw.textgenerator.letters.small.Block;
+import de.philw.textgenerator.letters.Block;
 import org.bukkit.Location;
 
 public class TextInstance {
@@ -13,6 +13,7 @@ public class TextInstance {
     private int fontSize;
     private String text;
     private boolean underline;
+    private int spaceBetweenEachLine;
 
     public Block getBlock() {
         return block;
@@ -44,6 +45,14 @@ public class TextInstance {
 
     public void setFontName(String fontName) {
         this.fontName = fontName;
+    }
+
+    public int getSpaceBetweenEachLine() {
+        return spaceBetweenEachLine;
+    }
+
+    public void setSpaceBetweenEachLine(int spaceBetweenEachLine) {
+        this.spaceBetweenEachLine = spaceBetweenEachLine;
     }
 
     public int getFontStyle() {
@@ -91,7 +100,8 @@ public class TextInstance {
         private int fontStyle;
         private int fontSize = 0;
         private String text;
-        private boolean underline = false;
+        private boolean underline;
+        private int spaceBetweenEachLine = 2;
 
         public TextInstanceBuilder withBlock(Block block) {
             this.block = block;
@@ -133,6 +143,11 @@ public class TextInstance {
             return this;
         }
 
+        public TextInstanceBuilder withSpaceBetweenEachLine(int spaceBetweenEachLine) {
+            this.spaceBetweenEachLine = spaceBetweenEachLine;
+            return this;
+        }
+
         public TextInstance build() {
             TextInstance textInstance = new TextInstance();
             textInstance.setBlock(block);
@@ -143,6 +158,7 @@ public class TextInstance {
             textInstance.setFontSize(fontSize);
             textInstance.setText(text);
             textInstance.setUnderline(underline);
+            textInstance.setSpaceBetweenEachLine(spaceBetweenEachLine);
             return textInstance;
         }
 

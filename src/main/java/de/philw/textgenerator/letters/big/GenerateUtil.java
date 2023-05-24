@@ -11,28 +11,36 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GenerateUtil {
 
-    public static void buildBlocks(BufferedImage textInPicture, TextInstance textInstance) {
+    private static TextInstance textInstance;
+
+    public static void setTextInstance(TextInstance textInstance) {
+        GenerateUtil.textInstance = textInstance;
+    }
+
+    public static void buildBlocks(BufferedImage textInPicture) {
         boolean[][] blocks = getBlocks(textInPicture);
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
                 if (blocks[heightIndex][widthIndex]) {
-                    textInstance.getStartLocation().getWorld().getBlockAt(editStartLocation(textInstance.getStartLocation(), widthIndex, heightIndex, textInstance.getDirection())).
+                    Objects.requireNonNull(
+                            textInstance.getStartLocation().getWorld()).getBlockAt(Objects.requireNonNull(editStartLocation(textInstance.getStartLocation(), widthIndex, heightIndex, textInstance.getDirection()))).
                             setBlockData(Bukkit.createBlockData(textInstance.getBlock().getNormalBlockData()));
                 }
             }
         }
     }
 
-    public static HashMap<Location, BlockData> getAffectedBlocks(BufferedImage textInPicture, TextInstance textInstance) {
+    public static HashMap<Location, BlockData> getAffectedBlocks(BufferedImage textInPicture) {
         HashMap<Location, BlockData> affectedBlocks = new HashMap<>();
         boolean[][] blocks = getBlocks(textInPicture);
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-                Block block = textInstance.getStartLocation().getWorld().getBlockAt(
-                        editStartLocation(textInstance.getStartLocation(), widthIndex, heightIndex, textInstance.getDirection()));
+                Block block = Objects.requireNonNull(textInstance.getStartLocation().getWorld()).getBlockAt(
+                        Objects.requireNonNull(editStartLocation(textInstance.getStartLocation(), widthIndex, heightIndex, textInstance.getDirection())));
                         affectedBlocks.put(block.getLocation(), block.getBlockData());
             }
         }
@@ -103,6 +111,27 @@ public class GenerateUtil {
                 start = false;
             }
         }
+        // Remove the spaces between each line
+        int spaceLineCount = 0;
+        for (int column = 0; column < blocks.length; column++) {
+            boolean reduce = true;
+            for (int row = 0; row < blocks[0].length; row++) {
+                if (blocks[column][row]) {
+                    reduce = false;
+                    spaceLineCount = 0;
+                    break;
+                }
+            }
+            if (!reduce) continue;
+            // to here the column is empty
+            if (toRemoveColumns.contains(column)) continue;
+            // to here the column is not already removed
+            spaceLineCount++;
+            if (spaceLineCount > textInstance.getSpaceBetweenEachLine()) {
+                toRemoveColumns.add(column);
+            }
+        }
+
         Collections.sort(toRemoveColumns);
         return toRemoveColumns;
     }

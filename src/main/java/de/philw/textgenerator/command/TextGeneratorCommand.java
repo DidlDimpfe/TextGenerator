@@ -2,7 +2,7 @@ package de.philw.textgenerator.command;
 
 import de.philw.textgenerator.letters.big.LetterConverter;
 import de.philw.textgenerator.letters.big.GenerateUtil;
-import de.philw.textgenerator.letters.small.Block;
+import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.utils.Direction;
 import de.philw.textgenerator.utils.TextInstance;
 import org.bukkit.ChatColor;
@@ -11,7 +11,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +33,13 @@ public class TextGeneratorCommand extends Command {
                 "textgenerator.use");
         lastChanges = new ArrayList<>();
         textInstance = TextInstance.getTextInstanceBuilder()
-                .withBlock(Block.QUARTZ)
-                .withFontSize(10)
-                .withFontName("SansSerif")
-                .withFontStyle(Font.BOLD).build();
+                .withBlock(ConfigManager.getBlock())
+                .withFontSize(ConfigManager.getFontSize())
+                .withFontName(ConfigManager.getFontName())
+                .withFontStyle(ConfigManager.getFontStyle())
+                .withUnderline(ConfigManager.isUnderline())
+                .withSpaceBetweenEachLine(ConfigManager.getSpaceBetweenEachLine())
+                .build();
     }
 
     @Override
@@ -100,11 +102,13 @@ public class TextGeneratorCommand extends Command {
 
         textInstance.setText(toGenerate);
 
+        GenerateUtil.setTextInstance(textInstance);
+
         BufferedImage textInPicture = LetterConverter.stringToBufferedImage(textInstance);
 
-        lastChanges.add(GenerateUtil.getAffectedBlocks(textInPicture, textInstance));
+        lastChanges.add(GenerateUtil.getAffectedBlocks(textInPicture));
 
-        GenerateUtil.buildBlocks(textInPicture, textInstance);
+        GenerateUtil.buildBlocks(textInPicture);
 
         if (deleteDirectionChange) textInstance.setDirection(null);
     }

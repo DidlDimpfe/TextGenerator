@@ -1,4 +1,4 @@
-package de.philw.textgenerator.letters.small;
+package de.philw.textgenerator.letters;
 
 public enum Block {
     COBBLESTONE("", true, "cobblestone"),
