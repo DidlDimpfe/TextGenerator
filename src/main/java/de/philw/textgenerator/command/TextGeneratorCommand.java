@@ -103,12 +103,11 @@ public class TextGeneratorCommand extends Command {
         textInstance.setText(toGenerate);
 
         GenerateUtil.setTextInstance(textInstance);
+        GenerateUtil.setBlocks(GenerateUtil.getBlocks(LetterConverter.stringToBufferedImages(textInstance)));
 
-        BufferedImage textInPicture = LetterConverter.stringToBufferedImage(textInstance);
+        lastChanges.add(GenerateUtil.getAffectedBlocks());
 
-        lastChanges.add(GenerateUtil.getAffectedBlocks(textInPicture));
-
-        GenerateUtil.buildBlocks(textInPicture);
+        GenerateUtil.buildBlocks();
 
         if (deleteDirectionChange) textInstance.setDirection(null);
     }

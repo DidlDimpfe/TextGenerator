@@ -27,7 +27,7 @@ public class ConfigManager {
     public static Block getBlock() {
         String block = config.getString("textSettings.block");
         if (!Validator.isValidBlock(Objects.requireNonNull(block))) {
-            System.err.println("'" + block + "' is not a valid block! The default block 'quartz' will be taken.");
+            printNotValidMessage(block, "Quartz", "block");
             return Block.QUARTZ;
         }
         return Block.valueOf(block.toUpperCase());
@@ -36,7 +36,7 @@ public class ConfigManager {
     public static String getFontName() {
         String fontName = config.getString("textSettings.fontName");
         if (!Validator.isValidFont(fontName)) {
-            System.err.println("'" + fontName + "' is not a valid font! The default font 'SansSerif' will be taken.");
+            printNotValidMessage(fontName, "SansSerif", "font name");
             return "SansSerif";
         }
         return fontName;
@@ -45,7 +45,7 @@ public class ConfigManager {
     public static int getFontSize() {
         String size = config.getString("textSettings.fontSize");
         if (!Validator.isValidSize(size)) {
-            System.err.println("'" + size + "' is not a valid size! The default size '15' will be taken.");
+            printNotValidMessage(size, "15", "font size");
             return 15;
 
         }
@@ -55,7 +55,8 @@ public class ConfigManager {
     public static int getFontStyle() {
         String fontStyle = config.getString("textSettings.fontStyle");
         if (!Validator.isValidFontStyle(Objects.requireNonNull(fontStyle))) {
-            System.err.println("'" + fontStyle + "' is not a valid font style! The default font style 'Bold' will be taken.");
+            printNotValidMessage(fontStyle, "Bold", "font style");
+            return 1;
         }
         if (fontStyle.equalsIgnoreCase("Bold")) return 1;
         else if (fontStyle.equalsIgnoreCase("Italic")) return 2;
@@ -66,7 +67,7 @@ public class ConfigManager {
     public static boolean isUnderline() {
         String bool = config.getString("textSettings.underline");
         if (!Validator.isValidBoolean(Objects.requireNonNull(bool))) {
-            System.err.println("'" + bool + "' is not a valid underline (either true or false)! The default underline 'false' will be taken.");
+            printNotValidMessage(bool, "false", "underline");
             return false;
         }
         return Boolean.parseBoolean(bool.toLowerCase());
@@ -75,10 +76,15 @@ public class ConfigManager {
     public static int getSpaceBetweenEachLine() {
         String spaceBetweenEachLine = config.getString("textSettings.spaceBetweenEachLine");
         if (!Validator.isValidSpaceBetweenEachLine(spaceBetweenEachLine)) {
-            System.err.println("'" + spaceBetweenEachLine + "' is not a valid spaceBetweenEachLine! The default spaceBetweenEachLine '2' will be taken.");
+            printNotValidMessage(spaceBetweenEachLine, "2", "spaceBetweenEachLine");
             return 2;
         }
         return Integer.parseInt(Objects.requireNonNull(spaceBetweenEachLine));
+    }
+
+    public static void printNotValidMessage(String notValidValue, String defaultValue, String dataType) {
+        System.err.println(TextGenerator.getMessageBeginning() + "The in your config assigned " + dataType + " '" + notValidValue + "' " +
+                "is not a valid " + dataType + "! The default " + dataType + " '" + defaultValue + "' will be taken.");
     }
 
     /**

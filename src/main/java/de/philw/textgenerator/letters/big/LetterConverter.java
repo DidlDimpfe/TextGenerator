@@ -5,12 +5,13 @@ import de.philw.textgenerator.utils.TextInstance;
 import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LetterConverter {
 
-    public static BufferedImage stringToBufferedImage(TextInstance textInstance) {
+    public static ArrayList<BufferedImage> stringToBufferedImages(TextInstance textInstance) {
         String text = textInstance.getText();
         boolean underline = textInstance.isUnderline();
         String fontName = textInstance.getFontName();
@@ -29,33 +30,26 @@ public class LetterConverter {
 
         graphicsTool.setFont(font);
         FontMetrics fontMetrics = graphicsTool.getFontMetrics();
-        String longestText = "";
-        for(String row: lines){
-            if(row.length() > longestText.length()){
-                longestText = row;
-            }
-        }
-
-        int width = fontMetrics.stringWidth(longestText);
-        int height = fontMetrics.getHeight()*lines.length;
         graphicsTool.dispose();
 
-        BufferedImage letters = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-        graphicsTool = letters.createGraphics();
-        graphicsTool.setColor(Color.WHITE);
-        graphicsTool.fillRect(0, 0, width, height);
-        graphicsTool.setFont(font);
-        fontMetrics = graphicsTool.getFontMetrics();
-        graphicsTool.setColor(Color.BLACK);
-        int y = fontMetrics.getAscent();
+        ArrayList<BufferedImage> linesAsBufferedImages = new ArrayList<>();
 
         for (String line: lines) {
-            graphicsTool.drawString(line, 0, y);
-            y += fontMetrics.getHeight();
+            int width = fontMetrics.stringWidth(line);
+            int height = fontMetrics.getHeight();
+            BufferedImage letters = new BufferedImage(fontMetrics.stringWidth(line), fontMetrics.getHeight(), BufferedImage.TYPE_INT_RGB);
+            graphicsTool = letters.createGraphics();
+            graphicsTool.setColor(Color.WHITE);
+            graphicsTool.fillRect(0, 0, width, height);
+            graphicsTool.setFont(font);
+            fontMetrics = graphicsTool.getFontMetrics();
+            graphicsTool.setColor(Color.BLACK);
+            graphicsTool.drawString(line, 0, fontMetrics.getAscent());
+            linesAsBufferedImages.add(letters);
         }
+
         graphicsTool.dispose();
-        return letters;
+        return linesAsBufferedImages;
     }
 
 

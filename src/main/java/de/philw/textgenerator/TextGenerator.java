@@ -38,4 +38,9 @@ public final class TextGenerator extends JavaPlugin {
     public static TextGenerator getInstance () {
         return INSTANCE;
     }
+
+    public static String getMessageBeginning() {
+        return "[TextGenerator] ";
+    }
+
 }
