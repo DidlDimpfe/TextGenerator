@@ -1,17 +1,18 @@
 package de.philw.textgenerator.command;
 
-import de.philw.textgenerator.letters.big.LetterConverter;
 import de.philw.textgenerator.letters.big.GenerateUtil;
+import de.philw.textgenerator.letters.big.LetterConverter;
 import de.philw.textgenerator.manager.ConfigManager;
+import de.philw.textgenerator.ui.SettingsUI;
 import de.philw.textgenerator.utils.Direction;
 import de.philw.textgenerator.utils.TextInstance;
+import de.philw.textgenerator.utils.Validator;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +72,9 @@ public class TextGeneratorCommand extends Command {
         if (args.length == 2 && args[0].equalsIgnoreCase("setDirection")) {
             setDirection(player, args[1]);
         }
+        if (args.length == 1 && args[0].equalsIgnoreCase("settings")) {
+            new SettingsUI(player);
+        }
 
     }
 
@@ -120,7 +124,7 @@ public class TextGeneratorCommand extends Command {
     }
 
     private void setStart(Player player, String x, String y, String z) {
-        if (isNotNumeric(x) || isNotNumeric(y) || isNotNumeric(z)) {
+        if (!Validator.isInteger(x) || !Validator.isInteger(y) || !Validator.isInteger(z)) {
             player.sendMessage(ChatColor.RED + "The coordinates have to be integers.");
             return;
         }
@@ -153,17 +157,6 @@ public class TextGeneratorCommand extends Command {
         }
         player.sendMessage(ChatColor.GREEN + "Successfully undid the last change!");
         lastChanges.remove(lastChanges.size()-1);
-    }
-
-    // UTILITY METHODS
-
-    private boolean isNotNumeric(String str) {
-        try {
-            Integer.parseInt(str);
-            return false;
-        } catch(NumberFormatException e){
-            return true;
-        }
     }
 
 }
