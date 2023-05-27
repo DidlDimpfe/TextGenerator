@@ -27,7 +27,7 @@ public class SettingsUI {
     }
 
     public void addSize() {
-        inventory.addItem(getPlayerHeadByString(SkullData.fontSize));
+        inventory.addItem(getPlayerHeadByString(SkullData.FONT_SIZE));
 
     }
 
