@@ -1,17 +1,13 @@
 package de.philw.textgenerator.ui;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import de.philw.textgenerator.utils.SkullData;
+import de.philw.textgenerator.utils.UIUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-
-import java.lang.reflect.Field;
-import java.util.UUID;
 
 public class SettingsUI {
 
@@ -19,7 +15,7 @@ public class SettingsUI {
     private Player player;
 
     public SettingsUI(Player player) {
-        inventory = Bukkit.createInventory(null, 45);
+        inventory = Bukkit.createInventory(null, 54);
         this.player = player;
 
         addSize();
@@ -27,27 +23,7 @@ public class SettingsUI {
     }
 
     public void addSize() {
-        inventory.addItem(getPlayerHeadByString(SkullData.FONT_SIZE));
-
-    }
-
-    public ItemStack getPlayerHeadByString(String string) {
-        ItemStack skullItemStack = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta skullItemMeta = (SkullMeta) skullItemStack.getItemMeta();
-
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        profile.getProperties().put("textures", new Property("textures", string));
-        Field field;
-        try {
-            field = skullItemMeta.getClass().getDeclaredField("profile");
-            field.setAccessible(true);
-            field.set(skullItemMeta, profile);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
-        }
-        skullItemStack.setItemMeta(skullItemMeta);
-        return skullItemStack;
+        inventory.addItem(UIUtil.getSkullByString(SkullData.FONT_SIZE));
     }
 
 }

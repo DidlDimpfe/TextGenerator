@@ -3,6 +3,8 @@ package de.philw.textgenerator;
 import de.philw.textgenerator.command.TextGeneratorCommand;
 import de.philw.textgenerator.letters.big.LetterConverter;
 import de.philw.textgenerator.manager.ConfigManager;
+import de.philw.textgenerator.ui.SettingUIListener;
+import de.philw.textgenerator.ui.SettingsUI;
 import de.philw.textgenerator.utils.Direction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,6 +30,7 @@ public final class TextGenerator extends JavaPlugin {
 //
 //        LettersBuilder.build(letters.getT(Font.OAK, Direction.EAST), Direction.EAST, start);
         new TextGeneratorCommand();
+        new SettingUIListener();
     }
 
     @Override
