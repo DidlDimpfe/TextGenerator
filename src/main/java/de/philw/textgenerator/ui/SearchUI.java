@@ -1,5 +1,6 @@
 package de.philw.textgenerator.ui;
 
+import de.philw.textgenerator.TextGenerator;
 import de.philw.textgenerator.utils.SkullData;
 import de.philw.textgenerator.utils.UIUtil;
 import org.bukkit.Bukkit;
@@ -27,13 +28,17 @@ public abstract class SearchUI {
     protected Inventory inventory;
     protected int currentPage;
     protected String currentSearch;
+    protected String searchDisplayTitle;
 
-    public SearchUI(String name, ArrayList<ItemStack> allItems) {
-        this.inventory = Bukkit.createInventory(null, 54);
+    public SearchUI(String name, ArrayList<ItemStack> allItems, String searchDisplayTitle) {
+        TextGenerator.getInstance().getSearchUIListener().addSearchUI(this);
+        this.inventory = Bukkit.createInventory(null, 54, name);
         this.name = name;
         this.allItems = allItems;
         this.searchedItems = this.allItems;
         this.currentSearch = "";
+        this.currentPage = 1;
+        this.searchDisplayTitle = searchDisplayTitle;
 
         // Add return item
         ItemStack returnArrowItemStack = UIUtil.getSkullByString(SkullData.RETURN_ARROW);
@@ -46,21 +51,7 @@ public abstract class SearchUI {
         inventory.setItem(RETURN_ARROW_INDEX, returnArrowItemStack);
 
         //Add search Item
-        ItemStack searchItemStack = UIUtil.getSkullByString(SkullData.SEARCH);
-        ItemMeta searchItemMeta = Objects.requireNonNull(searchItemStack).getItemMeta();
-        Objects.requireNonNull(searchItemMeta).setDisplayName(ChatColor.GREEN + "Search");
-        List<String> searchLore = new ArrayList<>();
-        searchLore.add(ChatColor.GRAY + "Search Items");
-        searchLore.add("");
-        searchLore.add(ChatColor.GRAY + "Filtered: " + currentSearch);
-        searchLore.add("");
-        searchLore.add(ChatColor.AQUA + "Right click to clear");
-        searchLore.add(ChatColor.YELLOW + "Click to edit filter");
-        searchItemMeta.setLore(searchLore);
-        searchItemStack.setItemMeta(searchItemMeta);
-        inventory.setItem(SEARCH_INDEX, searchItemStack);
-        //Add page arrows
-        updatePageArrows();
+        updateSearchItem("");
 
         //Add fill items
         for (int index: SPACE_INDEXES) {
@@ -70,6 +61,9 @@ public abstract class SearchUI {
             itemStack.setItemMeta(itemMeta);
             inventory.setItem(index, itemStack);
         }
+
+        //Open first page
+        openPage(1);
     }
 
     public void updatePageArrows() {
@@ -122,11 +116,50 @@ public abstract class SearchUI {
         inventory.setItem(PREVIOUS_PAGE_INDEX, previousPageItemStack);
     }
 
-    public void updateSearchItem() {
-        ItemStack itemStack = inventory.getItem(SEARCH_INDEX);
-        List<String> lore = Objects.requireNonNull(Objects.requireNonNull(itemStack).getItemMeta()).getLore();
-        Objects.requireNonNull(lore).set(2, "Filtered: " + currentSearch);
-        itemStack.getItemMeta().setLore(lore);
+    public void search(String searched) {
+        currentSearch = searched.trim();
+        updateSearchItem(currentSearch);
+        searchedItems = getSearchedItems(currentSearch);
+        openPage(1);
+    }
+
+    public abstract ArrayList<ItemStack> getSearchedItems(String searched);
+
+    public void clearPage() {
+        for (int i = 0; i < 45; i++) {
+            inventory.setItem(i, null);
+        }
+    }
+
+    public void openPage(int page) {
+        if (searchedItems.size() == 0) {
+            clearPage();
+            return;
+        }
+        if (!UIUtil.isPageValid(searchedItems, page, SPACES)) return;
+        clearPage();
+        List<ItemStack> contents = UIUtil.getPageItems(searchedItems, page, SPACES);
+        for (int index = 0; index < contents.size(); index++) {
+            inventory.setItem(index, contents.get(index));
+        }
+        currentPage = page;
+        updatePageArrows();
+    }
+
+    public void updateSearchItem(String filtered) {
+        ItemStack searchItemStack = UIUtil.getSkullByString(SkullData.SEARCH);
+        ItemMeta searchItemMeta = Objects.requireNonNull(searchItemStack).getItemMeta();
+        Objects.requireNonNull(searchItemMeta).setDisplayName(ChatColor.GREEN + "Search");
+        List<String> searchLore = new ArrayList<>();
+        searchLore.add(ChatColor.GRAY + "Search Items");
+        searchLore.add("");
+        searchLore.add(ChatColor.GRAY + "Filtered: " + filtered);
+        searchLore.add("");
+        searchLore.add(ChatColor.AQUA + "Right click to clear");
+        searchLore.add(ChatColor.YELLOW + "Click to edit filter");
+        searchItemMeta.setLore(searchLore);
+        searchItemStack.setItemMeta(searchItemMeta);
+        inventory.setItem(SEARCH_INDEX, searchItemStack);
     }
 
 }

@@ -1,24 +1,19 @@
 package de.philw.textgenerator;
 
 import de.philw.textgenerator.command.TextGeneratorCommand;
-import de.philw.textgenerator.letters.big.LetterConverter;
 import de.philw.textgenerator.manager.ConfigManager;
-import de.philw.textgenerator.ui.SettingUIListener;
-import de.philw.textgenerator.ui.SettingsUI;
-import de.philw.textgenerator.utils.Direction;
+import de.philw.textgenerator.ui.SearchUIListener;
+import de.philw.textgenerator.ui.SettingsUIListener;
+import de.philw.textgenerator.utils.TextInstance;
+import junit.framework.TestListener;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public final class TextGenerator extends JavaPlugin {
 
     private static TextGenerator INSTANCE;
+    private TextInstance currentEdited;
+    private SearchUIListener searchUIListener;
 
     @Override
     public void onEnable() {
@@ -30,7 +25,9 @@ public final class TextGenerator extends JavaPlugin {
 //
 //        LettersBuilder.build(letters.getT(Font.OAK, Direction.EAST), Direction.EAST, start);
         new TextGeneratorCommand();
-        new SettingUIListener();
+        searchUIListener = new SearchUIListener();
+        Bukkit.getPluginManager().registerEvents(new SettingsUIListener(), this);
+        Bukkit.getPluginManager().registerEvents(searchUIListener, this);
     }
 
     @Override
@@ -46,4 +43,15 @@ public final class TextGenerator extends JavaPlugin {
         return "[TextGenerator] ";
     }
 
+    public TextInstance getCurrentEdited() {
+        return currentEdited;
+    }
+
+    public void setCurrentEdited(TextInstance currentEdited) {
+        this.currentEdited = currentEdited;
+    }
+
+    public SearchUIListener getSearchUIListener() {
+        return searchUIListener;
+    }
 }

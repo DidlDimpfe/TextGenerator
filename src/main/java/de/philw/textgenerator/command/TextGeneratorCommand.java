@@ -3,9 +3,7 @@ package de.philw.textgenerator.command;
 import de.philw.textgenerator.letters.big.GenerateUtil;
 import de.philw.textgenerator.letters.big.LetterConverter;
 import de.philw.textgenerator.manager.ConfigManager;
-import de.philw.textgenerator.ui.SearchUI;
 import de.philw.textgenerator.ui.SettingsUI;
-import de.philw.textgenerator.ui.SizeSearchUI;
 import de.philw.textgenerator.utils.Direction;
 import de.philw.textgenerator.utils.TextInstance;
 import de.philw.textgenerator.utils.Validator;
@@ -75,7 +73,7 @@ public class TextGeneratorCommand extends Command {
             setDirection(player, args[1]);
         }
         if (args.length == 1 && args[0].equalsIgnoreCase("settings")) {
-            new SizeSearchUI(player);
+            new SettingsUI(player);
         }
 
     }

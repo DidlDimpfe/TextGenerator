@@ -3,10 +3,8 @@ package de.philw.textgenerator.ui;
 import de.philw.textgenerator.utils.SkullData;
 import de.philw.textgenerator.utils.UIUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 public class SettingsUI {
@@ -15,7 +13,7 @@ public class SettingsUI {
     private Player player;
 
     public SettingsUI(Player player) {
-        inventory = Bukkit.createInventory(null, 54);
+        inventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + "TextGenerator Settings");
         this.player = player;
 
         addSize();
