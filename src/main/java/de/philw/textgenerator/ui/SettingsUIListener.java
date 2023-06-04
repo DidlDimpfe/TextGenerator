@@ -10,16 +10,15 @@ public class SettingsUIListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (!ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.GREEN + "TextGenerator Settings")) {
+        if (!ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.GREEN +
+                "TextGenerator Settings")) {
             return;
         }
         if (e.getCurrentItem() == null) return;
         Player player = (Player) e.getWhoClicked();
         e.setCancelled(true);
-        switch (e.getRawSlot()) {
-            case 0: // close
-                new SizeSearchUI(player);
-                break;
+        if (e.getRawSlot() == 0) { // close
+            new SizeSearchUI(player);
         }
     }
 

@@ -128,7 +128,7 @@ public class TextInstance {
             return this;
         }
 
-        public TextInstanceBuilder withFontSize(int fontSize)  {
+        public TextInstanceBuilder withFontSize(int fontSize) {
             this.fontSize = fontSize;
             return this;
         }

@@ -52,6 +52,11 @@ public class ConfigManager {
         return Integer.parseInt(Objects.requireNonNull(size));
     }
 
+    public static void setFontSize(String size) {
+        config.set("textSettings.fontSize", size);
+        saveConfig();
+    }
+
     public static int getFontStyle() {
         String fontStyle = config.getString("textSettings.fontStyle");
         if (!Validator.isValidFontStyle(Objects.requireNonNull(fontStyle))) {
@@ -87,6 +92,14 @@ public class ConfigManager {
                 "is not a valid " + dataType + "! The default " + dataType + " '" + defaultValue + "' will be taken.");
     }
 
+    public static void saveConfig() {
+        try {
+            config.save(new File(TextGenerator.getInstance().getDataFolder(), "config.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * This method adds a field, if the field is not in the config, to the config with the default value
      */
@@ -96,25 +109,26 @@ public class ConfigManager {
             config.set("textSettings.block", Objects.requireNonNull(config.getDefaults()).get("textSettings.block"));
         }
         if (!config.isSet("textSettings.fontName")) {
-            config.set("textSettings.fontName", Objects.requireNonNull(config.getDefaults()).get("textSettings.fontName"));
+            config.set("textSettings.fontName", Objects.requireNonNull(config.getDefaults()).get("textSettings" +
+                    ".fontName"));
         }
         if (!config.isSet("textSettings.fontSize")) {
-            config.set("textSettings.fontSize", Objects.requireNonNull(config.getDefaults()).get("textSettings.fontSize"));
+            config.set("textSettings.fontSize", Objects.requireNonNull(config.getDefaults()).get("textSettings" +
+                    ".fontSize"));
         }
         if (!config.isSet("textSettings.fontStyle")) {
-            config.set("textSettings.fontStyle", Objects.requireNonNull(config.getDefaults()).get("textSettings.fontStyle"));
+            config.set("textSettings.fontStyle", Objects.requireNonNull(config.getDefaults()).get("textSettings" +
+                    ".fontStyle"));
         }
         if (!config.isSet("textSettings.underline")) {
-            config.set("textSettings.underline", Objects.requireNonNull(config.getDefaults()).get("textSettings.underline"));
+            config.set("textSettings.underline", Objects.requireNonNull(config.getDefaults()).get("textSettings" +
+                    ".underline"));
         }
         if (!config.isSet("textSettings.spaceBetweenEachLine")) {
-            config.set("textSettings.spaceBetweenEachLine", Objects.requireNonNull(config.getDefaults()).get("textSettings.spaceBetweenEachLine"));
+            config.set("textSettings.spaceBetweenEachLine", Objects.requireNonNull(config.getDefaults()).get(
+                    "textSettings.spaceBetweenEachLine"));
         }
-        try {
-            config.save(new File(textGenerator.getDataFolder(), "config.yml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveConfig();
     }
 
 }

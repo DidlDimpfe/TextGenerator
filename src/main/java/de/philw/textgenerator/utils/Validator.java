@@ -9,7 +9,7 @@ public class Validator {
     public static boolean isValidFont(String font) {
         GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         String[] fonts = graphicsEnvironment.getAvailableFontFamilyNames();
-        for (String string: fonts) {
+        for (String string : fonts) {
             if (string.equals(font)) {
                 return true;
             }

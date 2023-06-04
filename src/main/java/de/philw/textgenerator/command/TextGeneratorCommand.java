@@ -57,7 +57,7 @@ public class TextGeneratorCommand extends Command {
             for (int index = 1; index < args.length; index++) {
                 builder.append(args[index]).append(" ");
             }
-            generate(player, builder.substring(0, builder.toString().length()-1));
+            generate(player, builder.substring(0, builder.toString().length() - 1));
         }
         if ((args.length == 1 || args.length == 4) && args[0].equalsIgnoreCase("setStart")) {
             if (args.length == 1) {
@@ -91,9 +91,11 @@ public class TextGeneratorCommand extends Command {
         player.sendMessage(ChatColor.GREEN + "/textgenerator generate <direction>");
         player.sendMessage(ChatColor.GREEN + "/textgenerator undo");
     }
+
     private void generate(Player player, String toGenerate) {
         if (textInstance.getStartLocation() == null) {
-            player.sendMessage(ChatColor.RED + "Before you do this you have to set the start location with /textgenerator setStart (<coordinates>)");
+            player.sendMessage(ChatColor.RED + "Before you do this you have to set the start location with " +
+                    "/textgenerator setStart (<coordinates>)");
             return;
         }
 
@@ -128,7 +130,8 @@ public class TextGeneratorCommand extends Command {
             player.sendMessage(ChatColor.RED + "The coordinates have to be integers.");
             return;
         }
-        textInstance.setStartLocation(new Location(player.getWorld(), Double.parseDouble(x), Double.parseDouble(y), Double.parseDouble(z)));
+        textInstance.setStartLocation(new Location(player.getWorld(), Double.parseDouble(x), Double.parseDouble(y),
+                Double.parseDouble(z)));
         player.sendMessage(ChatColor.GREEN + "StartLocation has been successfully set to " +
                 textInstance.getStartLocation().getX() + ", " + textInstance.getStartLocation().getY() + ", " +
                 textInstance.getStartLocation().getZ());
@@ -151,12 +154,16 @@ public class TextGeneratorCommand extends Command {
             player.sendMessage(ChatColor.RED + "There's nothing to undo!");
             return;
         }
-        HashMap<Location, BlockData> lastChange = lastChanges.get(lastChanges.size()-1);
-        for (Location location: lastChange.keySet()) {
+        HashMap<Location, BlockData> lastChange = lastChanges.get(lastChanges.size() - 1);
+        for (Location location : lastChange.keySet()) {
             Objects.requireNonNull(location.getWorld()).getBlockAt(location).setBlockData(lastChange.get(location));
         }
         player.sendMessage(ChatColor.GREEN + "Successfully undid the last change!");
-        lastChanges.remove(lastChanges.size()-1);
+        lastChanges.remove(lastChanges.size() - 1);
+    }
+
+    public TextInstance getTextInstance() {
+        return textInstance;
     }
 
 }

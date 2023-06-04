@@ -38,7 +38,7 @@ public abstract class Command extends BukkitCommand {
     public abstract void execute(CommandSender sender, String[] args);
 
     @Override
-    public  List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
         return onTabComplete(sender, args);
     }
 

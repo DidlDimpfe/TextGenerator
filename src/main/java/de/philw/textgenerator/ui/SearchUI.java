@@ -6,6 +6,7 @@ import de.philw.textgenerator.utils.UIUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -22,7 +23,7 @@ public abstract class SearchUI {
     protected final static int NEXT_PAGE_INDEX = 50;
     protected final static int SEARCH_INDEX = 49;
     protected final static int[] SPACE_INDEXES = new int[]{46, 47, 51, 52, 53};
-    protected String name;
+    protected String inventoryDisplay;
     protected ArrayList<ItemStack> allItems;
     protected ArrayList<ItemStack> searchedItems;
     protected Inventory inventory;
@@ -30,11 +31,12 @@ public abstract class SearchUI {
     protected String currentSearch;
     protected String searchDisplayTitle;
 
-    public SearchUI(String name, ArrayList<ItemStack> allItems, String searchDisplayTitle) {
-        TextGenerator.getInstance().getSearchUIListener().addSearchUI(this);
-        this.inventory = Bukkit.createInventory(null, 54, name);
-        this.name = name;
-        this.allItems = allItems;
+    public SearchUI(String inventoryDisplay, String searchDisplayTitle, Player player) {
+        TextGenerator.getInstance().getSearchUIListener().addSearchUI(player.getUniqueId(), this);
+        this.inventory = Bukkit.createInventory(null, 54, inventoryDisplay);
+        this.inventoryDisplay = inventoryDisplay;
+        this.allItems = new ArrayList<>();
+        addAllItems();
         this.searchedItems = this.allItems;
         this.currentSearch = "";
         this.currentPage = 1;
@@ -54,7 +56,7 @@ public abstract class SearchUI {
         updateSearchItem("");
 
         //Add fill items
-        for (int index: SPACE_INDEXES) {
+        for (int index : SPACE_INDEXES) {
             ItemStack itemStack = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
             ItemMeta itemMeta = itemStack.getItemMeta();
             Objects.requireNonNull(itemMeta).setDisplayName("Space");
@@ -68,7 +70,7 @@ public abstract class SearchUI {
 
     public void updatePageArrows() {
         ItemStack nextPageItemStack, previousPageItemStack;
-        if (UIUtil.isPageValid(searchedItems, currentPage+1, SPACES)) {
+        if (UIUtil.isPageValid(searchedItems, currentPage + 1, SPACES)) {
             nextPageItemStack = UIUtil.getSkullByString(SkullData.NEXT_PAGE_ALLOWED);
             ItemMeta itemMeta = Objects.requireNonNull(nextPageItemStack).getItemMeta();
             Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Next Page");
@@ -90,7 +92,7 @@ public abstract class SearchUI {
             itemMeta.setLore(lore);
             nextPageItemStack.setItemMeta(itemMeta);
         }
-        if (UIUtil.isPageValid(searchedItems, currentPage-1, SPACES)) {
+        if (UIUtil.isPageValid(searchedItems, currentPage - 1, SPACES)) {
             previousPageItemStack = UIUtil.getSkullByString(SkullData.PREVIOUS_PAGE_ALLOWED);
             ItemMeta itemMeta = Objects.requireNonNull(previousPageItemStack).getItemMeta();
             Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Previous Page");
@@ -161,5 +163,7 @@ public abstract class SearchUI {
         searchItemStack.setItemMeta(searchItemMeta);
         inventory.setItem(SEARCH_INDEX, searchItemStack);
     }
+
+    public abstract void addAllItems();
 
 }

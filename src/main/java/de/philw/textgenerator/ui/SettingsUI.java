@@ -9,8 +9,8 @@ import org.bukkit.inventory.Inventory;
 
 public class SettingsUI {
 
-    private Inventory inventory;
-    private Player player;
+    private final Inventory inventory;
+    private final Player player;
 
     public SettingsUI(Player player) {
         inventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + "TextGenerator Settings");

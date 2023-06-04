@@ -77,12 +77,14 @@ public abstract class Letters {
 
     protected String getRightTopNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.getOppositeDirection().toString().toLowerCase() + ",half=bottom,shape=straight,waterlogged=false]";
+                rightDirection.getOppositeDirection().toString().toLowerCase() + ",half=bottom,shape=straight," +
+                "waterlogged=false]";
     }
 
     protected String getRightBottomNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.getOppositeDirection().toString().toLowerCase() + ",half=top,shape=straight,waterlogged=false]";
+                rightDirection.getOppositeDirection().toString().toLowerCase() + ",half=top,shape=straight," +
+                "waterlogged=false]";
     }
 
     protected String getLeftTopNothingStair(Block block, Direction rightDirection) {

@@ -36,7 +36,8 @@ public class GenerateUtil {
                                         textInstance.getStartLocation().getWorld()).getBlockAt(Objects.requireNonNull(editStartLocation(textInstance.getStartLocation(), widthIndex, heightIndex, textInstance.getDirection()))).
                                 setBlockData(Bukkit.createBlockData(textInstance.getBlock().getNormalBlockData()));
                     }
-                } catch (IndexOutOfBoundsException ignored) {}
+                } catch (IndexOutOfBoundsException ignored) {
+                }
             }
         }
     }
@@ -46,7 +47,8 @@ public class GenerateUtil {
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
                 Block block = Objects.requireNonNull(textInstance.getStartLocation().getWorld()).getBlockAt(
-                        Objects.requireNonNull(editStartLocation(textInstance.getStartLocation(), widthIndex, heightIndex, textInstance.getDirection())));
+                        Objects.requireNonNull(editStartLocation(textInstance.getStartLocation(), widthIndex,
+                                heightIndex, textInstance.getDirection())));
                 affectedBlocks.put(block.getLocation(), block.getBlockData());
             }
         }
@@ -57,13 +59,14 @@ public class GenerateUtil {
         ArrayList<boolean[][]> lines = new ArrayList<>();
         // find out the biggest width
         int width = 0;
-        for (BufferedImage bufferedImage: linesAsBufferedImages) {
+        for (BufferedImage bufferedImage : linesAsBufferedImages) {
             if (bufferedImage.getWidth() > width) width = bufferedImage.getWidth();
         }
         boolean[][] biggest = null;
-        // loop through all linesAsBufferedImages, make 2D-Boolean arrays out of it (what block has to be placed and what not)
+        // loop through all linesAsBufferedImages, make 2D-Boolean arrays out of it (what block has to be placed and
+        // what not)
         // and reduce them
-        for (BufferedImage bufferedImage: linesAsBufferedImages) {
+        for (BufferedImage bufferedImage : linesAsBufferedImages) {
             boolean[][] tempLine = new boolean[bufferedImage.getHeight()][width];
             for (int heightIndex = 0; heightIndex < bufferedImage.getHeight(); heightIndex++) {
                 for (int widthIndex = 0; widthIndex < bufferedImage.getWidth(); widthIndex++) {
@@ -72,12 +75,12 @@ public class GenerateUtil {
                 }
             }
             int alreadyRemoved = 0;
-            for (int columnIndex: getToRemoveColumns(tempLine)) {
+            for (int columnIndex : getToRemoveColumns(tempLine)) {
                 tempLine = removeColumn(tempLine, columnIndex - alreadyRemoved);
                 alreadyRemoved++;
             }
             alreadyRemoved = 0;
-            for (int rowIndex: getToRemoveRows(tempLine)) {
+            for (int rowIndex : getToRemoveRows(tempLine)) {
                 removeRow(tempLine, rowIndex - alreadyRemoved);
                 alreadyRemoved++;
             }
@@ -99,12 +102,12 @@ public class GenerateUtil {
         // merge the 2D-Boolean arrays to a big 2D-Boolean considering the in the config given spaceBetweenEachLine
         int height = 0;
         int spaceBetweenEachLine = ConfigManager.getSpaceBetweenEachLine();
-        for (boolean[][] doneLine: lines) {
+        for (boolean[][] doneLine : lines) {
             height += doneLine.length + spaceBetweenEachLine;
         }
         boolean[][] blocks = new boolean[height][width];
         int currentLineIndexCount = 0;
-        for (boolean[][] doneLine: lines) {
+        for (boolean[][] doneLine : lines) {
             for (boolean[] booleans : doneLine) {
                 blocks[currentLineIndexCount] = booleans;
                 currentLineIndexCount++;
@@ -136,7 +139,7 @@ public class GenerateUtil {
 
         // from bottom to top
         start = true;
-        for (int column = blocks.length-1; column >= 0; column--) {
+        for (int column = blocks.length - 1; column >= 0; column--) {
             boolean reduce = true;
             for (int row = 0; row < blocks[0].length; row++) {
                 if (blocks[column][row]) {
@@ -176,7 +179,7 @@ public class GenerateUtil {
 
         // from right to left
         start = true;
-        for (int row = blocks[0].length-1; row >= 0; row--) {
+        for (int row = blocks[0].length - 1; row >= 0; row--) {
             boolean reduce = true;
             for (boolean[] block : blocks) {
                 if (block[row]) {
@@ -197,7 +200,7 @@ public class GenerateUtil {
     private static boolean[][] removeColumn(boolean[][] blocks, int columnIndex) {
         boolean[][] newBlocks = new boolean[blocks.length - 1][];
         System.arraycopy(blocks, 0, newBlocks, 0, columnIndex);
-        System.arraycopy(blocks, columnIndex+1, newBlocks, columnIndex, blocks.length - columnIndex - 1);
+        System.arraycopy(blocks, columnIndex + 1, newBlocks, columnIndex, blocks.length - columnIndex - 1);
         return newBlocks;
     }
 
@@ -205,7 +208,8 @@ public class GenerateUtil {
         for (int columnIndex = 0; columnIndex < blocks.length; columnIndex++) {
             boolean[] row = new boolean[blocks[columnIndex].length - 1];
             System.arraycopy(blocks[columnIndex], 0, row, 0, rowIndex);
-            System.arraycopy(blocks[columnIndex], rowIndex+1, row, rowIndex, blocks[columnIndex].length - rowIndex - 1);
+            System.arraycopy(blocks[columnIndex], rowIndex + 1, row, rowIndex,
+                    blocks[columnIndex].length - rowIndex - 1);
             blocks[columnIndex] = row;
         }
     }

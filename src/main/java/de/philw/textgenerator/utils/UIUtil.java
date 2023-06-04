@@ -18,8 +18,9 @@ import java.util.*;
 
 public class UIUtil {
 
-    public static ItemStack getSizeItemStack(int size, String skullValue, String sizeAsString) {
-        ItemStack itemStack = getSkullByString(skullValue);
+    public static ItemStack getFontSizeItemStack(FontSize fontSize) {
+        int size = fontSize.getNumber();
+        ItemStack itemStack = getSkullByString(fontSize.getSkullData());
         ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + String.valueOf(size));
         if (TextGenerator.getInstance().getCurrentEdited() == null) {
@@ -33,7 +34,7 @@ public class UIUtil {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
         }
-        itemMeta.setLocalizedName(sizeAsString);
+        itemMeta.setLocalizedName(String.valueOf(size));
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
@@ -55,17 +56,6 @@ public class UIUtil {
         }
         skullItemStack.setItemMeta(skullItemMeta);
         return skullItemStack;
-    }
-
-    public static ArrayList<ItemStack> getAllItemStacksFromEnum(Class<? extends Enum<?>> enumValue) {
-        ArrayList<ItemStack> items = new ArrayList<>();
-        String[] values = Arrays.stream(enumValue.getEnumConstants()).map(Enum::name).toArray(String[]::new);
-        if (enumValue == FontSize.class) {
-            for (String string: values) {
-                items.add(FontSize.valueOf(string).getItemStack());
-            }
-        }
-        return items;
     }
 
     public static boolean isPageValid(List<ItemStack> items, int page, int spaces) {
@@ -90,7 +80,8 @@ public class UIUtil {
         for (int index = lowerBound; index < upperBound; index++) {
             try {
                 newItems.add(itemStacks.get(index));
-            } catch (IndexOutOfBoundsException ignored) {}
+            } catch (IndexOutOfBoundsException ignored) {
+            }
         }
         return newItems;
     }

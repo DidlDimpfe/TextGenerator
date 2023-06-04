@@ -34,10 +34,11 @@ public class LetterConverter {
 
         ArrayList<BufferedImage> linesAsBufferedImages = new ArrayList<>();
 
-        for (String line: lines) {
+        for (String line : lines) {
             int width = fontMetrics.stringWidth(line);
             int height = fontMetrics.getHeight();
-            BufferedImage letters = new BufferedImage(fontMetrics.stringWidth(line), fontMetrics.getHeight(), BufferedImage.TYPE_INT_RGB);
+            BufferedImage letters = new BufferedImage(fontMetrics.stringWidth(line), fontMetrics.getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
             graphicsTool = letters.createGraphics();
             graphicsTool.setColor(Color.WHITE);
             graphicsTool.fillRect(0, 0, width, height);

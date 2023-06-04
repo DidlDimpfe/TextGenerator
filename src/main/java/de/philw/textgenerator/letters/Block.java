@@ -5,9 +5,9 @@ public enum Block {
     OAK("_planks", true, "oak_planks"),
     QUARTZ("_block", true, "quartz_block");
 
-    private String mustAddAfterNormalBlock;
-    private boolean isCompatibleWithSmallLetters;
-    private String normalBlockData;
+    private final String mustAddAfterNormalBlock;
+    private final boolean isCompatibleWithSmallLetters;
+    private final String normalBlockData;
 
     Block(String mustAddAfterNormalBlock, boolean isCompatibleWithSmallLetters, String normalBlockData) {
         this.mustAddAfterNormalBlock = mustAddAfterNormalBlock;
