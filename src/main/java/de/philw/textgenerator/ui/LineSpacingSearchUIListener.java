@@ -8,12 +8,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class SizeSearchUIListener implements Listener {
+public class LineSpacingSearchUIListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (!ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.GREEN +
-                "Select Size")) {
+                "Select line spacing")) {
             return;
         }
         if (e.getCurrentItem() == null) return;
@@ -22,16 +22,17 @@ public class SizeSearchUIListener implements Listener {
         if (e.getCurrentItem().getItemMeta() == null) return;
         if (e.getCurrentItem().getItemMeta().getLocalizedName().equals("")) return;
         if (TextGenerator.getInstance().getCurrentEdited() == null) {
-            String fontSize = e.getCurrentItem().getItemMeta().getLocalizedName();
-            ConfigManager.setFontSize(Integer.parseInt(fontSize));
-            TextGenerator.getInstance().getTextGeneratorCommand().getTextInstance().setFontSize(Integer.parseInt(fontSize));
+            String lineSpacing = e.getCurrentItem().getItemMeta().getLocalizedName();
+            ConfigManager.setLineSpacing(Integer.parseInt(lineSpacing));
+            TextGenerator.getInstance().getTextGeneratorCommand().getTextInstance().setLineSpacing(Integer.parseInt(lineSpacing));
             for (SearchUI searchUI : TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
-                if (!(searchUI instanceof SearchUI)) continue;
+                if (!(searchUI instanceof LineSpacingSearchUI)) continue;
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed your default font size to " + fontSize);
+            player.sendMessage(ChatColor.GREEN + "Succesfully changed your default line spacing to " + lineSpacing);
             player.closeInventory();
         }
     }
+
 }

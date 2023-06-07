@@ -16,12 +16,10 @@ public class SettingsUI {
         inventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + "TextGenerator Settings");
         this.player = player;
 
-        addSize();
+        inventory.addItem(UIUtil.getSkullByString(SkullData.FONT_SIZE));
+        inventory.addItem(UIUtil.getSkullByString(SkullData.LINE_SPACING));
         player.openInventory(inventory);
     }
 
-    public void addSize() {
-        inventory.addItem(UIUtil.getSkullByString(SkullData.FONT_SIZE));
-    }
 
 }

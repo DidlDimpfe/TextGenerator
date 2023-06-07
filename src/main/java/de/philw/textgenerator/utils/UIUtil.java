@@ -2,42 +2,17 @@ package de.philw.textgenerator.utils;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import de.philw.textgenerator.TextGenerator;
-import de.philw.textgenerator.manager.ConfigManager;
-import de.philw.textgenerator.ui.value.FontSize;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class UIUtil {
-
-    public static ItemStack getFontSizeItemStack(FontSize fontSize) {
-        int size = fontSize.getNumber();
-        ItemStack itemStack = getSkullByString(fontSize.getSkullData());
-        ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
-        Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + String.valueOf(size));
-        if (TextGenerator.getInstance().getCurrentEdited() == null) {
-            itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default size to " + size));
-        } else {
-            itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to edit " + TextGenerator.getInstance().getCurrentEdited().getText() + " to size " + size));
-        }
-        if (size == ConfigManager.getFontSize()) {
-            itemMeta.setDisplayName(ChatColor.RED + String.valueOf(size));
-            itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
-        }
-        itemMeta.setLocalizedName(String.valueOf(size));
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
-    }
 
     public static ItemStack getSkullByString(String string) {
         ItemStack skullItemStack = new ItemStack(Material.PLAYER_HEAD);

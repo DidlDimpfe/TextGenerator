@@ -2,9 +2,7 @@ package de.philw.textgenerator;
 
 import de.philw.textgenerator.command.TextGeneratorCommand;
 import de.philw.textgenerator.manager.ConfigManager;
-import de.philw.textgenerator.ui.SearchUIListener;
-import de.philw.textgenerator.ui.SettingsUIListener;
-import de.philw.textgenerator.ui.SizeSearchUIListener;
+import de.philw.textgenerator.ui.*;
 import de.philw.textgenerator.utils.TextInstance;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,6 +28,7 @@ public final class TextGenerator extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SettingsUIListener(), this);
         Bukkit.getPluginManager().registerEvents(searchUIListener, this);
         Bukkit.getPluginManager().registerEvents(new SizeSearchUIListener(), this);
+        Bukkit.getPluginManager().registerEvents(new LineSpacingSearchUIListener(), this);
     }
 
     @Override

@@ -101,7 +101,7 @@ public class GenerateUtil {
         }
         // merge the 2D-Boolean arrays to a big 2D-Boolean considering the in the config given spaceBetweenEachLine
         int height = 0;
-        int spaceBetweenEachLine = ConfigManager.getSpaceBetweenEachLine();
+        int spaceBetweenEachLine = ConfigManager.getLineSpacing();
         for (boolean[][] doneLine : lines) {
             height += doneLine.length + spaceBetweenEachLine;
         }

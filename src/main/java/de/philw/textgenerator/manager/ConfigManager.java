@@ -52,7 +52,7 @@ public class ConfigManager {
         return Integer.parseInt(Objects.requireNonNull(size));
     }
 
-    public static void setFontSize(String size) {
+    public static void setFontSize(int size) {
         config.set("textSettings.fontSize", size);
         saveConfig();
     }
@@ -78,13 +78,18 @@ public class ConfigManager {
         return Boolean.parseBoolean(bool.toLowerCase());
     }
 
-    public static int getSpaceBetweenEachLine() {
-        String spaceBetweenEachLine = config.getString("textSettings.spaceBetweenEachLine");
+    public static int getLineSpacing() {
+        String spaceBetweenEachLine = config.getString("textSettings.lineSpacing");
         if (!Validator.isValidSpaceBetweenEachLine(spaceBetweenEachLine)) {
-            printNotValidMessage(spaceBetweenEachLine, "2", "spaceBetweenEachLine");
+            printNotValidMessage(spaceBetweenEachLine, "2", "lineSpacing");
             return 2;
         }
         return Integer.parseInt(Objects.requireNonNull(spaceBetweenEachLine));
+    }
+
+    public static void setLineSpacing(int lineSpacing) {
+        config.set("textSettings.lineSpacing", lineSpacing);
+        saveConfig();
     }
 
     public static void printNotValidMessage(String notValidValue, String defaultValue, String dataType) {
@@ -124,9 +129,9 @@ public class ConfigManager {
             config.set("textSettings.underline", Objects.requireNonNull(config.getDefaults()).get("textSettings" +
                     ".underline"));
         }
-        if (!config.isSet("textSettings.spaceBetweenEachLine")) {
-            config.set("textSettings.spaceBetweenEachLine", Objects.requireNonNull(config.getDefaults()).get(
-                    "textSettings.spaceBetweenEachLine"));
+        if (!config.isSet("textSettings.lineSpacing")) {
+            config.set("textSettings.lineSpacing", Objects.requireNonNull(config.getDefaults()).get(
+                    "textSettings.lineSpacing"));
         }
         saveConfig();
     }

@@ -18,7 +18,10 @@ public class SettingsUIListener implements Listener {
         Player player = (Player) e.getWhoClicked();
         e.setCancelled(true);
         if (e.getRawSlot() == 0) { // close
-            new SizeSearchUI(player);
+            new FontSizeSearchUI(player);
+        }
+        if (e.getRawSlot() == 1) { // close
+            new LineSpacingSearchUI(player);
         }
     }
 

@@ -20,11 +20,6 @@ import java.util.Objects;
 
 public class TextGeneratorCommand extends Command {
 
-    // /textgenerator test <input>
-    // /textgenerator generate <input>
-    // /textgenerator settings
-    // /textgenerator setStart (<coordinates>)
-
     private final TextInstance textInstance;
     private final ArrayList<HashMap<Location, BlockData>> lastChanges;
 
@@ -39,7 +34,7 @@ public class TextGeneratorCommand extends Command {
                 .withFontName(ConfigManager.getFontName())
                 .withFontStyle(ConfigManager.getFontStyle())
                 .withUnderline(ConfigManager.isUnderline())
-                .withSpaceBetweenEachLine(ConfigManager.getSpaceBetweenEachLine())
+                .withLineSpacing(ConfigManager.getLineSpacing())
                 .build();
     }
 

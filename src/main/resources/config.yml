@@ -4,4 +4,4 @@ textSettings:
   fontSize: 15
   fontStyle: BOLD
   underline: false
-  spaceBetweenEachLine: 2
+  lineSpacing: 2

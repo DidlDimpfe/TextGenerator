@@ -36,7 +36,7 @@ public abstract class SearchUI {
         this.inventory = Bukkit.createInventory(null, 54, inventoryDisplay);
         this.inventoryDisplay = inventoryDisplay;
         this.allItems = new ArrayList<>();
-        addAllItems();
+        updateAllItems();
         this.searchedItems = this.allItems;
         this.currentSearch = "";
         this.currentPage = 1;
@@ -66,6 +66,7 @@ public abstract class SearchUI {
 
         //Open first page
         openPage(1);
+        player.openInventory(inventory);
     }
 
     public void updatePageArrows() {
@@ -164,6 +165,6 @@ public abstract class SearchUI {
         inventory.setItem(SEARCH_INDEX, searchItemStack);
     }
 
-    public abstract void addAllItems();
+    public abstract void updateAllItems();
 
 }

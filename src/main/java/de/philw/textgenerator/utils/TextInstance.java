@@ -13,7 +13,7 @@ public class TextInstance {
     private int fontSize;
     private String text;
     private boolean underline;
-    private int spaceBetweenEachLine;
+    private int lineSpacing;
 
     public Block getBlock() {
         return block;
@@ -47,12 +47,12 @@ public class TextInstance {
         this.fontName = fontName;
     }
 
-    public int getSpaceBetweenEachLine() {
-        return spaceBetweenEachLine;
+    public int getLineSpacing() {
+        return lineSpacing;
     }
 
-    public void setSpaceBetweenEachLine(int spaceBetweenEachLine) {
-        this.spaceBetweenEachLine = spaceBetweenEachLine;
+    public void setLineSpacing(int lineSpacing) {
+        this.lineSpacing = lineSpacing;
     }
 
     public int getFontStyle() {
@@ -101,7 +101,7 @@ public class TextInstance {
         private int fontSize = 0;
         private String text;
         private boolean underline;
-        private int spaceBetweenEachLine = 2;
+        private int lineSpacing = 2;
 
         public TextInstanceBuilder withBlock(Block block) {
             this.block = block;
@@ -143,8 +143,8 @@ public class TextInstance {
             return this;
         }
 
-        public TextInstanceBuilder withSpaceBetweenEachLine(int spaceBetweenEachLine) {
-            this.spaceBetweenEachLine = spaceBetweenEachLine;
+        public TextInstanceBuilder withLineSpacing(int lineSpacing) {
+            this.lineSpacing = lineSpacing;
             return this;
         }
 
@@ -158,7 +158,7 @@ public class TextInstance {
             textInstance.setFontSize(fontSize);
             textInstance.setText(text);
             textInstance.setUnderline(underline);
-            textInstance.setSpaceBetweenEachLine(spaceBetweenEachLine);
+            textInstance.setLineSpacing(lineSpacing);
             return textInstance;
         }
 

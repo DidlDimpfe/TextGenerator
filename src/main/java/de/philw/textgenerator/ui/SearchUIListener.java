@@ -96,14 +96,21 @@ public class SearchUIListener implements Listener {
             notRemove.remove(e.getPlayer().getUniqueId());
             return;
         }
+        UUID toRemove = null;
         for (UUID uuid: searchUISToListenTo.keySet()) {
-            if (player.getUniqueId().equals(uuid)) {
-                if (e.getView().getTitle().contains(searchUISToListenTo.get(uuid).inventoryDisplay)) searchUISToListenTo.remove(uuid);
+            if (player.getUniqueId().equals(uuid) && e.getView().getTitle().contains(searchUISToListenTo.get(uuid).inventoryDisplay)) {
+                toRemove = uuid;
+                break;
             }
         }
+        searchUISToListenTo.remove(toRemove);
     }
 
     public void addSearchUI(UUID uuid, SearchUI searchUI) {
         searchUISToListenTo.put(uuid, searchUI);
+    }
+
+    public HashMap<UUID, SearchUI> getSearchUISToListenTo() {
+        return searchUISToListenTo;
     }
 }
