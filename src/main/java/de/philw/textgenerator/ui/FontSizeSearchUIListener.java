@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class SizeSearchUIListener implements Listener {
+public class FontSizeSearchUIListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
@@ -26,7 +26,7 @@ public class SizeSearchUIListener implements Listener {
             ConfigManager.setFontSize(Integer.parseInt(fontSize));
             TextGenerator.getInstance().getTextGeneratorCommand().getTextInstance().setFontSize(Integer.parseInt(fontSize));
             for (SearchUI searchUI : TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
-                if (!(searchUI instanceof SearchUI)) continue;
+                if (!(searchUI instanceof FontSizeSearchUI)) continue;
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }

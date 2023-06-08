@@ -27,8 +27,9 @@ public final class TextGenerator extends JavaPlugin {
         searchUIListener = new SearchUIListener();
         Bukkit.getPluginManager().registerEvents(new SettingsUIListener(), this);
         Bukkit.getPluginManager().registerEvents(searchUIListener, this);
-        Bukkit.getPluginManager().registerEvents(new SizeSearchUIListener(), this);
+        Bukkit.getPluginManager().registerEvents(new FontSizeSearchUIListener(), this);
         Bukkit.getPluginManager().registerEvents(new LineSpacingSearchUIListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BlockSearchUIListener(), this);
     }
 
     @Override

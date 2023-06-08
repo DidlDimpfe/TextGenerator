@@ -1,6 +1,6 @@
 package de.philw.textgenerator.utils;
 
-import de.philw.textgenerator.letters.Block;
+import de.philw.textgenerator.ui.value.Block;
 
 import java.awt.*;
 

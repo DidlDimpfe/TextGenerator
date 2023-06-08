@@ -23,6 +23,9 @@ public class SettingsUIListener implements Listener {
         if (e.getRawSlot() == 1) { // close
             new LineSpacingSearchUI(player);
         }
+        if (e.getRawSlot() == 2) { // close
+            new BlockSearchUI(player);
+        }
     }
 
 }

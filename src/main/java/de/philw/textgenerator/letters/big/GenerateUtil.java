@@ -34,7 +34,7 @@ public class GenerateUtil {
                     if (blocks[heightIndex][widthIndex]) {
                         Objects.requireNonNull(
                                         textInstance.getStartLocation().getWorld()).getBlockAt(Objects.requireNonNull(editStartLocation(textInstance.getStartLocation(), widthIndex, heightIndex, textInstance.getDirection()))).
-                                setBlockData(Bukkit.createBlockData(textInstance.getBlock().getNormalBlockData()));
+                                setBlockData(Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
                     }
                 } catch (IndexOutOfBoundsException ignored) {
                 }

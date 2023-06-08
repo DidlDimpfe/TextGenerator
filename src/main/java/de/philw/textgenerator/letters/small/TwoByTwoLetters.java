@@ -1,6 +1,6 @@
 package de.philw.textgenerator.letters.small;
 
-import de.philw.textgenerator.letters.Block;
+import de.philw.textgenerator.ui.value.Block;
 import de.philw.textgenerator.utils.Direction;
 
 public class TwoByTwoLetters extends Letters {

@@ -1,7 +1,7 @@
 package de.philw.textgenerator.manager;
 
 import de.philw.textgenerator.TextGenerator;
-import de.philw.textgenerator.letters.Block;
+import de.philw.textgenerator.ui.value.Block;
 import de.philw.textgenerator.utils.Validator;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -27,10 +27,15 @@ public class ConfigManager {
     public static Block getBlock() {
         String block = config.getString("textSettings.block");
         if (!Validator.isValidBlock(Objects.requireNonNull(block))) {
-            printNotValidMessage(block, "Quartz", "block");
-            return Block.QUARTZ;
+            printNotValidMessage(block, "Quartz_Block", "block");
+            return Block.QUARTZ_BLOCK;
         }
         return Block.valueOf(block.toUpperCase());
+    }
+
+    public static void setBlock(Block block) {
+        config.set("textSettings.block", block.name());
+        saveConfig();
     }
 
     public static String getFontName() {

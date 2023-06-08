@@ -18,6 +18,7 @@ public class SettingsUI {
 
         inventory.addItem(UIUtil.getSkullByString(SkullData.FONT_SIZE));
         inventory.addItem(UIUtil.getSkullByString(SkullData.LINE_SPACING));
+        inventory.addItem(UIUtil.getSkullByString(SkullData.BLOCKS));
         player.openInventory(inventory);
     }
 

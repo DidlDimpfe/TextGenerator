@@ -1,6 +1,6 @@
 package de.philw.textgenerator.letters.small;
 
-import de.philw.textgenerator.letters.Block;
+import de.philw.textgenerator.ui.value.Block;
 import de.philw.textgenerator.utils.Direction;
 
 public abstract class Letters {
@@ -77,36 +77,36 @@ public abstract class Letters {
 
     protected String getRightTopNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.getOppositeDirection().toString().toLowerCase() + ",half=bottom,shape=straight," +
+                rightDirection.getOppositeDirection().toString().toLowerCase().split("_")[0] + ",half=bottom,shape=straight," +
                 "waterlogged=false]";
     }
 
     protected String getRightBottomNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.getOppositeDirection().toString().toLowerCase() + ",half=top,shape=straight," +
+                rightDirection.getOppositeDirection().toString().toLowerCase().split("_")[0] + ",half=top,shape=straight," +
                 "waterlogged=false]";
     }
 
     protected String getLeftTopNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.toString().toLowerCase() + ",half=bottom,shape=straight,waterlogged=false]";
+                rightDirection.toString().toLowerCase().split("_")[0] + ",half=bottom,shape=straight,waterlogged=false]";
     }
 
     protected String getLeftBottomNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.toString().toLowerCase() + ",half=top,shape=straight,waterlogged=false]";
+                rightDirection.toString().toLowerCase().split("_")[0] + ",half=top,shape=straight,waterlogged=false]";
     }
 
     protected String getBottomSlap(Block block) {
-        return "minecraft:" + block.toString().toLowerCase() + "_slab[type=bottom,waterlogged=false]";
+        return "minecraft:" + block.toString().toLowerCase().split("_")[0] + "_slab[type=bottom,waterlogged=false]";
     }
 
     protected String getTopSlap(Block block) {
-        return "minecraft:" + block.toString().toLowerCase() + "_slab[type=top,waterlogged=false]";
+        return "minecraft:" + block.toString().toLowerCase().split("_")[0] + "_slab[type=top,waterlogged=false]";
     }
 
     protected String getNormalBlock(Block block) {
-        return "minecraft:" + block.toString().toLowerCase() + block.getMustAddAfterNormalBlock();
+        return "minecraft:" + block.toString().toLowerCase();
     }
 
     protected String getAir() {
