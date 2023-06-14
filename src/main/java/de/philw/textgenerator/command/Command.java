@@ -1,5 +1,6 @@
 package de.philw.textgenerator.command;
 
+import de.philw.textgenerator.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
@@ -18,7 +19,7 @@ public abstract class Command extends BukkitCommand {
         this.setAliases(Arrays.asList(aliases));
         this.setDescription(description);
         this.setPermission(permission);
-        this.setPermissionMessage(ChatColor.RED + "You need the " + permission + " permission to use this command!");
+        this.setPermissionMessage(Messages.needPermissionForCommand(permission));
         try {
             Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             field.setAccessible(true);

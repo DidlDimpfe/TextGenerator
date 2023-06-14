@@ -1,12 +1,9 @@
 package de.philw.textgenerator.command;
 
-import de.philw.textgenerator.letters.big.GenerateUtil;
 import de.philw.textgenerator.letters.big.LetterConverter;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.ui.SettingsUI;
-import de.philw.textgenerator.utils.Direction;
-import de.philw.textgenerator.utils.TextInstance;
-import de.philw.textgenerator.utils.Validator;
+import de.philw.textgenerator.utils.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
@@ -136,24 +133,24 @@ public class TextGeneratorCommand extends Command {
         try {
             Direction.valueOf(direction.toUpperCase());
         } catch (IllegalArgumentException e) {
-            player.sendMessage(ChatColor.RED + "That is not a valid direction. Try north, east, south or west!");
+            player.sendMessage(Messages.invalidDirection);
             return;
         }
 
         this.textInstance.setDirection(Direction.valueOf(direction.toUpperCase()));
-        player.sendMessage(ChatColor.GREEN + "Successfully changed the direction to " + direction);
+        player.sendMessage(Messages.successfulDirectionChange(direction));
     }
 
     private void undo(Player player) {
         if (lastChanges.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "There's nothing to undo!");
+            player.sendMessage(Messages.nothingToUndo);
             return;
         }
         HashMap<Location, BlockData> lastChange = lastChanges.get(lastChanges.size() - 1);
         for (Location location : lastChange.keySet()) {
             Objects.requireNonNull(location.getWorld()).getBlockAt(location).setBlockData(lastChange.get(location));
         }
-        player.sendMessage(ChatColor.GREEN + "Successfully undid the last change!");
+        player.sendMessage(Messages.successfulUndo);
         lastChanges.remove(lastChanges.size() - 1);
     }
 

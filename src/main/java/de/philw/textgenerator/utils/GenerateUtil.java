@@ -1,12 +1,14 @@
-package de.philw.textgenerator.letters.big;
+package de.philw.textgenerator.utils;
 
 import de.philw.textgenerator.manager.ConfigManager;
-import de.philw.textgenerator.utils.Direction;
-import de.philw.textgenerator.utils.TextInstance;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
+import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -195,6 +197,34 @@ public class GenerateUtil {
         }
         Collections.sort(toRemoveRows);
         return toRemoveRows;
+    }
+
+    public static Location getMiddleLocation(Player player, int range) {
+        int playerLocationX = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getX());
+        int playerLocationY = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getY());
+        int playerLocationZ = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getZ()) -1;
+
+        Vector normalVector = player.getLocation().getDirection().normalize();
+        Location actualLocation = null;
+
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        for (int i = 1; i <= range; i++) {
+            int nextX = playerLocationX + (int) normalVector.clone().multiply(i).getX();
+            int nextY = playerLocationY + (int) normalVector.clone().multiply(i).getY();
+            int nextZ = playerLocationZ + (int) normalVector.clone().multiply(i).getZ();
+
+            Location possibleLocation = new Location(player.getWorld(), nextX, nextY, nextZ);
+            if (possibleLocation.getBlock().getBlockData().getMaterial() != Material.AIR || i == range) {
+                actualLocation = new Location(player.getWorld(), x, y, z);
+                break;
+            }
+            x = nextX;
+            y = nextY;
+            z = nextZ;
+        }
+        return actualLocation;
     }
 
     private static boolean[][] removeColumn(boolean[][] blocks, int columnIndex) {
