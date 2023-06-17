@@ -45,14 +45,20 @@ public class FontSizeSearchUI extends SearchUI {
         ItemStack itemStack = UIUtil.getSkullByString(fontSize.getSkullData());
         ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + String.valueOf(size));
-        if (TextGenerator.getInstance().getCurrentEdited() == null) {
-            itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default size to " + size));
+        if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(uuid)) {
+            if (size == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(uuid).getTextInstance().getFontSize()) {
+                itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + size);
+                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+            } else {
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the font size from you current edited text to " + size));
+            }
         } else {
-            itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to edit " + TextGenerator.getInstance().getCurrentEdited().getText() + " to size " + size));
-        }
-        if (size == ConfigManager.getFontSize()) {
-            itemMeta.setDisplayName(ChatColor.RED + String.valueOf(size));
-            itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+            if (size == ConfigManager.getFontSize()) {
+                itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + size);
+                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+            } else {
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default font size to " + size));
+            }
         }
         itemMeta.setLocalizedName(String.valueOf(size));
         itemStack.setItemMeta(itemMeta);

@@ -2,7 +2,6 @@ package de.philw.textgenerator.command;
 
 import de.philw.textgenerator.utils.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;

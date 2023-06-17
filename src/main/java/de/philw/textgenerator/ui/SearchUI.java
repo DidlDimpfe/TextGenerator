@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class SearchUI {
 
@@ -30,17 +31,19 @@ public abstract class SearchUI {
     protected int currentPage;
     protected String currentSearch;
     protected String searchDisplayTitle;
+    protected UUID uuid;
 
     public SearchUI(String inventoryDisplay, String searchDisplayTitle, Player player) {
         TextGenerator.getInstance().getSearchUIListener().addSearchUI(player.getUniqueId(), this);
         this.inventory = Bukkit.createInventory(null, 54, inventoryDisplay);
         this.inventoryDisplay = inventoryDisplay;
         this.allItems = new ArrayList<>();
-        updateAllItems();
-        this.searchedItems = this.allItems;
         this.currentSearch = "";
         this.currentPage = 1;
         this.searchDisplayTitle = searchDisplayTitle;
+        this.uuid = player.getUniqueId();
+        updateAllItems();
+        this.searchedItems = this.allItems;
 
         // Add return item
         ItemStack returnArrowItemStack = UIUtil.getSkullByString(SkullData.RETURN_ARROW);

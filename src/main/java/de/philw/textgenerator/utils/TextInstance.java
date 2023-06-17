@@ -6,7 +6,7 @@ import org.bukkit.Location;
 public class TextInstance {
 
     private Block block;
-    private Location startLocation;
+    private Location middleLocation, topLeftLocation;
     private Direction direction;
     private String fontName;
     private int fontStyle;
@@ -23,12 +23,20 @@ public class TextInstance {
         this.block = block;
     }
 
-    public Location getStartLocation() {
-        return startLocation;
+    public Location getMiddleLocation() {
+        return middleLocation;
     }
 
-    public void setStartLocation(Location startLocation) {
-        this.startLocation = startLocation;
+    public void setMiddleLocation(Location middleLocation) {
+        this.middleLocation = middleLocation;
+    }
+
+    public Location getTopLeftLocation() {
+        return topLeftLocation;
+    }
+
+    public void setTopLeftLocation(Location topLeftLocation) {
+        this.topLeftLocation = topLeftLocation;
     }
 
     public Direction getDirection() {
@@ -94,7 +102,7 @@ public class TextInstance {
     public static class TextInstanceBuilder {
 
         private Block block;
-        private Location startLocation;
+        private Location middleLocation, topLeftLocation;
         private Direction direction;
         private String fontName;
         private int fontStyle;
@@ -108,8 +116,13 @@ public class TextInstance {
             return this;
         }
 
-        public TextInstanceBuilder withStartLocation(Location startLocation) {
-            this.startLocation = startLocation;
+        public TextInstanceBuilder withMiddleLocation(Location  middleLocation) {
+            this.middleLocation = middleLocation;
+            return this;
+        }
+
+        public TextInstanceBuilder withTopLeftLocation(Location  topLeftLocation) {
+            this.topLeftLocation = topLeftLocation;
             return this;
         }
 
@@ -151,7 +164,8 @@ public class TextInstance {
         public TextInstance build() {
             TextInstance textInstance = new TextInstance();
             textInstance.setBlock(block);
-            textInstance.setStartLocation(startLocation);
+            textInstance.setMiddleLocation(middleLocation);
+            textInstance.setTopLeftLocation(topLeftLocation);
             textInstance.setDirection(direction);
             textInstance.setFontName(fontName);
             textInstance.setFontStyle(fontStyle);

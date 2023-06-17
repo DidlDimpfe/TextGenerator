@@ -22,16 +22,19 @@ public class BlockSearchUIListener implements Listener {
         e.setCancelled(true);
         if (e.getCurrentItem().getItemMeta() == null) return;
         if (e.getCurrentItem().getItemMeta().getLocalizedName().equals("")) return;
-        if (TextGenerator.getInstance().getCurrentEdited() == null) {
-            Block block = Block.valueOf(e.getCurrentItem().getItemMeta().getLocalizedName());
+        Block block = Block.valueOf(e.getCurrentItem().getItemMeta().getLocalizedName());
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(player.getUniqueId())) {
             ConfigManager.setBlock(block);
-            TextGenerator.getInstance().getTextGeneratorCommand().getTextInstance().setBlock(block);
             for (SearchUI searchUI : TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof BlockSearchUI)) continue;
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed your default block to " + block.getDisplay());
+            player.sendMessage(ChatColor.GREEN + "Succesfully changed the default block to " + block.getDisplay());
+        } else {
+            TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setBlock(block);
+            player.closeInventory();
+            player.sendMessage(ChatColor.GREEN + "Succesfully changed the block of your current edited text to " + block.getDisplay());
             player.closeInventory();
         }
     }

@@ -40,25 +40,32 @@ public class BlockSearchUI extends SearchUI {
         }
     }
 
-    private static ItemStack getBlockItemStack(Block block) {
+    private ItemStack getBlockItemStack(Block block) {
         ItemStack itemStack = new ItemStack(Material.valueOf(block.name()));
         ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
         String display = block.getDisplay();
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + display);
-        if (TextGenerator.getInstance().getCurrentEdited() == null) {
-            itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default block to " + display));
+        if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(uuid)) {
+            if (block == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(uuid).getTextInstance().getBlock()) {
+                itemMeta.setDisplayName(ChatColor.RED + display);
+                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+                itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+                itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            } else {
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the block from you current edited text to " + display));
+            }
         } else {
-            itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to edit " + TextGenerator.getInstance().getCurrentEdited().getText() + " to block " + display));
-        }
-        if (block == ConfigManager.getBlock()) {
-            itemMeta.setDisplayName(ChatColor.RED + display);
-            itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
-            itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            if (block == ConfigManager.getBlock()) {
+                itemMeta.setDisplayName(ChatColor.RED + display);
+                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+                itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+                itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            } else {
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default Block to " + display));
+            }
         }
         itemMeta.setLocalizedName(block.name());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
-
 }

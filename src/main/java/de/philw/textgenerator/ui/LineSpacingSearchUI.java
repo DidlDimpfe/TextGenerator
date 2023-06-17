@@ -42,19 +42,25 @@ public class LineSpacingSearchUI extends SearchUI {
         }
     }
 
-    private static ItemStack getLineSpacingItemStack(LineSpacing lineSpacing) {
+    private ItemStack getLineSpacingItemStack(LineSpacing lineSpacing) {
         int lineSpacingNumber = lineSpacing.getNumber();
         ItemStack itemStack = UIUtil.getSkullByString(lineSpacing.getSkullData());
         ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + String.valueOf(lineSpacingNumber));
-        if (TextGenerator.getInstance().getCurrentEdited() == null) {
-            itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default lineSpacing to " + lineSpacingNumber));
+        if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(uuid)) {
+            if (lineSpacingNumber == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(uuid).getTextInstance().getLineSpacing()) {
+                itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + lineSpacingNumber);
+                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+            } else {
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the font size from you current edited text to " + lineSpacingNumber));
+            }
         } else {
-            itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to edit " + TextGenerator.getInstance().getCurrentEdited().getText() + " to lineSpacing " + lineSpacingNumber));
-        }
-        if (lineSpacingNumber == ConfigManager.getLineSpacing()) {
-            itemMeta.setDisplayName(ChatColor.RED + String.valueOf(lineSpacingNumber));
-            itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+            if (lineSpacingNumber == ConfigManager.getLineSpacing()) {
+                itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + lineSpacingNumber);
+                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+            } else {
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default font size to " + lineSpacingNumber));
+            }
         }
         itemMeta.setLocalizedName(String.valueOf(lineSpacingNumber));
         itemStack.setItemMeta(itemMeta);

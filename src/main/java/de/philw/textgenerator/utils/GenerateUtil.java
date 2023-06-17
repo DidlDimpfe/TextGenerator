@@ -1,63 +1,15 @@
 package de.philw.textgenerator.utils;
 
 import de.philw.textgenerator.manager.ConfigManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Player;
-import org.bukkit.util.BlockIterator;
-import org.bukkit.util.Vector;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Objects;
 
 public class GenerateUtil {
 
-    private static TextInstance textInstance;
-    private static boolean[][] blocks;
-
-    public static void setTextInstance(TextInstance textInstance) {
-        GenerateUtil.textInstance = textInstance;
-    }
-
-    public static void setBlocks(boolean[][] blocks) {
-        GenerateUtil.blocks = blocks;
-    }
-
-    public static void buildBlocks() {
-        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
-            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-                try {
-                    if (blocks[heightIndex][widthIndex]) {
-                        Objects.requireNonNull(
-                                        textInstance.getStartLocation().getWorld()).getBlockAt(Objects.requireNonNull(editStartLocation(textInstance.getStartLocation(), widthIndex, heightIndex, textInstance.getDirection()))).
-                                setBlockData(Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
-                    }
-                } catch (IndexOutOfBoundsException ignored) {
-                }
-            }
-        }
-    }
-
-    public static HashMap<Location, BlockData> getAffectedBlocks() {
-        HashMap<Location, BlockData> affectedBlocks = new HashMap<>();
-        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
-            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-                Block block = Objects.requireNonNull(textInstance.getStartLocation().getWorld()).getBlockAt(
-                        Objects.requireNonNull(editStartLocation(textInstance.getStartLocation(), widthIndex,
-                                heightIndex, textInstance.getDirection())));
-                affectedBlocks.put(block.getLocation(), block.getBlockData());
-            }
-        }
-        return affectedBlocks;
-    }
-
-    public static boolean[][] getBlocks(ArrayList<BufferedImage> linesAsBufferedImages) {
+    public static boolean[][] getBlocks(ArrayList<BufferedImage> linesAsBufferedImages, TextInstance textInstance) {
         ArrayList<boolean[][]> lines = new ArrayList<>();
         // find out the biggest width
         int width = 0;
@@ -103,10 +55,11 @@ public class GenerateUtil {
         }
         // merge the 2D-Boolean arrays to a big 2D-Boolean considering the in the config given spaceBetweenEachLine
         int height = 0;
-        int spaceBetweenEachLine = ConfigManager.getLineSpacing();
+        int spaceBetweenEachLine = textInstance.getLineSpacing();
         for (boolean[][] doneLine : lines) {
             height += doneLine.length + spaceBetweenEachLine;
         }
+        height -= spaceBetweenEachLine;
         boolean[][] blocks = new boolean[height][width];
         int currentLineIndexCount = 0;
         for (boolean[][] doneLine : lines) {
@@ -199,34 +152,6 @@ public class GenerateUtil {
         return toRemoveRows;
     }
 
-    public static Location getMiddleLocation(Player player, int range) {
-        int playerLocationX = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getX());
-        int playerLocationY = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getY());
-        int playerLocationZ = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getZ()) -1;
-
-        Vector normalVector = player.getLocation().getDirection().normalize();
-        Location actualLocation = null;
-
-        int x = 0;
-        int y = 0;
-        int z = 0;
-        for (int i = 1; i <= range; i++) {
-            int nextX = playerLocationX + (int) normalVector.clone().multiply(i).getX();
-            int nextY = playerLocationY + (int) normalVector.clone().multiply(i).getY();
-            int nextZ = playerLocationZ + (int) normalVector.clone().multiply(i).getZ();
-
-            Location possibleLocation = new Location(player.getWorld(), nextX, nextY, nextZ);
-            if (possibleLocation.getBlock().getBlockData().getMaterial() != Material.AIR || i == range) {
-                actualLocation = new Location(player.getWorld(), x, y, z);
-                break;
-            }
-            x = nextX;
-            y = nextY;
-            z = nextZ;
-        }
-        return actualLocation;
-    }
-
     private static boolean[][] removeColumn(boolean[][] blocks, int columnIndex) {
         boolean[][] newBlocks = new boolean[blocks.length - 1][];
         System.arraycopy(blocks, 0, newBlocks, 0, columnIndex);
@@ -244,12 +169,25 @@ public class GenerateUtil {
         }
     }
 
-    private static Location editStartLocation(Location start, int toRight, int toBottom, Direction direction) {
-        if (direction == Direction.NORTH) return start.clone().subtract(0, toBottom, toRight);
-        if (direction == Direction.EAST) return start.clone().subtract(0, toBottom, 0).add(toRight, 0, 0);
-        if (direction == Direction.SOUTH) return start.clone().subtract(0, toBottom, 0).add(0, 0, toRight);
-        if (direction == Direction.WEST) return start.clone().subtract(toRight, toBottom, 0);
-        return null;
+    public static boolean areLocationsEqual(Location a, Location b) {
+        return a.getWorld() == b.getWorld() && a.getY() == b.getY() && a.getX() == b.getX() && a.getZ() == b.getZ();
     }
+
+//    public static void setBlockInNativeDataPalette(World world, int x, int y, int z, int blockId, byte data, boolean applyPhysics) {
+//        org.bukkit.nmsWorld = ((CraftWorld) world).getHandle();
+//        net.minecraft.server.v1_14_R1.Chunk nmsChunk = nmsWorld.getChunkAt(x >> 4, z >> 4);
+//        IBlockData ibd = net.minecraft.server.v1_14_R1.Block.getByCombinedId(blockId + (data << 12));
+//
+//        LevelChunkSection cs = nmsChunk.getSections()[y >> 4];
+//        if (cs == nmsChunk.a()) {
+//            cs = new ChunkSection(y >> 4 << 4);
+//            nmsChunk.getSections()[y >> 4] = cs;
+//        }
+//
+//        if (applyPhysics)
+//            cs.getBlocks().setBlock(x & 15, y & 15, z & 15, ibd);
+//        else
+//            cs.getBlocks().b(x & 15, y & 15, z & 15, ibd);
+//    }
 
 }

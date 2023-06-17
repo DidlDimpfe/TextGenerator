@@ -21,16 +21,18 @@ public class FontSizeSearchUIListener implements Listener {
         e.setCancelled(true);
         if (e.getCurrentItem().getItemMeta() == null) return;
         if (e.getCurrentItem().getItemMeta().getLocalizedName().equals("")) return;
-        if (TextGenerator.getInstance().getCurrentEdited() == null) {
-            String fontSize = e.getCurrentItem().getItemMeta().getLocalizedName();
-            ConfigManager.setFontSize(Integer.parseInt(fontSize));
-            TextGenerator.getInstance().getTextGeneratorCommand().getTextInstance().setFontSize(Integer.parseInt(fontSize));
+        int size = Integer.parseInt(e.getCurrentItem().getItemMeta().getLocalizedName());
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(player.getUniqueId())) {
+            ConfigManager.setFontSize(size);
             for (SearchUI searchUI : TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof FontSizeSearchUI)) continue;
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed your default font size to " + fontSize);
+            player.sendMessage(ChatColor.GREEN + "Succesfully changed the default font size to " + size);
+        } else {
+            TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setFontSize(size);
+            player.sendMessage(ChatColor.GREEN + "Succesfully changed the font size of your current edited text to " + size);
             player.closeInventory();
         }
     }
