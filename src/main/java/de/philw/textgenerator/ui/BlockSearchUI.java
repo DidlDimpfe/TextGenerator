@@ -64,7 +64,7 @@ public class BlockSearchUI extends SearchUI {
                 itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default Block to " + display));
             }
         }
-        itemMeta.setLocalizedName(block.name());
+        itemMeta.setLocalizedName(SearchUI.BLOCK_SEARCH_UI + ";" + block.name());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

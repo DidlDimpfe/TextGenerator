@@ -21,7 +21,7 @@ public class ConfigManager {
     public static void setUpConfig() {
         ConfigManager.config = TextGenerator.getInstance().getConfig();
         TextGenerator.getInstance().saveDefaultConfig();
-        updateConfig(TextGenerator.getInstance());
+        updateConfig();
     }
 
     public static Block getBlock() {
@@ -114,7 +114,7 @@ public class ConfigManager {
      * This method adds a field, if the field is not in the config, to the config with the default value
      */
 
-    private static void updateConfig(TextGenerator textGenerator) {
+    private static void updateConfig() {
         if (!config.isSet("textSettings.block")) {
             config.set("textSettings.block", Objects.requireNonNull(config.getDefaults()).get("textSettings.block"));
         }

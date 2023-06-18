@@ -18,6 +18,10 @@ import java.util.UUID;
 
 public abstract class SearchUI {
 
+    public final static int BLOCK_SEARCH_UI = 0;
+    public final static int FONT_SIZE_SEARCH_UI = 1;
+    public final static int LINE_SPACING_SEARCH_UI = 2;
+
     protected final static int SPACES = 45;
     protected final static int RETURN_ARROW_INDEX = 45;
     protected final static int PREVIOUS_PAGE_INDEX = 48;

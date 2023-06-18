@@ -62,7 +62,7 @@ public class LineSpacingSearchUI extends SearchUI {
                 itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default font size to " + lineSpacingNumber));
             }
         }
-        itemMeta.setLocalizedName(String.valueOf(lineSpacingNumber));
+        itemMeta.setLocalizedName(SearchUI.LINE_SPACING_SEARCH_UI + ";" + lineSpacingNumber);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

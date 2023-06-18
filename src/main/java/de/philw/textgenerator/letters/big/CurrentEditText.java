@@ -52,60 +52,6 @@ public class CurrentEditText {
         System.out.println(toUpdateBlocks);
     }
 
-//    private void updatePreviewBlocks() {
-//        updateTopLeftLocation();
-//        for (FastBlockUpdate fastBlockUpdate: currentUpdates) {
-//            if (fastBlockUpdate.isRunning()) {
-//                fastBlockUpdate.cancel();
-//            }
-//        }
-//        currentUpdates.clear();
-//        ArrayList<Location> toAirBlocks = new ArrayList<>();
-//        ArrayList<Location> toBuildBlocks = new ArrayList<>();
-//        ArrayList<Location> allBlocks = new ArrayList<>();
-//
-//        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
-//            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-//                try {
-//                    if (!blocks[heightIndex][widthIndex]) {
-//                        continue;
-//                    }
-//                    Location toPlaceBlockLocation = editLocation(textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0);
-//                    allBlocks.add(toPlaceBlockLocation);
-//                    if (!currentlyPreviewedBlocks.contains(toPlaceBlockLocation)) {
-//                        toBuildBlocks.add(toPlaceBlockLocation);
-//                    }
-//                } catch (IndexOutOfBoundsException ignored) {
-//                }
-//            }
-//        }
-//
-//        for (Location location: currentlyPreviewedBlocks) {
-//            if (!allBlocks.contains(location)) {
-//                toAirBlocks.add(location);
-//            }
-//        }
-//        currentlyPreviewedBlocks.clear();
-//
-//
-//        FastBlockUpdate airFastBlockUpdate = new FastBlockUpdate(TextGenerator.getInstance(), 10000);
-//        for (Location location: toAirBlocks) {
-//            location.getWorld().getBlockAt(location).setBlockData(Material.AIR.createBlockData());
-//        }
-//        airFastBlockUpdate.run();
-//
-//
-//        FastBlockUpdate fastBlockUpdate = new FastBlockUpdate(TextGenerator.getInstance(),10000);
-//        for (Location location: toBuildBlocks) {
-//            location.getWorld().getBlockAt(location).setBlockData(Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
-//        }
-//        fastBlockUpdate.run();
-////        currentUpdates.add(fastBlockUpdate);
-//        for (Location location: allBlocks) {
-//            currentlyPreviewedBlocks.add(location);
-//        }
-//    }
-
     private void updatePreviewBlocks() {
         updateTopLeftLocation();
         for (FastBlockUpdate fastBlockUpdate: currentUpdates) {
@@ -174,24 +120,9 @@ public class CurrentEditText {
         }, 1, 1));
     }
 
-    private void stopTasks() {
+    public void stopTasks() {
         for (BukkitTask bukkitTask: tasks) {
             bukkitTask.cancel();
-        }
-    }
-
-    public void buildBlocks() {
-        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
-            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-                try {
-                    if (blocks[heightIndex][widthIndex]) {
-                        Objects.requireNonNull(
-                                        textInstance.getTopLeftLocation().getWorld()).getBlockAt(Objects.requireNonNull(editLocation(textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0))).
-                                setBlockData(Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
-                    }
-                } catch (IndexOutOfBoundsException ignored) {
-                }
-            }
         }
     }
 
@@ -245,7 +176,7 @@ public class CurrentEditText {
             int nextZ = playerLocationZ + (int) normalVector.clone().multiply(i).getZ();
 
             Location possibleLocation = new Location(player.getWorld(), nextX, nextY, nextZ);
-//            if (possibleLocation.getBlock().getBlockData().getMaterial() != Material.AIR) {
+//            if (possibleLocation.getBlock().getBlockData().getMaterial() != Material.AIR) { TO WORK ON
 //                if (!currentlyPreviewedBlocks.contains(possibleLocation)) {
 //                    actualLocation = new Location(player.getWorld(), x, y, z);
 //                    break;
@@ -279,7 +210,7 @@ public class CurrentEditText {
     }
 
     private void updateBlocks() {
-        this.blocks = GenerateUtil.getBlocks(LetterConverter.stringToBufferedImages(textInstance), textInstance);
+        this.blocks = GenerateUtil.getBlocks(textInstance);
         toUpdateBlocks = 0;
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
@@ -298,6 +229,10 @@ public class CurrentEditText {
         textInstance.setLineSpacing(lineSpacing);
         updateBlocks();
         updatePreviewBlocks();
+    }
+
+    public void save() {
+        // TO WORK ON
     }
 
 }

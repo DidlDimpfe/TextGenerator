@@ -60,7 +60,7 @@ public class FontSizeSearchUI extends SearchUI {
                 itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default font size to " + size));
             }
         }
-        itemMeta.setLocalizedName(String.valueOf(size));
+        itemMeta.setLocalizedName(SearchUI.FONT_SIZE_SEARCH_UI + ";" + size);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

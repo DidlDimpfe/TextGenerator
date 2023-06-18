@@ -10,7 +10,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class TextGenerator extends JavaPlugin {
 
     private static TextGenerator INSTANCE;
-    private TextInstance currentEdited;
     private SearchUIListener searchUIListener;
     private TextGeneratorCommand textGeneratorCommand;
 
@@ -27,9 +26,6 @@ public final class TextGenerator extends JavaPlugin {
         searchUIListener = new SearchUIListener();
         Bukkit.getPluginManager().registerEvents(new SettingsUIListener(), this);
         Bukkit.getPluginManager().registerEvents(searchUIListener, this);
-        Bukkit.getPluginManager().registerEvents(new FontSizeSearchUIListener(), this);
-        Bukkit.getPluginManager().registerEvents(new LineSpacingSearchUIListener(), this);
-        Bukkit.getPluginManager().registerEvents(new BlockSearchUIListener(), this);
     }
 
     @Override
@@ -43,14 +39,6 @@ public final class TextGenerator extends JavaPlugin {
 
     public static String getMessageBeginning() {
         return "[TextGenerator] ";
-    }
-
-    public TextInstance getCurrentEdited() {
-        return currentEdited;
-    }
-
-    public void setCurrentEdited(TextInstance currentEdited) {
-        this.currentEdited = currentEdited;
     }
 
     public SearchUIListener getSearchUIListener() {
