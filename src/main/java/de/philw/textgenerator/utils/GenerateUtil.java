@@ -1,6 +1,5 @@
 package de.philw.textgenerator.utils;
 
-import de.philw.textgenerator.manager.ConfigManager;
 import org.bukkit.Location;
 
 import java.awt.*;
@@ -219,22 +218,4 @@ public class GenerateUtil {
     public static boolean areLocationsEqual(Location a, Location b) {
         return a.getWorld() == b.getWorld() && a.getY() == b.getY() && a.getX() == b.getX() && a.getZ() == b.getZ();
     }
-
-//    public static void setBlockInNativeDataPalette(World world, int x, int y, int z, int blockId, byte data, boolean applyPhysics) {
-//        org.bukkit.nmsWorld = ((CraftWorld) world).getHandle();
-//        net.minecraft.server.v1_14_R1.Chunk nmsChunk = nmsWorld.getChunkAt(x >> 4, z >> 4);
-//        IBlockData ibd = net.minecraft.server.v1_14_R1.Block.getByCombinedId(blockId + (data << 12));
-//
-//        LevelChunkSection cs = nmsChunk.getSections()[y >> 4];
-//        if (cs == nmsChunk.a()) {
-//            cs = new ChunkSection(y >> 4 << 4);
-//            nmsChunk.getSections()[y >> 4] = cs;
-//        }
-//
-//        if (applyPhysics)
-//            cs.getBlocks().setBlock(x & 15, y & 15, z & 15, ibd);
-//        else
-//            cs.getBlocks().b(x & 15, y & 15, z & 15, ibd);
-//    }
-
 }

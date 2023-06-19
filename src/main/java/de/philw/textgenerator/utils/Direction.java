@@ -10,9 +10,6 @@ public enum Direction {
             return EAST;
         }
 
-        public Direction getLeftDirection() {
-            return WEST;
-        }
     },
     EAST() {
         public Direction getOppositeDirection() {
@@ -23,9 +20,6 @@ public enum Direction {
             return SOUTH;
         }
 
-        public Direction getLeftDirection() {
-            return NORTH;
-        }
     },
     SOUTH() {
         public Direction getOppositeDirection() {
@@ -36,9 +30,6 @@ public enum Direction {
             return WEST;
         }
 
-        public Direction getLeftDirection() {
-            return EAST;
-        }
     },
     WEST() {
         public Direction getOppositeDirection() {
@@ -49,14 +40,10 @@ public enum Direction {
             return NORTH;
         }
 
-        public Direction getLeftDirection() {
-            return SOUTH;
-        }
     };
 
     public abstract Direction getOppositeDirection();
 
     public abstract Direction getRightDirection();
 
-    public abstract Direction getLeftDirection();
 }

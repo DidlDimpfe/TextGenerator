@@ -18,7 +18,7 @@ import java.util.Objects;
 public class BlockSearchUI extends SearchUI {
 
     public BlockSearchUI(Player player) {
-        super(ChatColor.GREEN + "Select a Block for the text", "Search a block...", player);
+        super(ChatColor.GREEN + "Select block", "Search a block...", player);
     }
 
     @Override

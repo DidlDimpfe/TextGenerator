@@ -3,7 +3,6 @@ package de.philw.textgenerator;
 import de.philw.textgenerator.command.TextGeneratorCommand;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.ui.*;
-import de.philw.textgenerator.utils.TextInstance;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

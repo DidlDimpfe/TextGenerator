@@ -1,6 +1,6 @@
 package de.philw.textgenerator.command;
 
-import de.philw.textgenerator.letters.big.CurrentEditText;
+import de.philw.textgenerator.letters.CurrentEditedText;
 import de.philw.textgenerator.ui.SettingsUI;
 import de.philw.textgenerator.utils.Messages;
 import org.bukkit.ChatColor;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class TextGeneratorCommand extends Command {
 
-    private final HashMap<UUID, CurrentEditText> currentEditTexts;
+    private final HashMap<UUID, CurrentEditedText> currentEditTexts;
 
 
     public TextGeneratorCommand() {
@@ -42,6 +42,7 @@ public class TextGeneratorCommand extends Command {
         if (checkConfirm(player, args)) return;
         if (checkSettingsMenu(player, args)) return;
         if (checkGenerate(player, args)) return;
+        if (checkCancel(player, args)) return;
 
         helpRequested(player);
     }
@@ -52,11 +53,14 @@ public class TextGeneratorCommand extends Command {
         for (int index = 1; index < args.length; index++) {
             builder.append(args[index]).append(" ");
         }
-        currentEditTexts.put(player.getUniqueId(), new CurrentEditText(player, builder.substring(0, builder.toString().length() - 1)));
+        currentEditTexts.put(player.getUniqueId(), new CurrentEditedText(player, builder.substring(0, builder.toString().length() - 1), true));
+        //TO WORK ON
+        // You can  adjust it now message
+        // don't Forget to confirm message
         return true;
     }
 
-    public HashMap<UUID, CurrentEditText> getCurrentEditTexts() {
+    public HashMap<UUID, CurrentEditedText> getCurrentEditTexts() {
         return currentEditTexts;
     }
 
@@ -106,6 +110,25 @@ public class TextGeneratorCommand extends Command {
             return true;
         }
         return false;
+    }
+
+    private boolean checkCancel(Player player, String[] args) {
+        if (!(args.length == 1 && args[0].equalsIgnoreCase("cancel"))) return false;
+        if (!currentEditTexts.containsKey(player.getUniqueId())) {
+            player.sendMessage(Messages.cancelDestroyDenied);
+            return true;
+        }
+        CurrentEditedText currentEditedText = currentEditTexts.get(player.getUniqueId());
+        if (currentEditedText.isFirstGenerate()) {
+            currentEditedText.destroy();
+            currentEditTexts.remove(player.getUniqueId());
+            player.sendMessage(Messages.cancelDestroySuccess);
+            return true;
+        }
+        // TO WORK ON
+        // SET TO PREVIOUS STATE
+
+        return true;
     }
 
 }

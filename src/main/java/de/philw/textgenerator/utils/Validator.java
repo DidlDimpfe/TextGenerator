@@ -27,18 +27,18 @@ public class Validator {
     }
 
     public static boolean isValidSize(String size) {
-        if (!isInteger(size)) return false;
+        if (isNoInteger(size)) return false;
         int integer = Integer.parseInt(size);
         return integer > 5 && integer < 250;
     }
 
-    public static boolean isInteger(String integer) {
+    public static boolean isNoInteger(String integer) {
         try {
             Integer.parseInt(integer);
         } catch (NumberFormatException e) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public static boolean isValidFontStyle(String fontStyle) {
@@ -51,7 +51,7 @@ public class Validator {
     }
 
     public static boolean isValidSpaceBetweenEachLine(String spaceBetweenEachLine) {
-        if (!isInteger(spaceBetweenEachLine)) return false;
+        if (isNoInteger(spaceBetweenEachLine)) return false;
         return Integer.parseInt(spaceBetweenEachLine) > 0;
     }
 

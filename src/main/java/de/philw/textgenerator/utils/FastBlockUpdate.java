@@ -13,9 +13,9 @@ import java.util.Map;
 public class FastBlockUpdate {
 
     private final JavaPlugin javaPlugin;
-    private int blocksPerTick;
+    private final int blocksPerTick;
 
-    private Map<Location, BlockData> blocks = new LinkedHashMap<>();
+    private final Map<Location, BlockData> blocks = new LinkedHashMap<>();
     private FastBlockUpdateTask fastBlockUpdateTask = null;
 
     public FastBlockUpdate(JavaPlugin javaPlugin, int blocksPerTick) {
@@ -27,16 +27,8 @@ public class FastBlockUpdate {
         return blocksPerTick;
     }
 
-    public void setBlocksPerTick(int blocksPerTick) {
-        this.blocksPerTick = blocksPerTick;
-    }
-
     public Map<Location, BlockData> getBlocks() {
         return blocks;
-    }
-
-    public void setBlocks(Map<Location, BlockData> blocks) {
-        this.blocks = blocks;
     }
 
     public void addBlock(Location location, BlockData blockData) {
@@ -94,6 +86,7 @@ public class FastBlockUpdate {
                         for (int blocks = 0; blocks < blocksPerTicks; blocks++) {
                             if (cancelled) {
                                 for (BukkitRunnable runnable : tasks) runnable.cancel();
+                                setComplete(true);
                                 return;
                             }
                             if (!blocksRemaining.entrySet().iterator().hasNext()) break;

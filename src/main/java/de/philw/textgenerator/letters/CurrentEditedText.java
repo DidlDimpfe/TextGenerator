@@ -1,4 +1,4 @@
-package de.philw.textgenerator.letters.big;
+package de.philw.textgenerator.letters;
 
 import de.philw.textgenerator.TextGenerator;
 import de.philw.textgenerator.manager.ConfigManager;
@@ -19,22 +19,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class CurrentEditText {
+public class CurrentEditedText {
 
     private final Player player;
     private final TextInstance textInstance;
     private boolean[][] blocks;
     private final ArrayList<BukkitTask> tasks;
     private final ArrayList<Location> currentlyPreviewedBlocks;
-    private final ArrayList<FastBlockUpdate> currentUpdates;
+    private final ArrayList<FastBlockUpdate> currentUpdates; // TO WORK ON: Vielleicht nur buildUpdates
     private int toUpdateBlocks;
+    private boolean firstGenerate;
 
-    public CurrentEditText(Player player, String wantedText) {
+    public CurrentEditedText(Player player, String wantedText, boolean firstGenerate) {
         this.player = player;
         this.tasks = new ArrayList<>();
         this.currentlyPreviewedBlocks = new ArrayList<>();
         this.currentUpdates = new ArrayList<>();
         this.previosPlayerLocation = player.getLocation();
+        this.firstGenerate = firstGenerate;
         textInstance = TextInstance.getTextInstanceBuilder()
                 .withBlock(ConfigManager.getBlock())
                 .withFontSize(ConfigManager.getFontSize())
@@ -49,28 +51,28 @@ public class CurrentEditText {
         this.updateBlocks();
         updatePreviewBlocks();
         addTasks();
-        System.out.println(toUpdateBlocks);
     }
 
     private void updatePreviewBlocks() {
         updateTopLeftLocation();
-        for (FastBlockUpdate fastBlockUpdate: currentUpdates) {
-            if (fastBlockUpdate.isRunning()) {
-                fastBlockUpdate.cancel();
+        try {
+            FastBlockUpdate previousBlockBuilder = currentUpdates.get(1);
+            if (previousBlockBuilder.isRunning() && toUpdateBlocks > 10000) {
+                previousBlockBuilder.cancel();
             }
-        }
+        } catch (IndexOutOfBoundsException ignored) {}
         currentUpdates.clear();
 
 
-        FastBlockUpdate airFastBlockUpdate = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
+        FastBlockUpdate airBuilder = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
         for (Location location: currentlyPreviewedBlocks) {
-            airFastBlockUpdate.addBlock(location, Material.AIR.createBlockData());
+            airBuilder.addBlock(location, Material.AIR.createBlockData());
         }
         currentlyPreviewedBlocks.clear();
-        airFastBlockUpdate.run();
+        airBuilder.run();
 
 
-        FastBlockUpdate fastBlockUpdate = new FastBlockUpdate(TextGenerator.getInstance(),100000);
+        FastBlockUpdate blockBuilder = new FastBlockUpdate(TextGenerator.getInstance(),100000);
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
                 try {
@@ -78,13 +80,15 @@ public class CurrentEditText {
                         continue;
                     }
                     Location toPlaceBlockLocation = editLocation(textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0);
-                    fastBlockUpdate.addBlock(toPlaceBlockLocation, Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
+                    blockBuilder.addBlock(toPlaceBlockLocation, Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
                     currentlyPreviewedBlocks.add(toPlaceBlockLocation);
                 } catch (IndexOutOfBoundsException ignored) {
                 }
             }
         }
-        fastBlockUpdate.run();
+        blockBuilder.run();
+        currentUpdates.add(airBuilder);
+        currentUpdates.add(blockBuilder);
     }
 
     private Location previosPlayerLocation;
@@ -235,4 +239,24 @@ public class CurrentEditText {
         // TO WORK ON
     }
 
+    private BukkitTask destroyTask;
+
+    public void destroy() {
+        stopTasks();
+        destroyTask = Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
+                FastBlockUpdate previousBlockBuilder = currentUpdates.get(1);
+                if (!previousBlockBuilder.isRunning()) {
+                    FastBlockUpdate fastBlockUpdate = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
+                    for (Location location: currentlyPreviewedBlocks) {
+                        fastBlockUpdate.addBlock(location, Material.AIR.createBlockData());
+                    }
+                    fastBlockUpdate.run();
+                    destroyTask.cancel();
+                }
+        }, 1, 1);
+    }
+
+    public boolean isFirstGenerate() {
+        return firstGenerate;
+    }
 }

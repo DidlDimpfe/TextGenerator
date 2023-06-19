@@ -17,13 +17,13 @@ public class SettingsUIListener implements Listener {
         if (e.getCurrentItem() == null) return;
         Player player = (Player) e.getWhoClicked();
         e.setCancelled(true);
-        if (e.getRawSlot() == 0) { // close
+        if (e.getRawSlot() == 0) {
             new FontSizeSearchUI(player);
         }
-        if (e.getRawSlot() == 1) { // close
+        if (e.getRawSlot() == 1) {
             new LineSpacingSearchUI(player);
         }
-        if (e.getRawSlot() == 2) { // close
+        if (e.getRawSlot() == 2) {
             new BlockSearchUI(player);
         }
     }
