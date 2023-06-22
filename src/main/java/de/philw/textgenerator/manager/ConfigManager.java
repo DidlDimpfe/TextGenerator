@@ -27,8 +27,8 @@ public class ConfigManager {
     public static Block getBlock() {
         String block = config.getString("textSettings.block");
         if (!Validator.isValidBlock(Objects.requireNonNull(block))) {
-            printNotValidMessage(block, "Quartz_Block", "block");
-            return Block.QUARTZ_BLOCK;
+            printNotValidMessage(block, Objects.requireNonNull(config.getDefaults()).getString("textSettings.block"), "block");
+            return Block.valueOf(config.getDefaults().getString("textSettings.block"));
         }
         return Block.valueOf(block.toUpperCase());
     }
@@ -41,18 +41,17 @@ public class ConfigManager {
     public static String getFontName() {
         String fontName = config.getString("textSettings.fontName");
         if (!Validator.isValidFont(fontName)) {
-            printNotValidMessage(fontName, "SansSerif", "font name");
-            return "SansSerif";
+            printNotValidMessage(fontName, Objects.requireNonNull(config.getDefaults()).getString("textSettings.fontName"), "font name");
+            return config.getDefaults().getString("textSettings.fontName");
         }
         return fontName;
     }
 
     public static int getFontSize() {
         String size = config.getString("textSettings.fontSize");
-        if (!Validator.isValidSize(size)) {
-            printNotValidMessage(size, "15", "font size");
-            return 15;
-
+        if (!Validator.isValidFontSize(size)) {
+            printNotValidMessage(size, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.fontSize")), "font size");
+            return config.getDefaults().getInt("textSettings.fontSize");
         }
         return Integer.parseInt(Objects.requireNonNull(size));
     }
@@ -65,7 +64,7 @@ public class ConfigManager {
     public static int getFontStyle() {
         String fontStyle = config.getString("textSettings.fontStyle");
         if (!Validator.isValidFontStyle(Objects.requireNonNull(fontStyle))) {
-            printNotValidMessage(fontStyle, "Bold", "font style");
+            printNotValidMessage(fontStyle, Objects.requireNonNull(config.getDefaults()).getString("textSettings.fontStyle"), "font style");
             return 1;
         }
         if (fontStyle.equalsIgnoreCase("Bold")) return 1;
@@ -77,17 +76,17 @@ public class ConfigManager {
     public static boolean isUnderline() {
         String bool = config.getString("textSettings.underline");
         if (!Validator.isValidBoolean(Objects.requireNonNull(bool))) {
-            printNotValidMessage(bool, "false", "underline");
-            return false;
+            printNotValidMessage(bool, String.valueOf(Objects.requireNonNull(config.getDefaults()).getBoolean("textSettings.underline")), "underline");
+            return config.getDefaults().getBoolean("textSettings.underline");
         }
         return Boolean.parseBoolean(bool.toLowerCase());
     }
 
     public static int getLineSpacing() {
         String spaceBetweenEachLine = config.getString("textSettings.lineSpacing");
-        if (!Validator.isValidSpaceBetweenEachLine(spaceBetweenEachLine)) {
-            printNotValidMessage(spaceBetweenEachLine, "2", "lineSpacing");
-            return 2;
+        if (!Validator.isValidLineSpacing(spaceBetweenEachLine)) {
+            printNotValidMessage(spaceBetweenEachLine, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.lineSpacing")), "lineSpacing");
+            return config.getDefaults().getInt("textSettings.lineSpacing");
         }
         return Integer.parseInt(Objects.requireNonNull(spaceBetweenEachLine));
     }
@@ -95,6 +94,15 @@ public class ConfigManager {
     public static void setLineSpacing(int lineSpacing) {
         config.set("textSettings.lineSpacing", lineSpacing);
         saveConfig();
+    }
+
+    public static int getPlaceRange() {
+        String placeRange = config.getString("textSettings.placeRange");
+        if (!Validator.isValidPlaceRange(placeRange)) {
+            printNotValidMessage(placeRange, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.placeRange")), "place range");
+            return config.getDefaults().getInt("textSettings.placeRange");
+        }
+        return Integer.parseInt(Objects.requireNonNull(placeRange));
     }
 
     public static void printNotValidMessage(String notValidValue, String defaultValue, String dataType) {
@@ -137,6 +145,10 @@ public class ConfigManager {
         if (!config.isSet("textSettings.lineSpacing")) {
             config.set("textSettings.lineSpacing", Objects.requireNonNull(config.getDefaults()).get(
                     "textSettings.lineSpacing"));
+        }
+        if (!config.isSet("textSettings.placeRange")) {
+            config.set("textSettings.placeRange", Objects.requireNonNull(config.getDefaults()).get(
+                    "textSettings.placeRange"));
         }
         saveConfig();
     }

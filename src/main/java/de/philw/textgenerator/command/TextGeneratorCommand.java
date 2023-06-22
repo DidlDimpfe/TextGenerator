@@ -77,8 +77,7 @@ public class TextGeneratorCommand extends Command {
     private boolean checkConfirm(Player player, String[] args) {
         if (!(args.length == 1 && args[0].equalsIgnoreCase("confirm"))) return false;
         if (currentEditTexts.containsKey(player.getUniqueId())) {
-            currentEditTexts.get(player.getUniqueId()).stopTasks();
-            currentEditTexts.get(player.getUniqueId()).save();
+            currentEditTexts.get(player.getUniqueId()).confirm();
             currentEditTexts.remove(player.getUniqueId());
             player.sendMessage(Messages.confirmSuccessful);
         } else {

@@ -1,6 +1,9 @@
 package de.philw.textgenerator.utils;
 
 import de.philw.textgenerator.ui.value.Block;
+import de.philw.textgenerator.ui.value.FontSize;
+import de.philw.textgenerator.ui.value.LineSpacing;
+import de.philw.textgenerator.ui.value.PlaceRange;
 
 import java.awt.*;
 
@@ -26,10 +29,10 @@ public class Validator {
         return true;
     }
 
-    public static boolean isValidSize(String size) {
+    public static boolean isValidFontSize(String size) {
         if (isNoInteger(size)) return false;
         int integer = Integer.parseInt(size);
-        return integer > 5 && integer < 250;
+        return integer >= FontSize.getMinFontSize() && integer <= FontSize.getMaxFontSize();
     }
 
     public static boolean isNoInteger(String integer) {
@@ -50,9 +53,15 @@ public class Validator {
         return bool.equalsIgnoreCase("true") || bool.equalsIgnoreCase("false");
     }
 
-    public static boolean isValidSpaceBetweenEachLine(String spaceBetweenEachLine) {
-        if (isNoInteger(spaceBetweenEachLine)) return false;
-        return Integer.parseInt(spaceBetweenEachLine) > 0;
+    public static boolean isValidLineSpacing(String lineSpacing) {
+        if (isNoInteger(lineSpacing)) return false;
+        int number = Integer.parseInt(lineSpacing);
+        return number >= LineSpacing.getMinLineSpacing() && number <= LineSpacing.getMaxLineSpacing();
     }
 
+    public static boolean isValidPlaceRange(String placeRange) {
+        if (isNoInteger(placeRange)) return false;
+        int number = Integer.parseInt(placeRange);
+        return Integer.parseInt(placeRange) >= PlaceRange.getMinPlaceRange() && number <= PlaceRange.getMaxPlaceRange();
+    }
 }

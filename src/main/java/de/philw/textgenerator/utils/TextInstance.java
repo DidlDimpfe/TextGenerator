@@ -14,6 +14,7 @@ public class TextInstance {
     private String text;
     private boolean underline;
     private int lineSpacing;
+    private int placeRange;
 
     public Block getBlock() {
         return block;
@@ -95,6 +96,14 @@ public class TextInstance {
         return underline;
     }
 
+    public void setPlaceRange(int placeRange) {
+        this.placeRange = placeRange;
+    }
+
+    public int getPlaceRange() {
+        return placeRange;
+    }
+
     public static TextInstanceBuilder getTextInstanceBuilder() {
         return new TextInstanceBuilder();
     }
@@ -110,6 +119,7 @@ public class TextInstance {
         private String text;
         private boolean underline;
         private int lineSpacing = 2;
+        private int placeRange = 0;
 
         public TextInstanceBuilder withBlock(Block block) {
             this.block = block;
@@ -161,6 +171,11 @@ public class TextInstance {
             return this;
         }
 
+        public TextInstanceBuilder withPlaceRange(int placeRange) {
+            this.placeRange = placeRange;
+            return this;
+        }
+
         public TextInstance build() {
             TextInstance textInstance = new TextInstance();
             textInstance.setBlock(block);
@@ -173,6 +188,7 @@ public class TextInstance {
             textInstance.setText(text);
             textInstance.setUnderline(underline);
             textInstance.setLineSpacing(lineSpacing);
+            textInstance.setPlaceRange(placeRange);
             return textInstance;
         }
 

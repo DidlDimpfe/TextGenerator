@@ -99,7 +99,7 @@ public class GenerateUtil {
             }
             lines.set(arrayIndex, doneLine);
         }
-        // merge the 2D-Boolean arrays to a big 2D-Boolean considering the in the config given spaceBetweenEachLine
+        // merge the 2D-Boolean arrays to a big 2D-Boolean considering the in the textInstance given spaceBetweenEachLine
         int height = 0;
         int spaceBetweenEachLine = textInstance.getLineSpacing();
         for (boolean[][] doneLine : lines) {
@@ -218,4 +218,13 @@ public class GenerateUtil {
     public static boolean areLocationsEqual(Location a, Location b) {
         return a.getWorld() == b.getWorld() && a.getY() == b.getY() && a.getX() == b.getX() && a.getZ() == b.getZ();
     }
+
+    public static Location editLocation(TextInstance textInstance, Location location, int toRight, int toBottom, int toLeft, int toTop) {
+        if (textInstance.getDirection() == Direction.NORTH) return location.clone().subtract(0, toBottom, toRight).add(0, toTop, toLeft);
+        if (textInstance.getDirection() == Direction.EAST) return location.clone().subtract(toLeft, toBottom, 0).add(toRight, toTop, 0);
+        if (textInstance.getDirection() == Direction.SOUTH) return location.clone().subtract(0, toBottom, toLeft).add(0, toTop, toRight);
+        if (textInstance.getDirection() == Direction.WEST) return location.clone().subtract(toRight, toBottom, 0).add(toLeft, toTop, 0);
+        return null;
+    }
+
 }

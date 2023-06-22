@@ -127,4 +127,13 @@ public enum FontSize {
     public List<String> getSearchKeywords() {
         return searchKeywords;
     }
+
+    public static int getMinFontSize() {
+        return 6;
+    }
+
+    public static int getMaxFontSize() {
+        return 99;
+    }
+
 }

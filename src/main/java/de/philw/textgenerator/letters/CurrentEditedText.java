@@ -10,33 +10,31 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class CurrentEditedText {
 
     private final Player player;
     private final TextInstance textInstance;
-    private boolean[][] blocks;
     private final ArrayList<BukkitTask> tasks;
     private final ArrayList<Location> currentlyPreviewedBlocks;
-    private final ArrayList<FastBlockUpdate> currentUpdates; // TO WORK ON: Vielleicht nur buildUpdates
+    private final boolean firstGenerate;
+    private boolean[][] blocks;
+    private FastBlockUpdate blockBuilder;
     private int toUpdateBlocks;
-    private boolean firstGenerate;
 
     public CurrentEditedText(Player player, String wantedText, boolean firstGenerate) {
         this.player = player;
         this.tasks = new ArrayList<>();
         this.currentlyPreviewedBlocks = new ArrayList<>();
-        this.currentUpdates = new ArrayList<>();
         this.previosPlayerLocation = player.getLocation();
         this.firstGenerate = firstGenerate;
+        int placeRange = ConfigManager.getPlaceRange();
         textInstance = TextInstance.getTextInstanceBuilder()
                 .withBlock(ConfigManager.getBlock())
                 .withFontSize(ConfigManager.getFontSize())
@@ -44,51 +42,14 @@ public class CurrentEditedText {
                 .withFontStyle(ConfigManager.getFontStyle())
                 .withUnderline(ConfigManager.isUnderline())
                 .withLineSpacing(ConfigManager.getLineSpacing())
-                .withMiddleLocation(getMiddleLocationFromPlayersSight(player, 40))
+                .withMiddleLocation(getMiddleLocationFromPlayersSight(player, placeRange))
                 .withText(wantedText)
                 .withDirection(Direction.valueOf(player.getFacing().toString()).getRightDirection())
+                .withPlaceRange(placeRange)
                 .build();
-        this.updateBlocks();
-        updatePreviewBlocks();
+        updateBlockArray();
+        updateBlocksInWorld();
         addTasks();
-    }
-
-    private void updatePreviewBlocks() {
-        updateTopLeftLocation();
-        try {
-            FastBlockUpdate previousBlockBuilder = currentUpdates.get(1);
-            if (previousBlockBuilder.isRunning() && toUpdateBlocks > 10000) {
-                previousBlockBuilder.cancel();
-            }
-        } catch (IndexOutOfBoundsException ignored) {}
-        currentUpdates.clear();
-
-
-        FastBlockUpdate airBuilder = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
-        for (Location location: currentlyPreviewedBlocks) {
-            airBuilder.addBlock(location, Material.AIR.createBlockData());
-        }
-        currentlyPreviewedBlocks.clear();
-        airBuilder.run();
-
-
-        FastBlockUpdate blockBuilder = new FastBlockUpdate(TextGenerator.getInstance(),100000);
-        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
-            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-                try {
-                    if (!blocks[heightIndex][widthIndex]) {
-                        continue;
-                    }
-                    Location toPlaceBlockLocation = editLocation(textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0);
-                    blockBuilder.addBlock(toPlaceBlockLocation, Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
-                    currentlyPreviewedBlocks.add(toPlaceBlockLocation);
-                } catch (IndexOutOfBoundsException ignored) {
-                }
-            }
-        }
-        blockBuilder.run();
-        currentUpdates.add(airBuilder);
-        currentUpdates.add(blockBuilder);
     }
 
     private Location previosPlayerLocation;
@@ -110,12 +71,12 @@ public class CurrentEditedText {
                     return;
                 }
             }
-            Location newMiddleLocation = getMiddleLocationFromPlayersSight(player, 40);
+            Location newMiddleLocation = getMiddleLocationFromPlayersSight(player, textInstance.getPlaceRange());
             if (GenerateUtil.areLocationsEqual(newMiddleLocation, textInstance.getMiddleLocation())) {
                 return;
             }
             textInstance.setMiddleLocation(newMiddleLocation);
-            updatePreviewBlocks();
+            updateBlocksInWorld();
         }, 1, 1));
         tasks.add(Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
             if (textInstance.getDirection() != Direction.valueOf(player.getFacing().toString()).getRightDirection()) {
@@ -124,49 +85,82 @@ public class CurrentEditedText {
         }, 1, 1));
     }
 
-    public void stopTasks() {
+    private void stopTasks() {
         for (BukkitTask bukkitTask: tasks) {
             bukkitTask.cancel();
         }
     }
 
-    public HashMap<Location, BlockData> getAffectedBlocks() {
-        HashMap<Location, BlockData> affectedBlocks = new HashMap<>();
-        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
-            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-                Block block = Objects.requireNonNull(textInstance.getTopLeftLocation().getWorld()).getBlockAt(
-                        Objects.requireNonNull(editLocation(textInstance.getTopLeftLocation(), widthIndex,
-                                heightIndex, 0, 0)));
-                affectedBlocks.put(block.getLocation(), block.getBlockData());
-            }
-        }
-        return affectedBlocks;
+    private void save() {
+        // TO WORK ON
     }
 
-    public boolean isEnoughSpaceForText(boolean[][] blocks, TextInstance textInstance) {
+    private void updateBlocksInWorld() {
+        updateTopLeftLocation();
+        if (!isEnoughSpaceForText()) {
+            FastBlockUpdate errorBuilder = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
+            errorBuilder.addBlock(textInstance.getMiddleLocation(), Material.AIR.createBlockData());
+            for (Location location: currentlyPreviewedBlocks) {
+                errorBuilder.addBlock(location, Material.AIR.createBlockData());
+            }
+            errorBuilder.addBlock(textInstance.getMiddleLocation(), Material.REDSTONE_BLOCK.createBlockData());
+            errorBuilder.run();
+            currentlyPreviewedBlocks.clear();
+            currentlyPreviewedBlocks.add(textInstance.getMiddleLocation());
+            return;
+        }
+        if (blockBuilder != null) {
+            if (blockBuilder.isRunning() && toUpdateBlocks > 10000) {
+                blockBuilder.cancel();
+            }
+        }
+
+        FastBlockUpdate airBuilder = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
+        for (Location location: currentlyPreviewedBlocks) {
+            airBuilder.addBlock(location, Material.AIR.createBlockData());
+        }
+        currentlyPreviewedBlocks.clear();
+        airBuilder.run();
+
+
+        FastBlockUpdate blockBuilder = new FastBlockUpdate(TextGenerator.getInstance(),100000);
+        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
+            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
+                try {
+                    if (!blocks[heightIndex][widthIndex]) {
+                        continue;
+                    }
+                    Location toPlaceBlockLocation = GenerateUtil.editLocation(textInstance, textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0);
+                    blockBuilder.addBlock(toPlaceBlockLocation, Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
+                    currentlyPreviewedBlocks.add(toPlaceBlockLocation);
+                } catch (IndexOutOfBoundsException ignored) {
+                }
+            }
+        }
+        blockBuilder.run();
+        this.blockBuilder = blockBuilder;
+    }
+
+    private boolean isEnoughSpaceForText() {
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
                 Block block = Objects.requireNonNull(textInstance.getTopLeftLocation().getWorld()).getBlockAt(
-                        Objects.requireNonNull(editLocation(textInstance.getTopLeftLocation(), widthIndex,
+                        Objects.requireNonNull(GenerateUtil.editLocation(textInstance, textInstance.getTopLeftLocation(), widthIndex,
                                 heightIndex, 0, 0)));
-                if (block.getBlockData().getMaterial() != Material.AIR) return false;
+                if (block.getBlockData().getMaterial() != Material.AIR) {
+                    if (!block.hasMetadata(FastBlockUpdate.metaDataKey)) {
+                        return false;
+                    }
+                }
             }
         }
         return true;
     }
 
-    private Location editLocation(Location location, int toRight, int toBottom, int toLeft, int toTop) {
-        if (textInstance.getDirection() == Direction.NORTH) return location.clone().subtract(0, toBottom, toRight).add(0, toTop, toLeft);
-        if (textInstance.getDirection() == Direction.EAST) return location.clone().subtract(toLeft, toBottom, 0).add(toRight, toTop, 0);
-        if (textInstance.getDirection() == Direction.SOUTH) return location.clone().subtract(0, toBottom, toLeft).add(0, toTop, toRight);
-        if (textInstance.getDirection() == Direction.WEST) return location.clone().subtract(toRight, toBottom, 0).add(toLeft, toTop, 0);
-        return null;
-    }
-
-    public Location getMiddleLocationFromPlayersSight(Player player, int range) {
+    private Location getMiddleLocationFromPlayersSight(Player player, int range) {
         int playerLocationX = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getX());
         int playerLocationY = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getY());
-        int playerLocationZ = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getZ()) -1;
+        int playerLocationZ = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getZ());
 
         Vector normalVector = player.getLocation().getDirection().normalize();
         Location actualLocation = null;
@@ -180,12 +174,12 @@ public class CurrentEditedText {
             int nextZ = playerLocationZ + (int) normalVector.clone().multiply(i).getZ();
 
             Location possibleLocation = new Location(player.getWorld(), nextX, nextY, nextZ);
-//            if (possibleLocation.getBlock().getBlockData().getMaterial() != Material.AIR) { TO WORK ON
-//                if (!currentlyPreviewedBlocks.contains(possibleLocation)) {
-//                    actualLocation = new Location(player.getWorld(), x, y, z);
-//                    break;
-//                }
-//            }
+            if (possibleLocation.getBlock().getBlockData().getMaterial() != Material.AIR) {
+                if (!possibleLocation.getBlock().hasMetadata(FastBlockUpdate.metaDataKey)) {
+                    actualLocation = new Location(player.getWorld(), x, y, z);
+                    break;
+                }
+            }
             if (i == range) {
                 actualLocation = new Location(player.getWorld(), x, y, z);
             }
@@ -197,23 +191,10 @@ public class CurrentEditedText {
     }
 
     private void updateTopLeftLocation() {
-        textInstance.setTopLeftLocation(editLocation(textInstance.getMiddleLocation(), 0, 0, blocks[0].length/2, blocks.length/2));
+        textInstance.setTopLeftLocation(GenerateUtil.editLocation(textInstance, textInstance.getMiddleLocation(), 0, 0, blocks[0].length/2, blocks.length/2));
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public TextInstance getTextInstance() {
-        return textInstance;
-    }
-
-    public void setBlock(de.philw.textgenerator.ui.value.Block block) {
-        this.textInstance.setBlock(block);
-        updatePreviewBlocks();
-    }
-
-    private void updateBlocks() {
+    private void updateBlockArray() {
         this.blocks = GenerateUtil.getBlocks(textInstance);
         toUpdateBlocks = 0;
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
@@ -223,40 +204,65 @@ public class CurrentEditedText {
         }
     }
 
-    public void setFontSize(int size) {
-        textInstance.setFontSize(size);
-        updateBlocks();
-        updatePreviewBlocks();
-    }
-
-    public void setLineSpacing(int lineSpacing) {
-        textInstance.setLineSpacing(lineSpacing);
-        updateBlocks();
-        updatePreviewBlocks();
-    }
-
-    public void save() {
-        // TO WORK ON
-    }
-
     private BukkitTask destroyTask;
 
     public void destroy() {
         stopTasks();
         destroyTask = Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
-                FastBlockUpdate previousBlockBuilder = currentUpdates.get(1);
-                if (!previousBlockBuilder.isRunning()) {
-                    FastBlockUpdate fastBlockUpdate = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
-                    for (Location location: currentlyPreviewedBlocks) {
-                        fastBlockUpdate.addBlock(location, Material.AIR.createBlockData());
-                    }
-                    fastBlockUpdate.run();
-                    destroyTask.cancel();
+            if (!blockBuilder.isRunning()) {
+                FastBlockUpdate fastBlockUpdate = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
+                for (Location location: currentlyPreviewedBlocks) {
+                    fastBlockUpdate.addBlock(location, Material.AIR.createBlockData());
                 }
+                fastBlockUpdate.run();
+                destroyTask.cancel();
+            }
         }, 1, 1);
+    }
+
+    private BukkitTask confirmTask;
+
+    public void confirm() {
+        stopTasks();
+        confirmTask = Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
+            if (!blockBuilder.isRunning()) {
+                if (currentlyPreviewedBlocks.size() > 1) {
+                    for (Location location : currentlyPreviewedBlocks) {
+                        location.getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
+                    }
+                } else {
+                    currentlyPreviewedBlocks.get(0).getBlock().setType(Material.AIR);
+                    currentlyPreviewedBlocks.get(0).getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
+                }
+                confirmTask.cancel();
+            }
+        }, 1, 1);
+        save();
+    }
+
+    public void setFontSize(int size) {
+        textInstance.setFontSize(size);
+        updateBlockArray();
+        updateBlocksInWorld();
+    }
+
+    public void setLineSpacing(int lineSpacing) {
+        textInstance.setLineSpacing(lineSpacing);
+        updateBlockArray();
+        updateBlocksInWorld();
+    }
+
+    public void setBlock(de.philw.textgenerator.ui.value.Block block) {
+        this.textInstance.setBlock(block);
+        updateBlocksInWorld();
     }
 
     public boolean isFirstGenerate() {
         return firstGenerate;
     }
+
+    public TextInstance getTextInstance() {
+        return textInstance;
+    }
+
 }

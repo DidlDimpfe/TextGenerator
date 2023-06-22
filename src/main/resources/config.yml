@@ -5,3 +5,4 @@ textSettings:
   fontStyle: BOLD
   underline: false
   lineSpacing: 2
+  placeRange: 30

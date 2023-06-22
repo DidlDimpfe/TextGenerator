@@ -81,4 +81,11 @@ public enum LineSpacing {
         return searchKeywords;
     }
 
+    public static int getMinLineSpacing() {
+        return 0;
+    }
+    public static int getMaxLineSpacing() {
+        return 50;
+    }
+
 }
