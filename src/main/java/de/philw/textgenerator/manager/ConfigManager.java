@@ -75,7 +75,7 @@ public class ConfigManager {
 
     public static boolean isUnderline() {
         String bool = config.getString("textSettings.underline");
-        if (!Validator.isValidBoolean(Objects.requireNonNull(bool))) {
+        if (Validator.isNoValidBoolean(Objects.requireNonNull(bool))) {
             printNotValidMessage(bool, String.valueOf(Objects.requireNonNull(config.getDefaults()).getBoolean("textSettings.underline")), "underline");
             return config.getDefaults().getBoolean("textSettings.underline");
         }
@@ -103,6 +103,20 @@ public class ConfigManager {
             return config.getDefaults().getInt("textSettings.placeRange");
         }
         return Integer.parseInt(Objects.requireNonNull(placeRange));
+    }
+
+    public static boolean isDragPreview(boolean printNotValidMessage) {
+        String dragPreview = config.getString("textSettings.dragPreview");
+        if (Validator.isNoValidBoolean(Objects.requireNonNull(dragPreview))) {
+            if (printNotValidMessage) printNotValidMessage(dragPreview, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.dragPreview")), "drag preview");
+            return Objects.requireNonNull(config.getDefaults()).getBoolean("textSettings.dragPreview");
+        }
+        return Boolean.parseBoolean(dragPreview.toLowerCase());
+    }
+
+    public static void setDragPreview(boolean dragPreview) {
+        config.set("textSettings.dragPreview", dragPreview);
+        saveConfig();
     }
 
     public static void printNotValidMessage(String notValidValue, String defaultValue, String dataType) {
@@ -149,6 +163,10 @@ public class ConfigManager {
         if (!config.isSet("textSettings.placeRange")) {
             config.set("textSettings.placeRange", Objects.requireNonNull(config.getDefaults()).get(
                     "textSettings.placeRange"));
+        }
+        if (!config.isSet("textSettings.dragPreview")) {
+            config.set("textSettings.dragPreview", Objects.requireNonNull(config.getDefaults()).get(
+                    "textSettings.dragPreview"));
         }
         saveConfig();
     }

@@ -9,6 +9,12 @@ import org.bukkit.inventory.Inventory;
 
 public class SettingsUI {
 
+    protected final static int FONT_SIZE_INDEX = 0;
+    protected final static int LINE_SPACING_INDEX = 1;
+    protected final static int BLOCKS_INDEX = 2;
+    protected final static int DRAG_PREVIEW_INDEX = 3;
+
+
     private final Inventory inventory;
     private final Player player;
 
@@ -16,9 +22,10 @@ public class SettingsUI {
         inventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + "TextGenerator Settings");
         this.player = player;
 
-        inventory.addItem(UIUtil.getSkullByString(SkullData.FONT_SIZE));
-        inventory.addItem(UIUtil.getSkullByString(SkullData.LINE_SPACING));
-        inventory.addItem(UIUtil.getSkullByString(SkullData.BLOCKS));
+        inventory.setItem(FONT_SIZE_INDEX, UIUtil.getSkullByString(SkullData.FONT_SIZE));
+        inventory.setItem(LINE_SPACING_INDEX, UIUtil.getSkullByString(SkullData.LINE_SPACING));
+        inventory.setItem(BLOCKS_INDEX, UIUtil.getSkullByString(SkullData.BLOCKS));
+        inventory.setItem(DRAG_PREVIEW_INDEX, UIUtil.getSkullByString(SkullData.DRAG_PREVIEW));
         player.openInventory(inventory);
     }
 

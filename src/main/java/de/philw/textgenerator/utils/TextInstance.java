@@ -15,6 +15,7 @@ public class TextInstance {
     private boolean underline;
     private int lineSpacing;
     private int placeRange;
+    private boolean dragPreview;
 
     public Block getBlock() {
         return block;
@@ -104,6 +105,14 @@ public class TextInstance {
         return placeRange;
     }
 
+    public void setDragPreview(boolean dragPreview) {
+        this.dragPreview = dragPreview;
+    }
+
+    public boolean isDragPreview() {
+        return dragPreview;
+    }
+
     public static TextInstanceBuilder getTextInstanceBuilder() {
         return new TextInstanceBuilder();
     }
@@ -120,6 +129,7 @@ public class TextInstance {
         private boolean underline;
         private int lineSpacing = 2;
         private int placeRange = 0;
+        private boolean dragPreview = false;
 
         public TextInstanceBuilder withBlock(Block block) {
             this.block = block;
@@ -176,6 +186,11 @@ public class TextInstance {
             return this;
         }
 
+        public TextInstanceBuilder withDragPreview(boolean dragPreview) {
+            this.dragPreview = dragPreview;
+            return this;
+        }
+
         public TextInstance build() {
             TextInstance textInstance = new TextInstance();
             textInstance.setBlock(block);
@@ -189,6 +204,7 @@ public class TextInstance {
             textInstance.setUnderline(underline);
             textInstance.setLineSpacing(lineSpacing);
             textInstance.setPlaceRange(placeRange);
+            textInstance.setDragPreview(dragPreview);
             return textInstance;
         }
 

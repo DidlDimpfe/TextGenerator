@@ -16,20 +16,11 @@ public final class TextGenerator extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         ConfigManager.setUpConfig();
-//        Location start = new Location(Bukkit.getWorld("world"), -59, 73, 98);
-//
-//        Letters letters = new ThreeByThreeLetters();
-//
-//        LettersBuilder.build(letters.getT(Font.OAK, Direction.EAST), Direction.EAST, start);
+
         textGeneratorCommand = new TextGeneratorCommand();
         searchUIListener = new SearchUIListener();
         Bukkit.getPluginManager().registerEvents(new SettingsUIListener(), this);
         Bukkit.getPluginManager().registerEvents(searchUIListener, this);
-    }
-
-    @Override
-    public void onDisable() {
-
     }
 
     public static TextGenerator getInstance() {

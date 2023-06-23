@@ -1,5 +1,9 @@
 package de.philw.textgenerator.ui;
 
+import de.philw.textgenerator.TextGenerator;
+import de.philw.textgenerator.letters.CurrentEditedText;
+import de.philw.textgenerator.manager.ConfigManager;
+import de.philw.textgenerator.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,14 +21,34 @@ public class SettingsUIListener implements Listener {
         if (e.getCurrentItem() == null) return;
         Player player = (Player) e.getWhoClicked();
         e.setCancelled(true);
-        if (e.getRawSlot() == 0) {
-            new FontSizeSearchUI(player);
+        switch (e.getRawSlot()) {
+            case SettingsUI.FONT_SIZE_INDEX:
+                new FontSizeSearchUI(player);
+                break;
+            case SettingsUI.LINE_SPACING_INDEX:
+                new LineSpacingSearchUI(player);
+                break;
+            case SettingsUI.BLOCKS_INDEX:
+                new BlockSearchUI(player);
+                break;
+            case SettingsUI.DRAG_PREVIEW_INDEX:
+                toggleDragPreview(player);
+                break;
         }
-        if (e.getRawSlot() == 1) {
-            new LineSpacingSearchUI(player);
-        }
-        if (e.getRawSlot() == 2) {
-            new BlockSearchUI(player);
+    }
+
+    private void toggleDragPreview(Player player) {
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(player.getUniqueId())) {
+            boolean dragPreview = !ConfigManager.isDragPreview(false);
+            ConfigManager.setDragPreview(dragPreview);
+            player.sendMessage(Messages.defaultDragPreviewChangeSuccess(dragPreview));
+        } else {
+            CurrentEditedText currentEditedText = TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId());
+            boolean dragPreview = !currentEditedText.getTextInstance().isDragPreview();
+            currentEditedText.setDragPreview(dragPreview);
+            player.sendMessage(Messages.currentTextDragPreviewChangeSuccess(dragPreview));
+            player.closeInventory();
+
         }
     }
 

@@ -3,6 +3,7 @@ package de.philw.textgenerator.ui;
 import de.philw.textgenerator.TextGenerator;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.ui.value.Block;
+import de.philw.textgenerator.utils.Messages;
 import de.philw.textgenerator.utils.UIUtil;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
@@ -138,27 +139,27 @@ public class SearchUIListener implements Listener {
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed the default block to " + block.getDisplay());
+            player.sendMessage(Messages.defaultBlockChangeSuccess(block.getDisplay()));
         } else {
             TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setBlock(block);
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed the block of your current edited text to " + block.getDisplay());
+            player.sendMessage(Messages.currentTextBlockChangeSuccess(block.getDisplay()));
             player.closeInventory();
         }
     }
 
     private void fontSizeSearchUIValueClicked(Player player, String[] information) {
-        int size = Integer.parseInt(information[1]);
+        int fontSize = Integer.parseInt(information[1]);
         if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(player.getUniqueId())) {
-            ConfigManager.setFontSize(size);
+            ConfigManager.setFontSize(fontSize);
             for (SearchUI searchUI : TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof FontSizeSearchUI)) continue;
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed the default font size to " + size);
+            player.sendMessage(Messages.defaultFontSizeChangeSuccess(fontSize));
         } else {
-            TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setFontSize(size);
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed the font size of your current edited text to " + size);
+            TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setFontSize(fontSize);
+            player.sendMessage(Messages.currentTextFontSizeChangeSuccess(fontSize));
             player.closeInventory();
         }
     }
@@ -172,10 +173,10 @@ public class SearchUIListener implements Listener {
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed the default lineSpacing to " + lineSpacing);
+            player.sendMessage(Messages.defaultLineSpacingChangeSuccess(lineSpacing));
         } else {
             TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setLineSpacing(lineSpacing);
-            player.sendMessage(ChatColor.GREEN + "Succesfully changed the line spacing of your current edited text to " + lineSpacing);
+            player.sendMessage(Messages.currentTextLineSpacingChangeSuccess(lineSpacing));
             player.closeInventory();
         }
     }

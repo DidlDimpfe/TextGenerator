@@ -49,8 +49,8 @@ public class Validator {
                 || fontStyle.equalsIgnoreCase("BoldItalic") || fontStyle.equalsIgnoreCase("Plain");
     }
 
-    public static boolean isValidBoolean(String bool) {
-        return bool.equalsIgnoreCase("true") || bool.equalsIgnoreCase("false");
+    public static boolean isNoValidBoolean(String bool) {
+        return !bool.trim().equalsIgnoreCase("true") && !bool.trim().equalsIgnoreCase("false");
     }
 
     public static boolean isValidLineSpacing(String lineSpacing) {

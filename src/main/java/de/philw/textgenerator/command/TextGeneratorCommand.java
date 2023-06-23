@@ -3,6 +3,7 @@ package de.philw.textgenerator.command;
 import de.philw.textgenerator.letters.CurrentEditedText;
 import de.philw.textgenerator.ui.SettingsUI;
 import de.philw.textgenerator.utils.Messages;
+import de.philw.textgenerator.utils.Validator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -97,18 +98,27 @@ public class TextGeneratorCommand extends Command {
             }
             return true;
         }
-        if (args.length != 2) {
-            return false;
-        }
-        if (args[1].equalsIgnoreCase("this")) {
-            // TO WORK ON
+        if (args.length == 2) {
+            if (args[1].equalsIgnoreCase("this")) {
+                // TO WORK ON
+            } else if (args[1].equalsIgnoreCase("last")) {
+                // TO WORK ON
+            }
             return true;
         }
-        if (args[1].equalsIgnoreCase("last")) {
-            // TO WORK ON
-            return true;
+        if (args.length == 4) {
+            if (currentEditTexts.containsKey(player.getUniqueId())) {
+                if (Validator.isNoInteger(args[1]) || Validator.isNoInteger(args[2]) || Validator.isNoInteger(args[3])) {
+                    player.sendMessage(Messages.textMoveDeniedBecauseInvalidCoordinates);
+                } else {
+                    currentEditTexts.get(player.getUniqueId()).move(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+                    player.sendMessage(Messages.textMoveSuccess(args[1] + ", " + args[2] + ", " + args[3]));
+                }
+                return true;
+            }
+            player.sendMessage(Messages.textMoveDeniedBecauseNotEditing);
         }
-        return false;
+        return true;
     }
 
     private boolean checkCancel(Player player, String[] args) {

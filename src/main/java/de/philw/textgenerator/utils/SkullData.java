@@ -21,6 +21,8 @@ public class SkullData {
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjk3MWJmNTA1YzM0MzcxNDQyZmViNDg2NWZiZGI4OWY3ODYzZWM5OGRiMDBjZTI1NjIzNjRiNjE5Y2ViMjBmNiJ9fX0=";
     public static final String BLOCKS =
             "";
+    public static final String DRAG_PREVIEW =
+            "";
 
     // Numbers
     public static final String ZERO =

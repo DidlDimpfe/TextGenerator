@@ -219,11 +219,11 @@ public class GenerateUtil {
         return a.getWorld() == b.getWorld() && a.getY() == b.getY() && a.getX() == b.getX() && a.getZ() == b.getZ();
     }
 
-    public static Location editLocation(TextInstance textInstance, Location location, int toRight, int toBottom, int toLeft, int toTop) {
-        if (textInstance.getDirection() == Direction.NORTH) return location.clone().subtract(0, toBottom, toRight).add(0, toTop, toLeft);
-        if (textInstance.getDirection() == Direction.EAST) return location.clone().subtract(toLeft, toBottom, 0).add(toRight, toTop, 0);
-        if (textInstance.getDirection() == Direction.SOUTH) return location.clone().subtract(0, toBottom, toLeft).add(0, toTop, toRight);
-        if (textInstance.getDirection() == Direction.WEST) return location.clone().subtract(toRight, toBottom, 0).add(toLeft, toTop, 0);
+    public static Location editLocation(TextInstance textInstance, Location location, int toRight, int toBottom, int toLeft, int toTop, int toFront, int toBack) {
+        if (textInstance.getDirection() == Direction.NORTH) return location.clone().subtract(toBack, toBottom, toRight).add(toFront, toTop, toLeft);
+        if (textInstance.getDirection() == Direction.EAST) return location.clone().subtract(toLeft, toBottom, toBack).add(toRight, toTop, toFront);
+        if (textInstance.getDirection() == Direction.SOUTH) return location.clone().subtract(toFront, toBottom, toLeft).add(toBack, toTop, toRight);
+        if (textInstance.getDirection() == Direction.WEST) return location.clone().subtract(toRight, toBottom, toFront).add(toLeft, toTop, toBack);
         return null;
     }
 
