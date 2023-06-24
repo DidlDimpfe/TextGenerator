@@ -2,6 +2,7 @@ package de.philw.textgenerator.manager;
 
 import de.philw.textgenerator.TextGenerator;
 import de.philw.textgenerator.ui.value.Block;
+import de.philw.textgenerator.utils.FileUtil;
 import de.philw.textgenerator.utils.Validator;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -67,10 +68,7 @@ public class ConfigManager {
             printNotValidMessage(fontStyle, Objects.requireNonNull(config.getDefaults()).getString("textSettings.fontStyle"), "font style");
             return 1;
         }
-        if (fontStyle.equalsIgnoreCase("Bold")) return 1;
-        else if (fontStyle.equalsIgnoreCase("Italic")) return 2;
-        else if (fontStyle.equalsIgnoreCase("BoldItalic")) return 3;
-        else return 4; // Plain
+        return FileUtil.fromFontStyleStringToInt(fontStyle);
     }
 
     public static boolean isUnderline() {

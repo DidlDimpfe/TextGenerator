@@ -9,11 +9,13 @@ public class Messages {
     public static final String textMoveDeniedBecauseNotEditing = ChatColor.RED + "You cannot move the edited text, when you are not editing something!";
     public static String textMoveSuccess(String coordinates) { return ChatColor.GREEN + "Succesfully moved your text to these directions: " + coordinates; }
     public static final String textMoveDeniedBecauseInvalidCoordinates = ChatColor.RED + "The coordinates you have given are not valid";
-
     public static final String openSettingsMenuDenied = ChatColor.RED + "You are currently editing a text. Try /textgenerator edit or /textgenerator confirm";
     public static final String cancelDestroyDenied = "Denied Cancel";
     public static final String cancelDestroySuccess = "Sucessfully cancelled";
     public static final String cancelToPreviousLocationSuccess = "";
+    public static final String editThisDeniedBecauseNotLookingAtSomething = "DE";
+    public static final String editThisDeniedBecauseAlreadyEditingSomething = "DE";
+    public static final String editThisSuccess = "SU";
 
     public static String defaultBlockChangeSuccess(String blockDisplay) { return ChatColor.GREEN + "Succesfully changed the default block to " + blockDisplay; }
     public static String currentTextBlockChangeSuccess(String blockDisplay) { return ChatColor.GREEN + "Succesfully changed the block of your current edited text to " + blockDisplay; }

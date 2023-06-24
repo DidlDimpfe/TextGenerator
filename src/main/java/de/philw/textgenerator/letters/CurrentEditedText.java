@@ -2,6 +2,7 @@ package de.philw.textgenerator.letters;
 
 import de.philw.textgenerator.TextGenerator;
 import de.philw.textgenerator.manager.ConfigManager;
+import de.philw.textgenerator.manager.GeneratedTextsManager;
 import de.philw.textgenerator.utils.Direction;
 import de.philw.textgenerator.utils.FastBlockUpdate;
 import de.philw.textgenerator.utils.GenerateUtil;
@@ -20,22 +21,20 @@ import java.util.Objects;
 public class CurrentEditedText {
 
     private final Player player;
-    private final TextInstance textInstance;
-    private final ArrayList<BukkitTask> dragPreview;
+    private TextInstance textInstance;
+    private final ArrayList<BukkitTask> dragPreviewTasks;
     private final ArrayList<Location> currentlyPreviewedBlocks;
-    private final boolean firstGenerate;
     private boolean[][] blocks;
     private FastBlockUpdate blockBuilder;
     private int toUpdateBlocks;
 
-    public CurrentEditedText(Player player, String wantedText, boolean firstGenerate) {
+    public CurrentEditedText(Player player, String wantedText) { // For first Generate
         this.player = player;
-        this.dragPreview = new ArrayList<>();
+        this.dragPreviewTasks = new ArrayList<>();
         this.currentlyPreviewedBlocks = new ArrayList<>();
         this.previosPlayerLocation = player.getLocation();
-        this.firstGenerate = firstGenerate;
         int placeRange = ConfigManager.getPlaceRange();
-        textInstance = TextInstance.getTextInstanceBuilder()
+        this.textInstance = TextInstance.getTextInstanceBuilder()
                 .withBlock(ConfigManager.getBlock())
                 .withFontSize(ConfigManager.getFontSize())
                 .withFontName(ConfigManager.getFontName())
@@ -55,10 +54,34 @@ public class CurrentEditedText {
         }
     }
 
+    public CurrentEditedText(Player player, TextInstance textInstance) { // For Edit
+        GeneratedTextsManager.removeTextInstance(textInstance.getUuid());
+        this.player = player;
+        this.dragPreviewTasks = new ArrayList<>();
+        this.currentlyPreviewedBlocks = new ArrayList<>();
+        this.previosPlayerLocation = player.getLocation();
+        textInstance.setPlaceRange(ConfigManager.getPlaceRange());
+        textInstance.setDragPreview(false);
+        this.textInstance = textInstance;
+        updateBlockArray();
+        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
+            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
+                try {
+                    if (!blocks[heightIndex][widthIndex]) {
+                        continue;
+                    }
+                    Location hereIsBlockLocation = GenerateUtil.editLocation(textInstance, textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0, 0, 0);
+                    Objects.requireNonNull(hereIsBlockLocation).getBlock().setMetadata(FastBlockUpdate.metaDataKey, FastBlockUpdate.metaDataValue);
+                    currentlyPreviewedBlocks.add(hereIsBlockLocation);
+                } catch (IndexOutOfBoundsException ignored) {
+                }
+            }
+        }
+    }
     private Location previosPlayerLocation;
 
     private void addDragPreviewTasks() {
-        dragPreview.add(Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
+        dragPreviewTasks.add(Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
             if (toUpdateBlocks > 10000) {
                 if (!player.getLocation().equals(previosPlayerLocation)) {
                     previosPlayerLocation = player.getLocation();
@@ -81,7 +104,7 @@ public class CurrentEditedText {
             textInstance.setMiddleLocation(newMiddleLocation);
             updateBlocksInWorld();
         }, 1, 1));
-        dragPreview.add(Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
+        dragPreviewTasks.add(Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
             if (textInstance.getDirection() != Direction.valueOf(player.getFacing().toString()).getRightDirection()) {
                 textInstance.setDirection(Direction.valueOf(player.getFacing().toString()).getRightDirection());
             }
@@ -89,13 +112,14 @@ public class CurrentEditedText {
     }
 
     private void stopDragPreviewTasks() {
-        for (BukkitTask bukkitTask: dragPreview) {
+        for (BukkitTask bukkitTask: dragPreviewTasks) {
             bukkitTask.cancel();
         }
     }
 
     private void save() {
-        // TO WORK ON
+        textInstance.setBottomRightLocation(GenerateUtil.editLocation(textInstance, textInstance.getTopLeftLocation(), blocks[0].length-1, blocks.length-1, 0, 0, 0, 0));
+        GeneratedTextsManager.saveTextInstance(textInstance);
     }
 
     public void updateBlocksInWorld() {
@@ -159,8 +183,15 @@ public class CurrentEditedText {
         int toBack = Math.abs(Math.min(fromViewZ, 0));
         textInstance.setMiddleLocation(GenerateUtil.editLocation(textInstance, textInstance.getMiddleLocation(), toRight, toBottom, toLeft, toTop,  toFront, toBack));
         updateTopLeftLocation();
-
         updateBlocksInWorld();
+    }
+
+    public void setToPreviousLocation() {
+        textInstance = textInstance.getPreviousTextInstance();
+        updateBlockArray();
+        updateTopLeftLocation();
+        updateBlocksInWorld();
+        confirm();
     }
 
     private boolean isEnoughSpaceForText() {
@@ -252,6 +283,7 @@ public class CurrentEditedText {
                     for (Location location : currentlyPreviewedBlocks) {
                         location.getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
                     }
+                    save();
                 } else {
                     currentlyPreviewedBlocks.get(0).getBlock().setType(Material.AIR);
                     currentlyPreviewedBlocks.get(0).getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
@@ -259,7 +291,6 @@ public class CurrentEditedText {
                 confirmTask.cancel();
             }
         }, 1, 1);
-        save();
     }
 
     public void setFontSize(int size) {
@@ -279,15 +310,15 @@ public class CurrentEditedText {
         updateBlocksInWorld();
     }
 
-    public void setDragPreview(boolean dragPreview) {
-        this.textInstance.setDragPreview(dragPreview);
+    public void setDragPreviewTasks(boolean dragPreviewTasks) {
+        this.textInstance.setDragPreview(dragPreviewTasks);
         this.textInstance.setDirection(Direction.valueOf(player.getFacing().toString()).getRightDirection());
-        if (dragPreview) addDragPreviewTasks();
+        if (dragPreviewTasks) addDragPreviewTasks();
         else stopDragPreviewTasks();
     }
 
     public boolean isFirstGenerate() {
-        return firstGenerate;
+        return textInstance.getPreviousTextInstance() == null;
     }
 
     public TextInstance getTextInstance() {

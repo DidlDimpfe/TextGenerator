@@ -1,14 +1,16 @@
 package de.philw.textgenerator.utils;
 
+import de.philw.textgenerator.letters.CurrentEditedText;
+import de.philw.textgenerator.manager.ConfigManager;
+import de.philw.textgenerator.manager.GeneratedTextsManager;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GenerateUtil {
 
@@ -224,6 +226,40 @@ public class GenerateUtil {
         if (textInstance.getDirection() == Direction.EAST) return location.clone().subtract(toLeft, toBottom, toBack).add(toRight, toTop, toFront);
         if (textInstance.getDirection() == Direction.SOUTH) return location.clone().subtract(toFront, toBottom, toLeft).add(toBack, toTop, toRight);
         if (textInstance.getDirection() == Direction.WEST) return location.clone().subtract(toRight, toBottom, toFront).add(toLeft, toTop, toBack);
+        return null;
+    }
+
+    public static CurrentEditedText getPlayersWantedTextToEdit(Player player) {
+        // Get all Cuboids from previously generated Texts
+        Map<UUID, Cuboid> possibleCuboidsFromPreviousGeneratedText = new HashMap<>();
+        for (UUID uuid: GeneratedTextsManager.getUUIDs()) {
+            TextInstance textInstance = GeneratedTextsManager.getTextInstance(uuid);
+            possibleCuboidsFromPreviousGeneratedText.put(uuid, new Cuboid(textInstance.getTopLeftLocation(), textInstance.getBottomRightLocation()));
+        }
+
+        if (possibleCuboidsFromPreviousGeneratedText.isEmpty()) return null;
+
+        // Check if a Cuboid from previously generated Texts contains possible Locations the player wants
+
+        int playerLocationX = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getX());
+        int playerLocationY = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getY());
+        int playerLocationZ = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getZ());
+
+        Vector normalVector = player.getLocation().getDirection().normalize();
+
+        for (int i = 1; i <= ConfigManager.getPlaceRange(); i++) {
+            int x = playerLocationX + (int) normalVector.clone().multiply(i).getX();
+            int y = playerLocationY + (int) normalVector.clone().multiply(i).getY();
+            int z = playerLocationZ + (int) normalVector.clone().multiply(i).getZ();
+
+            Location possibleLocation = new Location(player.getWorld(), x, y, z);
+            for (UUID uuid : possibleCuboidsFromPreviousGeneratedText.keySet()) {
+                if (possibleCuboidsFromPreviousGeneratedText.get(uuid).contains(possibleLocation)) {
+                    return new CurrentEditedText(player, GeneratedTextsManager.getTextInstance(uuid));
+                }
+            }
+        }
+
         return null;
     }
 

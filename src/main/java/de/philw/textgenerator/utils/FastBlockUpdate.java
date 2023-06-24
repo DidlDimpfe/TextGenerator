@@ -18,12 +18,14 @@ import java.util.Map;
 
 public class FastBlockUpdate {
 
+    public final static String metaDataKey = "PlacedBlock";
+    public final static MetadataValue metaDataValue = new MyMetaDataValue();
+
     private final JavaPlugin javaPlugin;
     private final int blocksPerTick;
 
     private final Map<Location, BlockData> blocks = new LinkedHashMap<>();
     private FastBlockUpdateTask fastBlockUpdateTask = null;
-    public final static String metaDataKey = "PlacedBlock";
 
     public FastBlockUpdate(JavaPlugin javaPlugin, int blocksPerTick) {
         this.javaPlugin = javaPlugin;
@@ -101,65 +103,7 @@ public class FastBlockUpdate {
                             Location key = entry.getKey();
                             key.getBlock().setBlockData(entry.getValue());
                             if (entry.getValue().getMaterial() != Material.AIR) {
-                                key.getBlock().setMetadata(FastBlockUpdate.metaDataKey, new MetadataValue() {
-                                    @Nullable
-                                    @Override
-                                    public Object value() {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public int asInt() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public float asFloat() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public double asDouble() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public long asLong() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public short asShort() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public byte asByte() {
-                                        return 0;
-                                    }
-
-                                    @Override
-                                    public boolean asBoolean() {
-                                        return false;
-                                    }
-
-                                    @NotNull
-                                    @Override
-                                    public String asString() {
-                                        return null;
-                                    }
-
-                                    @Nullable
-                                    @Override
-                                    public Plugin getOwningPlugin() {
-                                        return TextGenerator.getInstance();
-                                    }
-
-                                    @Override
-                                    public void invalidate() {
-
-                                    }
-                                });
+                                key.getBlock().setMetadata(metaDataKey, metaDataValue);
                             } else {
                                 if (key.getBlock().hasMetadata(FastBlockUpdate.metaDataKey)) {
                                     key.getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
@@ -192,6 +136,66 @@ public class FastBlockUpdate {
 
         public void setComplete(boolean complete) {
             this.complete = complete;
+        }
+    }
+
+    private static class MyMetaDataValue implements MetadataValue  {
+        @Nullable
+        @Override
+        public Object value() {
+            return null;
+        }
+
+        @Override
+        public int asInt() {
+            return 0;
+        }
+
+        @Override
+        public float asFloat() {
+            return 0;
+        }
+
+        @Override
+        public double asDouble() {
+            return 0;
+        }
+
+        @Override
+        public long asLong() {
+            return 0;
+        }
+
+        @Override
+        public short asShort() {
+            return 0;
+        }
+
+        @Override
+        public byte asByte() {
+            return 0;
+        }
+
+        @Override
+        public boolean asBoolean() {
+            return false;
+        }
+
+        @NotNull
+        @Override
+        public String asString() {
+            return "Yeah";
+        }
+
+        @Nullable
+        @Override
+        public Plugin getOwningPlugin() {
+            return TextGenerator.getInstance();
+        }
+
+        @Override
+        public void invalidate() {
+
         }
     }
 

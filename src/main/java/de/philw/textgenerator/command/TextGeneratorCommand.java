@@ -2,6 +2,7 @@ package de.philw.textgenerator.command;
 
 import de.philw.textgenerator.letters.CurrentEditedText;
 import de.philw.textgenerator.ui.SettingsUI;
+import de.philw.textgenerator.utils.GenerateUtil;
 import de.philw.textgenerator.utils.Messages;
 import de.philw.textgenerator.utils.Validator;
 import org.bukkit.ChatColor;
@@ -54,7 +55,7 @@ public class TextGeneratorCommand extends Command {
         for (int index = 1; index < args.length; index++) {
             builder.append(args[index]).append(" ");
         }
-        currentEditTexts.put(player.getUniqueId(), new CurrentEditedText(player, builder.substring(0, builder.toString().length() - 1), true));
+        currentEditTexts.put(player.getUniqueId(), new CurrentEditedText(player, builder.substring(0, builder.toString().length() - 1)));
         //TO WORK ON
         // You can  adjust it now message
         // don't Forget to confirm message
@@ -100,9 +101,17 @@ public class TextGeneratorCommand extends Command {
         }
         if (args.length == 2) {
             if (args[1].equalsIgnoreCase("this")) {
-                // TO WORK ON
-            } else if (args[1].equalsIgnoreCase("last")) {
-                // TO WORK ON
+                if (currentEditTexts.containsKey(player.getUniqueId())) {
+                    player.sendMessage(Messages.editThisDeniedBecauseAlreadyEditingSomething);
+                    return true;
+                }
+                CurrentEditedText currentEditedText = GenerateUtil.getPlayersWantedTextToEdit(player);
+                if (currentEditedText == null) {
+                    player.sendMessage(Messages.editThisDeniedBecauseNotLookingAtSomething);
+                } else {
+                    currentEditTexts.put(player.getUniqueId(), currentEditedText);
+                    player.sendMessage(Messages.editThisSuccess);
+                }
             }
             return true;
         }
@@ -134,9 +143,9 @@ public class TextGeneratorCommand extends Command {
             player.sendMessage(Messages.cancelDestroySuccess);
             return true;
         }
-        // TO WORK ON
-        // SET TO PREVIOUS STATE
-
+        currentEditedText.setToPreviousLocation();
+        currentEditTexts.remove(player.getUniqueId());
+        player.sendMessage(Messages.cancelToPreviousLocationSuccess);
         return true;
     }
 

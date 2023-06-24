@@ -45,7 +45,7 @@ public class SettingsUIListener implements Listener {
         } else {
             CurrentEditedText currentEditedText = TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId());
             boolean dragPreview = !currentEditedText.getTextInstance().isDragPreview();
-            currentEditedText.setDragPreview(dragPreview);
+            currentEditedText.setDragPreviewTasks(dragPreview);
             player.sendMessage(Messages.currentTextDragPreviewChangeSuccess(dragPreview));
             player.closeInventory();
 

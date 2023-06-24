@@ -3,10 +3,13 @@ package de.philw.textgenerator.utils;
 import de.philw.textgenerator.ui.value.Block;
 import org.bukkit.Location;
 
-public class TextInstance {
+import java.util.UUID;
 
+public class TextInstance implements Cloneable{
+
+    private UUID uuid;
     private Block block;
-    private Location middleLocation, topLeftLocation;
+    private Location middleLocation, topLeftLocation, bottomRightLocation;
     private Direction direction;
     private String fontName;
     private int fontStyle;
@@ -16,6 +19,15 @@ public class TextInstance {
     private int lineSpacing;
     private int placeRange;
     private boolean dragPreview;
+    private TextInstance previousTextInstance;
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
 
     public Block getBlock() {
         return block;
@@ -113,14 +125,40 @@ public class TextInstance {
         return dragPreview;
     }
 
+    public Location getBottomRightLocation() {
+        return bottomRightLocation;
+    }
+
+    public void setBottomRightLocation(Location bottomRightLocation) {
+        this.bottomRightLocation = bottomRightLocation;
+    }
+
+    public void setPreviousTextInstance(TextInstance previousTextInstance) {
+        this.previousTextInstance = previousTextInstance;
+    }
+
+    public TextInstance getPreviousTextInstance() {
+        return previousTextInstance;
+    }
+
     public static TextInstanceBuilder getTextInstanceBuilder() {
         return new TextInstanceBuilder();
     }
 
+    @Override
+    public TextInstance clone() {
+        try {
+            return (TextInstance) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
     public static class TextInstanceBuilder {
 
+        private UUID uuid;
         private Block block;
-        private Location middleLocation, topLeftLocation;
+        private Location middleLocation, topLeftLocation, bottomRightLocation;
         private Direction direction;
         private String fontName;
         private int fontStyle;
@@ -131,18 +169,27 @@ public class TextInstance {
         private int placeRange = 0;
         private boolean dragPreview = false;
 
+        public TextInstanceBuilder withUuid(UUID uuid) {
+            this.uuid = uuid;
+            return this;
+        }
         public TextInstanceBuilder withBlock(Block block) {
             this.block = block;
             return this;
         }
 
-        public TextInstanceBuilder withMiddleLocation(Location  middleLocation) {
+        public TextInstanceBuilder withMiddleLocation(Location middleLocation) {
             this.middleLocation = middleLocation;
             return this;
         }
 
-        public TextInstanceBuilder withTopLeftLocation(Location  topLeftLocation) {
+        public TextInstanceBuilder withTopLeftLocation(Location topLeftLocation) {
             this.topLeftLocation = topLeftLocation;
+            return this;
+        }
+
+        public TextInstanceBuilder withBottomRightLocation(Location  bottomRightLocation) {
+            this.bottomRightLocation = bottomRightLocation;
             return this;
         }
 
@@ -193,9 +240,11 @@ public class TextInstance {
 
         public TextInstance build() {
             TextInstance textInstance = new TextInstance();
+            textInstance.setUuid(uuid);
             textInstance.setBlock(block);
             textInstance.setMiddleLocation(middleLocation);
             textInstance.setTopLeftLocation(topLeftLocation);
+            textInstance.setBottomRightLocation(bottomRightLocation);
             textInstance.setDirection(direction);
             textInstance.setFontName(fontName);
             textInstance.setFontStyle(fontStyle);

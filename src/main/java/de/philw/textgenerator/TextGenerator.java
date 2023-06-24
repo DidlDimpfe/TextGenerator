@@ -2,6 +2,7 @@ package de.philw.textgenerator;
 
 import de.philw.textgenerator.command.TextGeneratorCommand;
 import de.philw.textgenerator.manager.ConfigManager;
+import de.philw.textgenerator.manager.GeneratedTextsManager;
 import de.philw.textgenerator.ui.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +17,7 @@ public final class TextGenerator extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         ConfigManager.setUpConfig();
+        GeneratedTextsManager.setUpManager();
 
         textGeneratorCommand = new TextGeneratorCommand();
         searchUIListener = new SearchUIListener();
