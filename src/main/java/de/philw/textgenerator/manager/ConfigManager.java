@@ -28,7 +28,8 @@ public class ConfigManager {
     public static Block getBlock() {
         String block = config.getString("textSettings.block");
         if (!Validator.isValidBlock(Objects.requireNonNull(block))) {
-            printNotValidMessage(block, Objects.requireNonNull(config.getDefaults()).getString("textSettings.block"), "block");
+            printNotValidMessage(block, Objects.requireNonNull(config.getDefaults()).getString("textSettings.block"),
+                    "block");
             return Block.valueOf(config.getDefaults().getString("textSettings.block"));
         }
         return Block.valueOf(block.toUpperCase());
@@ -42,7 +43,8 @@ public class ConfigManager {
     public static String getFontName() {
         String fontName = config.getString("textSettings.fontName");
         if (!Validator.isValidFont(fontName)) {
-            printNotValidMessage(fontName, Objects.requireNonNull(config.getDefaults()).getString("textSettings.fontName"), "font name");
+            printNotValidMessage(fontName, Objects.requireNonNull(config.getDefaults()).getString("textSettings" +
+                    ".fontName"), "font name");
             return config.getDefaults().getString("textSettings.fontName");
         }
         return fontName;
@@ -51,7 +53,8 @@ public class ConfigManager {
     public static int getFontSize() {
         String size = config.getString("textSettings.fontSize");
         if (!Validator.isValidFontSize(size)) {
-            printNotValidMessage(size, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.fontSize")), "font size");
+            printNotValidMessage(size, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
+                    "textSettings.fontSize")), "font size");
             return config.getDefaults().getInt("textSettings.fontSize");
         }
         return Integer.parseInt(Objects.requireNonNull(size));
@@ -65,7 +68,8 @@ public class ConfigManager {
     public static int getFontStyle() {
         String fontStyle = config.getString("textSettings.fontStyle");
         if (!Validator.isValidFontStyle(Objects.requireNonNull(fontStyle))) {
-            printNotValidMessage(fontStyle, Objects.requireNonNull(config.getDefaults()).getString("textSettings.fontStyle"), "font style");
+            printNotValidMessage(fontStyle, Objects.requireNonNull(config.getDefaults()).getString("textSettings" +
+                    ".fontStyle"), "font style");
             return 1;
         }
         return FileUtil.fromFontStyleStringToInt(fontStyle);
@@ -74,7 +78,8 @@ public class ConfigManager {
     public static boolean isUnderline() {
         String bool = config.getString("textSettings.underline");
         if (Validator.isNoValidBoolean(Objects.requireNonNull(bool))) {
-            printNotValidMessage(bool, String.valueOf(Objects.requireNonNull(config.getDefaults()).getBoolean("textSettings.underline")), "underline");
+            printNotValidMessage(bool, String.valueOf(Objects.requireNonNull(config.getDefaults()).getBoolean(
+                    "textSettings.underline")), "underline");
             return config.getDefaults().getBoolean("textSettings.underline");
         }
         return Boolean.parseBoolean(bool.toLowerCase());
@@ -83,7 +88,9 @@ public class ConfigManager {
     public static int getLineSpacing() {
         String spaceBetweenEachLine = config.getString("textSettings.lineSpacing");
         if (!Validator.isValidLineSpacing(spaceBetweenEachLine)) {
-            printNotValidMessage(spaceBetweenEachLine, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.lineSpacing")), "lineSpacing");
+            printNotValidMessage(spaceBetweenEachLine,
+                    String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.lineSpacing")),
+                    "lineSpacing");
             return config.getDefaults().getInt("textSettings.lineSpacing");
         }
         return Integer.parseInt(Objects.requireNonNull(spaceBetweenEachLine));
@@ -97,23 +104,26 @@ public class ConfigManager {
     public static int getPlaceRange() {
         String placeRange = config.getString("textSettings.placeRange");
         if (!Validator.isValidPlaceRange(placeRange)) {
-            printNotValidMessage(placeRange, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.placeRange")), "place range");
+            printNotValidMessage(placeRange, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
+                    "textSettings.placeRange")), "place range");
             return config.getDefaults().getInt("textSettings.placeRange");
         }
         return Integer.parseInt(Objects.requireNonNull(placeRange));
     }
 
-    public static boolean isDragPreview(boolean printNotValidMessage) {
-        String dragPreview = config.getString("textSettings.dragPreview");
-        if (Validator.isNoValidBoolean(Objects.requireNonNull(dragPreview))) {
-            if (printNotValidMessage) printNotValidMessage(dragPreview, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt("textSettings.dragPreview")), "drag preview");
-            return Objects.requireNonNull(config.getDefaults()).getBoolean("textSettings.dragPreview");
+    public static boolean isDragToMove(boolean printNotValidMessage) {
+        String dragToMove = config.getString("textSettings.dragToMove");
+        if (Validator.isNoValidBoolean(Objects.requireNonNull(dragToMove))) {
+            if (printNotValidMessage)
+                printNotValidMessage(dragToMove, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
+                        "textSettings.dragToMove")), "drag to move");
+            return Objects.requireNonNull(config.getDefaults()).getBoolean("textSettings.dragToMove");
         }
-        return Boolean.parseBoolean(dragPreview.toLowerCase());
+        return Boolean.parseBoolean(dragToMove.toLowerCase());
     }
 
-    public static void setDragPreview(boolean dragPreview) {
-        config.set("textSettings.dragPreview", dragPreview);
+    public static void setDragToMove(boolean dragToMove) {
+        config.set("textSettings.dragToMove", dragToMove);
         saveConfig();
     }
 
@@ -162,9 +172,9 @@ public class ConfigManager {
             config.set("textSettings.placeRange", Objects.requireNonNull(config.getDefaults()).get(
                     "textSettings.placeRange"));
         }
-        if (!config.isSet("textSettings.dragPreview")) {
-            config.set("textSettings.dragPreview", Objects.requireNonNull(config.getDefaults()).get(
-                    "textSettings.dragPreview"));
+        if (!config.isSet("textSettings.dragToMove")) {
+            config.set("textSettings.dragToMove", Objects.requireNonNull(config.getDefaults()).get(
+                    "textSettings.dragToMove"));
         }
         saveConfig();
     }

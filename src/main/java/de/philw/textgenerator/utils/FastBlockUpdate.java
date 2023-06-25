@@ -57,7 +57,7 @@ public class FastBlockUpdate {
         }.runTaskTimer(javaPlugin, 10, 10);
     }
 
-    public boolean isRunning(){
+    public boolean isRunning() {
         return fastBlockUpdateTask != null;
     }
 
@@ -106,7 +106,8 @@ public class FastBlockUpdate {
                                 key.getBlock().setMetadata(metaDataKey, metaDataValue);
                             } else {
                                 if (key.getBlock().hasMetadata(FastBlockUpdate.metaDataKey)) {
-                                    key.getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
+                                    key.getBlock().removeMetadata(FastBlockUpdate.metaDataKey,
+                                            TextGenerator.getInstance());
                                 }
                             }
                             blocksRemaining.remove(key);
@@ -139,7 +140,7 @@ public class FastBlockUpdate {
         }
     }
 
-    private static class MyMetaDataValue implements MetadataValue  {
+    private static class MyMetaDataValue implements MetadataValue {
         @Nullable
         @Override
         public Object value() {

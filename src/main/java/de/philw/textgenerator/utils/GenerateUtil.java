@@ -101,7 +101,8 @@ public class GenerateUtil {
             }
             lines.set(arrayIndex, doneLine);
         }
-        // merge the 2D-Boolean arrays to a big 2D-Boolean considering the in the textInstance given spaceBetweenEachLine
+        // merge the 2D-Boolean arrays to a big 2D-Boolean considering the in the textInstance given
+        // spaceBetweenEachLine
         int height = 0;
         int spaceBetweenEachLine = textInstance.getLineSpacing();
         for (boolean[][] doneLine : lines) {
@@ -217,24 +218,30 @@ public class GenerateUtil {
         }
     }
 
-    public static boolean areLocationsEqual(Location a, Location b) {
-        return a.getWorld() == b.getWorld() && a.getY() == b.getY() && a.getX() == b.getX() && a.getZ() == b.getZ();
+    public static boolean areLocationsEqual(Location l1, Location l2) {
+        return l1.getWorld() == l2.getWorld() && l1.getY() == l2.getY() && l1.getX() == l2.getX() && l1.getZ() == l2.getZ();
     }
 
-    public static Location editLocation(TextInstance textInstance, Location location, int toRight, int toBottom, int toLeft, int toTop, int toFront, int toBack) {
-        if (textInstance.getDirection() == Direction.NORTH) return location.clone().subtract(toBack, toBottom, toRight).add(toFront, toTop, toLeft);
-        if (textInstance.getDirection() == Direction.EAST) return location.clone().subtract(toLeft, toBottom, toBack).add(toRight, toTop, toFront);
-        if (textInstance.getDirection() == Direction.SOUTH) return location.clone().subtract(toFront, toBottom, toLeft).add(toBack, toTop, toRight);
-        if (textInstance.getDirection() == Direction.WEST) return location.clone().subtract(toRight, toBottom, toFront).add(toLeft, toTop, toBack);
+    public static Location editLocation(TextInstance textInstance, Location location, int toRight, int toBottom,
+                                        int toLeft, int toTop, int toFront, int toBack) {
+        if (textInstance.getDirection() == Direction.NORTH)
+            return location.clone().subtract(toBack, toBottom, toRight).add(toFront, toTop, toLeft);
+        if (textInstance.getDirection() == Direction.EAST)
+            return location.clone().subtract(toLeft, toBottom, toBack).add(toRight, toTop, toFront);
+        if (textInstance.getDirection() == Direction.SOUTH)
+            return location.clone().subtract(toFront, toBottom, toLeft).add(toBack, toTop, toRight);
+        if (textInstance.getDirection() == Direction.WEST)
+            return location.clone().subtract(toRight, toBottom, toFront).add(toLeft, toTop, toBack);
         return null;
     }
 
     public static CurrentEditedText getPlayersWantedTextToEdit(Player player) {
         // Get all Cuboids from previously generated Texts
         Map<UUID, Cuboid> possibleCuboidsFromPreviousGeneratedText = new HashMap<>();
-        for (UUID uuid: GeneratedTextsManager.getUUIDs()) {
+        for (UUID uuid : GeneratedTextsManager.getUUIDs()) {
             TextInstance textInstance = GeneratedTextsManager.getTextInstance(uuid);
-            possibleCuboidsFromPreviousGeneratedText.put(uuid, new Cuboid(textInstance.getTopLeftLocation(), textInstance.getBottomRightLocation()));
+            possibleCuboidsFromPreviousGeneratedText.put(uuid, new Cuboid(textInstance.getTopLeftLocation(),
+                    textInstance.getBottomRightLocation()));
         }
 
         if (possibleCuboidsFromPreviousGeneratedText.isEmpty()) return null;

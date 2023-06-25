@@ -35,7 +35,7 @@ public class BlockSearchUI extends SearchUI {
     @Override
     public void updateAllItems() {
         allItems.clear();
-        for (Block block: Block.values()) {
+        for (Block block : Block.values()) {
             allItems.add(getBlockItemStack(block));
         }
     }
@@ -45,14 +45,15 @@ public class BlockSearchUI extends SearchUI {
         ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
         String display = block.getDisplay();
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + display);
-        if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(uuid)) {
-            if (block == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(uuid).getTextInstance().getBlock()) {
+        if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(uuid)) {
+            if (block == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(uuid).getTextInstance().getBlock()) {
                 itemMeta.setDisplayName(ChatColor.RED + display);
                 itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
                 itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
                 itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             } else {
-                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the block from you current edited text to " + display));
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the block from you " +
+                        "current edited text to " + display));
             }
         } else {
             if (block == ConfigManager.getBlock()) {

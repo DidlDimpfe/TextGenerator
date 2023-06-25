@@ -1,0 +1,36 @@
+prefix: "&l&a[TextGenerator] "
+success: "♦prefix♦&l&2SUCCESS: "
+denied: "♦prefix♦&l&cDENIED: "
+
+generate:
+  success: "♦success♦&rYou generated \"{0}\"! You can adjust it with commands and the edit menu. Do not forget to type /textgenerator confirm when you are done."
+  deniedBecauseAlreadyEditingSomething: "♦denied♦&r You are already editing \"{0}\" so you cannot generate a new Text! Try /textgenerator confirm/cancel/destroy to not edit it."
+destroy:
+  success: "♦success♦&rYou destroyed \"{0}\"!"
+  deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to destroy!"
+confirm:
+  success: "♦success♦&rYou have build \"{0}\"!"
+  deniedBecauseNotValidPosition: "♦denied♦&rThe text \"{0}\" was not build, because it would override other blocks!"
+  deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to confirm!"
+openSettingsMenu:
+  denied: "♦denied♦&r You are already editing \"{0}\" so you cannot change the general Text settings! Try /textgenerator confirm/cancel/destroy to not edit it."
+edit:
+  openMenuDenied: "♦denied♦&rYou are not editing something to change!"
+  this:
+    success: "♦success♦&rYou are now editing \"{0}\"! You can adjust it with commands and the edit menu. Do not forget to type /textgenerator confirm when you are done."
+    deniedBecauseAlreadyEditingSomething: "♦denied♦&r You are already editing \"{0}\" so you edit another Text! Try /textgenerator confirm/cancel/destroy to not edit it."
+    deniedBecauseNotLookingAtSomething: "♦denied♦&r You are not looking at a previously generated Text so you cannot edit it."
+cancel:
+  destroy:
+    success: "♦success♦&rYou cancelled \"{0}\" by destroying it!"
+    deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to cancel!"
+  toPreviousLocationSuccess: "♦success♦&rYou cancelled \"{0}\" by making it like it was before!"
+move:
+  success: "♦success♦&rYou moved \"{0}\" to these directions: {1}!"
+  deniedBecauseInvalidCoordinates: "♦denied♦&rYour coordinates are invalid!"
+  deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to move!"
+  deniedBecauseDragToMoveActivated: "♦denied♦&rYou have the feature \"Drag to move\" and it would not make sense to move it now!"
+changedValueOfCurrentText:
+  success: "♦success♦&rYou changed the {0} from your current text to \"{1}\"!"
+  deniedBecauseValueAlreadySelected: "♦denied♦&rYou have already selected the {0} \"{1}\"!"
+needPermissionForCommand: "♦denied♦&rYou need the \"{1}\" permission to use this command!"

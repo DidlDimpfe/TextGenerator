@@ -1,7 +1,5 @@
 package de.philw.textgenerator.ui.value;
 
-import org.bukkit.Material;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -255,7 +253,7 @@ public enum Block {
     public String getDisplay() {
         String[] words = name().split("_");
         StringBuilder stringBuilder = new StringBuilder();
-        for (String word: words) {
+        for (String word : words) {
             word = word.toLowerCase();
             word = word.substring(0, 1).toUpperCase() + word.substring(1);
             stringBuilder.append(word).append(" ");

@@ -84,6 +84,7 @@ public enum LineSpacing {
     public static int getMinLineSpacing() {
         return 0;
     }
+
     public static int getMaxLineSpacing() {
         return 50;
     }

@@ -6,4 +6,4 @@ textSettings:
   underline: false
   lineSpacing: 2
   placeRange: 30
-  dragPreview: false
+  dragToMove: false

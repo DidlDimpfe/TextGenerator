@@ -5,7 +5,7 @@ import org.bukkit.Location;
 
 import java.util.UUID;
 
-public class TextInstance implements Cloneable{
+public class TextInstance implements Cloneable {
 
     private UUID uuid;
     private Block block;
@@ -18,7 +18,7 @@ public class TextInstance implements Cloneable{
     private boolean underline;
     private int lineSpacing;
     private int placeRange;
-    private boolean dragPreview;
+    private boolean dragToMove;
     private TextInstance previousTextInstance;
 
     public UUID getUuid() {
@@ -117,12 +117,12 @@ public class TextInstance implements Cloneable{
         return placeRange;
     }
 
-    public void setDragPreview(boolean dragPreview) {
-        this.dragPreview = dragPreview;
+    public void setDragToMove(boolean dragToMove) {
+        this.dragToMove = dragToMove;
     }
 
-    public boolean isDragPreview() {
-        return dragPreview;
+    public boolean isDragToMove() {
+        return dragToMove;
     }
 
     public Location getBottomRightLocation() {
@@ -167,12 +167,13 @@ public class TextInstance implements Cloneable{
         private boolean underline;
         private int lineSpacing = 2;
         private int placeRange = 0;
-        private boolean dragPreview = false;
+        private boolean dragToMove = false;
 
         public TextInstanceBuilder withUuid(UUID uuid) {
             this.uuid = uuid;
             return this;
         }
+
         public TextInstanceBuilder withBlock(Block block) {
             this.block = block;
             return this;
@@ -188,7 +189,7 @@ public class TextInstance implements Cloneable{
             return this;
         }
 
-        public TextInstanceBuilder withBottomRightLocation(Location  bottomRightLocation) {
+        public TextInstanceBuilder withBottomRightLocation(Location bottomRightLocation) {
             this.bottomRightLocation = bottomRightLocation;
             return this;
         }
@@ -233,8 +234,8 @@ public class TextInstance implements Cloneable{
             return this;
         }
 
-        public TextInstanceBuilder withDragPreview(boolean dragPreview) {
-            this.dragPreview = dragPreview;
+        public TextInstanceBuilder withDragToMove(boolean dragToMove) {
+            this.dragToMove = dragToMove;
             return this;
         }
 
@@ -253,7 +254,7 @@ public class TextInstance implements Cloneable{
             textInstance.setUnderline(underline);
             textInstance.setLineSpacing(lineSpacing);
             textInstance.setPlaceRange(placeRange);
-            textInstance.setDragPreview(dragPreview);
+            textInstance.setDragToMove(dragToMove);
             return textInstance;
         }
 

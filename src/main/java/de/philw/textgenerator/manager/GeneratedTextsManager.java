@@ -58,12 +58,14 @@ public class GeneratedTextsManager {
         generatedTexts.set(savedTextUUID + ".text", textInstance.getText());
         generatedTexts.set(savedTextUUID + ".middleLocation", getSavedLocation(textInstance.getMiddleLocation()));
         generatedTexts.set(savedTextUUID + ".topLeftLocation", getSavedLocation(textInstance.getTopLeftLocation()));
-        generatedTexts.set(savedTextUUID + ".bottomRightLocation", getSavedLocation(textInstance.getBottomRightLocation()));
+        generatedTexts.set(savedTextUUID + ".bottomRightLocation",
+                getSavedLocation(textInstance.getBottomRightLocation()));
         generatedTexts.set(savedTextUUID + ".direction", textInstance.getDirection().toString());
         generatedTexts.set(savedTextUUID + ".block", textInstance.getBlock().toString());
         generatedTexts.set(savedTextUUID + ".fontName", textInstance.getFontName());
         generatedTexts.set(savedTextUUID + ".fontSize", textInstance.getFontSize());
-        generatedTexts.set(savedTextUUID + ".fontStyle", FileUtil.fromFontStyleIntToString(textInstance.getFontStyle()));
+        generatedTexts.set(savedTextUUID + ".fontStyle",
+                FileUtil.fromFontStyleIntToString(textInstance.getFontStyle()));
         generatedTexts.set(savedTextUUID + ".underline", textInstance.isUnderline());
         generatedTexts.set(savedTextUUID + ".lineSpacing", textInstance.getLineSpacing());
         saveCraftingTables();
@@ -91,7 +93,7 @@ public class GeneratedTextsManager {
     public static Set<UUID> getUUIDs() {
         Set<String> inStrings = Objects.requireNonNull(generatedTexts.getConfigurationSection("")).getKeys(false);
         Set<UUID> inUUID = new HashSet<>();
-        for (String string: inStrings) {
+        for (String string : inStrings) {
             inUUID.add(UUID.fromString(string));
         }
         return inUUID;

@@ -1,12 +1,12 @@
 package de.philw.textgenerator.ui;
 
 import de.philw.textgenerator.TextGenerator;
+import de.philw.textgenerator.letters.CurrentEditedText;
 import de.philw.textgenerator.manager.ConfigManager;
+import de.philw.textgenerator.manager.MessagesManager;
 import de.philw.textgenerator.ui.value.Block;
-import de.philw.textgenerator.utils.Messages;
 import de.philw.textgenerator.utils.UIUtil;
 import net.wesjd.anvilgui.AnvilGUI;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,13 +15,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SearchUIListener implements Listener {
 
     private final HashMap<UUID, SearchUI> searchUISToListenTo;
-    //This arrayList is for all players who open an anvil gui to search and close the search UI inventory, so it knows that
+    //This arrayList is for all players who open an anvil gui to search and close the search UI inventory, so it
+    // knows that
     //this particular search UI should not be removed
     private final ArrayList<UUID> notRemove;
 
@@ -35,7 +39,7 @@ public class SearchUIListener implements Listener {
     public void onInventoryClick(InventoryClickEvent e) {
         SearchUI clickedSearchUI = null;
         Player player = (Player) e.getWhoClicked();
-        for (UUID uuid: searchUISToListenTo.keySet()) {
+        for (UUID uuid : searchUISToListenTo.keySet()) {
             if (player.getUniqueId().equals(uuid)) {
                 clickedSearchUI = searchUISToListenTo.get(uuid);
             }
@@ -89,8 +93,9 @@ public class SearchUIListener implements Listener {
             default:
                 if (e.getRawSlot() >= SearchUI.RETURN_ARROW_INDEX) return;
                 if (clickedSearchUI.inventory.getItem(e.getRawSlot()) == null) return;
-                String[] information = Objects.requireNonNull(Objects.requireNonNull(clickedSearchUI.inventory.getItem(e.getRawSlot())).
-                        getItemMeta()).getLocalizedName().split(";");
+                String[] information =
+                        Objects.requireNonNull(Objects.requireNonNull(clickedSearchUI.inventory.getItem(e.getRawSlot())).
+                                getItemMeta()).getLocalizedName().split(";");
                 switch (Integer.parseInt(information[0])) {
                     case SearchUI.BLOCK_SEARCH_UI:
                         blockSearchUIValueClicked(player, information);
@@ -113,7 +118,7 @@ public class SearchUIListener implements Listener {
             return;
         }
         UUID toRemove = null;
-        for (UUID uuid: searchUISToListenTo.keySet()) {
+        for (UUID uuid : searchUISToListenTo.keySet()) {
             if (player.getUniqueId().equals(uuid) && e.getView().getTitle().contains(searchUISToListenTo.get(uuid).inventoryDisplay)) {
                 toRemove = uuid;
                 break;
@@ -130,53 +135,76 @@ public class SearchUIListener implements Listener {
         return searchUISToListenTo;
     }
 
-    private void blockSearchUIValueClicked(Player player, String[] information)  {
+    private void blockSearchUIValueClicked(Player player, String[] information) {
         Block block = Block.valueOf(information[1]);
-        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(player.getUniqueId())) {
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
             ConfigManager.setBlock(block);
             for (SearchUI searchUI : this.getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof BlockSearchUI)) continue;
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(Messages.defaultBlockChangeSuccess(block.getDisplay()));
         } else {
-            TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setBlock(block);
-            player.sendMessage(Messages.currentTextBlockChangeSuccess(block.getDisplay()));
+            CurrentEditedText currentEditedText =
+                    TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());
+            if (block == currentEditedText.getTextInstance().getBlock()) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
+                        ".deniedBecauseValueAlreadySelected", "block", block.getDisplay()));
+            } else {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "block",
+                        block.getDisplay()));
+                currentEditedText.setBlock(block);
+            }
             player.closeInventory();
         }
     }
 
     private void fontSizeSearchUIValueClicked(Player player, String[] information) {
         int fontSize = Integer.parseInt(information[1]);
-        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(player.getUniqueId())) {
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
             ConfigManager.setFontSize(fontSize);
-            for (SearchUI searchUI : TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
+            for (SearchUI searchUI :
+                    TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof FontSizeSearchUI)) continue;
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(Messages.defaultFontSizeChangeSuccess(fontSize));
         } else {
-            TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setFontSize(fontSize);
-            player.sendMessage(Messages.currentTextFontSizeChangeSuccess(fontSize));
+            CurrentEditedText currentEditedText =
+                    TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());
+            if (fontSize == currentEditedText.getTextInstance().getFontSize()) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
+                        ".deniedBecauseValueAlreadySelected", "font size", fontSize));
+            } else {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font size",
+                        fontSize));
+                currentEditedText.setFontSize(fontSize);
+            }
             player.closeInventory();
         }
     }
 
     private void lineSpacingSearchUIValueClicked(Player player, String[] information) {
         int lineSpacing = Integer.parseInt(information[1]);
-        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(player.getUniqueId())) {
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
             ConfigManager.setLineSpacing(lineSpacing);
-            for (SearchUI searchUI : TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
+            for (SearchUI searchUI :
+                    TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof LineSpacingSearchUI)) continue;
                 searchUI.updateAllItems();
                 searchUI.openPage(searchUI.currentPage);
             }
-            player.sendMessage(Messages.defaultLineSpacingChangeSuccess(lineSpacing));
         } else {
-            TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId()).setLineSpacing(lineSpacing);
-            player.sendMessage(Messages.currentTextLineSpacingChangeSuccess(lineSpacing));
+            CurrentEditedText currentEditedText =
+                    TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());
+            if (lineSpacing == currentEditedText.getTextInstance().getLineSpacing()) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
+                        ".deniedBecauseValueAlreadySelected", "line spacing", lineSpacing));
+            } else {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "line spacing",
+                        lineSpacing));
+                currentEditedText.setLineSpacing(lineSpacing);
+            }
             player.closeInventory();
         }
     }

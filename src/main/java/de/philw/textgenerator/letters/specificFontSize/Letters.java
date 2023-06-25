@@ -77,19 +77,22 @@ public abstract class Letters {
 
     protected String getRightTopNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.getOppositeDirection().toString().toLowerCase().split("_")[0] + ",half=bottom,shape=straight," +
+                rightDirection.getOppositeDirection().toString().toLowerCase().split("_")[0] + ",half=bottom," +
+                "shape=straight," +
                 "waterlogged=false]";
     }
 
     protected String getRightBottomNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.getOppositeDirection().toString().toLowerCase().split("_")[0] + ",half=top,shape=straight," +
+                rightDirection.getOppositeDirection().toString().toLowerCase().split("_")[0] + ",half=top," +
+                "shape=straight," +
                 "waterlogged=false]";
     }
 
     protected String getLeftTopNothingStair(Block block, Direction rightDirection) {
         return "minecraft:" + block.toString().toLowerCase() + "_stairs[facing=" +
-                rightDirection.toString().toLowerCase().split("_")[0] + ",half=bottom,shape=straight,waterlogged=false]";
+                rightDirection.toString().toLowerCase().split("_")[0] + ",half=bottom,shape=straight," +
+                "waterlogged=false]";
     }
 
     protected String getLeftBottomNothingStair(Block block, Direction rightDirection) {

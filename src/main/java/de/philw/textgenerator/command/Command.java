@@ -1,6 +1,6 @@
 package de.philw.textgenerator.command;
 
-import de.philw.textgenerator.utils.Messages;
+import de.philw.textgenerator.manager.MessagesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
@@ -18,7 +18,7 @@ public abstract class Command extends BukkitCommand {
         this.setAliases(Arrays.asList(aliases));
         this.setDescription(description);
         this.setPermission(permission);
-        this.setPermissionMessage(Messages.needPermissionForCommand(permission));
+        this.setPermissionMessage(MessagesManager.getMessage("needPermissionForCommand", permission));
         try {
             Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             field.setAccessible(true);

@@ -35,7 +35,7 @@ public class FontSizeSearchUI extends SearchUI {
     @Override
     public void updateAllItems() {
         allItems.clear();
-        for (FontSize fontSize: FontSize.values()) {
+        for (FontSize fontSize : FontSize.values()) {
             allItems.add(getFontSizeItemStack(fontSize));
         }
     }
@@ -45,19 +45,21 @@ public class FontSizeSearchUI extends SearchUI {
         ItemStack itemStack = UIUtil.getSkullByString(fontSize.getSkullData());
         ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + String.valueOf(size));
-        if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(uuid)) {
-            if (size == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(uuid).getTextInstance().getFontSize()) {
+        if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(uuid)) {
+            if (size == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(uuid).getTextInstance().getFontSize()) {
                 itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + size);
                 itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
             } else {
-                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the font size from you current edited text to " + size));
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the font size from you" +
+                        " current edited text to " + size));
             }
         } else {
             if (size == ConfigManager.getFontSize()) {
                 itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + size);
                 itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
             } else {
-                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default font size to " + size));
+                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default font size " +
+                        "to " + size));
             }
         }
         itemMeta.setLocalizedName(SearchUI.FONT_SIZE_SEARCH_UI + ";" + size);

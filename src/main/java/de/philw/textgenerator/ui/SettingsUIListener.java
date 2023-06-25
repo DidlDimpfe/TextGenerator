@@ -3,7 +3,7 @@ package de.philw.textgenerator.ui;
 import de.philw.textgenerator.TextGenerator;
 import de.philw.textgenerator.letters.CurrentEditedText;
 import de.philw.textgenerator.manager.ConfigManager;
-import de.philw.textgenerator.utils.Messages;
+import de.philw.textgenerator.manager.MessagesManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,23 +32,23 @@ public class SettingsUIListener implements Listener {
                 new BlockSearchUI(player);
                 break;
             case SettingsUI.DRAG_PREVIEW_INDEX:
-                toggleDragPreview(player);
+                toggleDragToMove(player);
                 break;
         }
     }
 
-    private void toggleDragPreview(Player player) {
-        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().containsKey(player.getUniqueId())) {
-            boolean dragPreview = !ConfigManager.isDragPreview(false);
-            ConfigManager.setDragPreview(dragPreview);
-            player.sendMessage(Messages.defaultDragPreviewChangeSuccess(dragPreview));
+    private void toggleDragToMove(Player player) {
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
+            boolean dragToMove = !ConfigManager.isDragToMove(false);
+            ConfigManager.setDragToMove(dragToMove);
         } else {
-            CurrentEditedText currentEditedText = TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditTexts().get(player.getUniqueId());
-            boolean dragPreview = !currentEditedText.getTextInstance().isDragPreview();
-            currentEditedText.setDragPreviewTasks(dragPreview);
-            player.sendMessage(Messages.currentTextDragPreviewChangeSuccess(dragPreview));
+            CurrentEditedText currentEditedText =
+                    TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());
+            boolean dragToMove = !currentEditedText.getTextInstance().isDragToMove();
+            currentEditedText.setDragToMoveTasks(dragToMove);
+            player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "drag to move",
+                    dragToMove));
             player.closeInventory();
-
         }
     }
 
