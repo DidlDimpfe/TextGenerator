@@ -86,6 +86,7 @@ public class CurrentEditedText {
 
     private void addDragToMoveTasks() {
         dragToMoveTasks.add(Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
+            // For big texts (protection for lags)
             if (toUpdateBlocks > 10000) {
                 if (!player.getLocation().equals(previosPlayerLocation)) {
                     previosPlayerLocation = player.getLocation();
@@ -101,17 +102,7 @@ public class CurrentEditedText {
                     return;
                 }
             }
-            Location newMiddleLocation = getMiddleLocationFromPlayersSight(player, textInstance.getPlaceRange());
-            if (GenerateUtil.areLocationsEqual(newMiddleLocation, textInstance.getMiddleLocation())) {
-                return;
-            }
-            textInstance.setMiddleLocation(newMiddleLocation);
-            updateBlocksInWorld();
-        }, 1, 1));
-        dragToMoveTasks.add(Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
-            if (textInstance.getDirection() != Direction.valueOf(player.getFacing().toString()).getRightDirection()) {
-                textInstance.setDirection(Direction.valueOf(player.getFacing().toString()).getRightDirection());
-            }
+            refreshBlocksByPlayersSight();
         }, 1, 1));
     }
 
@@ -122,9 +113,25 @@ public class CurrentEditedText {
     }
 
     private void save() {
-        textInstance.setBottomRightLocation(GenerateUtil.editLocation(textInstance, textInstance.getTopLeftLocation()
-                , blocks[0].length - 1, blocks.length - 1, 0, 0, 0, 0));
+        textInstance.setBottomRightLocation(GenerateUtil.editLocation(textInstance, textInstance.getTopLeftLocation(),
+                blocks[0].length - 1, blocks.length - 1, 0, 0, 0, 0));
         GeneratedTextsManager.saveTextInstance(textInstance);
+    }
+
+    public void refreshBlocksByPlayersSight() {
+        Location newMiddleLocation = getMiddleLocationFromPlayersSight(player, textInstance.getPlaceRange());
+        if (newMiddleLocation == null) {
+            return;
+        }
+        if (GenerateUtil.areLocationsEqual(newMiddleLocation, textInstance.getMiddleLocation())) {
+            return;
+        }
+        Direction playerWantsTextToBeDirection = Direction.valueOf(player.getFacing().toString()).getRightDirection();
+        if (textInstance.getDirection() != playerWantsTextToBeDirection) {
+            textInstance.setDirection(playerWantsTextToBeDirection);
+        }
+        textInstance.setMiddleLocation(newMiddleLocation);
+        updateBlocksInWorld();
     }
 
     public void updateBlocksInWorld() {
@@ -225,7 +232,6 @@ public class CurrentEditedText {
         int playerLocationZ = (int) (player.getLocation().add(0, player.getEyeHeight(), 0).getZ());
 
         Vector normalVector = player.getLocation().getDirection().normalize();
-        Location actualLocation = null;
 
         int x = 0;
         int y = 0;
@@ -235,21 +241,24 @@ public class CurrentEditedText {
             int nextY = playerLocationY + (int) normalVector.clone().multiply(i).getY();
             int nextZ = playerLocationZ + (int) normalVector.clone().multiply(i).getZ();
 
+            if (nextY > 319 || nextY < -64) {
+                return null;
+            }
+            if (i == range) {
+                return new Location(player.getWorld(), x, y, z);
+            }
             Location possibleLocation = new Location(player.getWorld(), nextX, nextY, nextZ);
             if (possibleLocation.getBlock().getBlockData().getMaterial() != Material.AIR) {
                 if (!possibleLocation.getBlock().hasMetadata(FastBlockUpdate.metaDataKey)) {
-                    actualLocation = new Location(player.getWorld(), x, y, z);
-                    break;
+                    return new Location(player.getWorld(), x, y, z);
                 }
             }
-            if (i == range) {
-                actualLocation = new Location(player.getWorld(), x, y, z);
-            }
+
             x = nextX;
             y = nextY;
             z = nextZ;
         }
-        return actualLocation;
+        return null;
     }
 
     private void updateTopLeftLocation() {

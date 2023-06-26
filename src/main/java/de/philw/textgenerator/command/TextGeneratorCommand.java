@@ -47,6 +47,7 @@ public class TextGeneratorCommand extends Command {
         if (checkCancel(player, args)) return;
         if (checkMove(player, args)) return;
         if (checkDestroy(player, args)) return;
+        if (checkRefresh(player, args)) return;
 
         helpRequested(player);
     }
@@ -188,6 +189,22 @@ public class TextGeneratorCommand extends Command {
         } else {
             player.sendMessage(MessagesManager.getMessage("destroy.deniedBecauseNotEditingSomething"));
         }
+        return true;
+    }
+
+    private boolean checkRefresh(Player player, String[] args) {
+        if (!(args.length == 1 && args[0].equalsIgnoreCase("refresh"))) return false;
+        if (currentEditedTexts.containsKey(player.getUniqueId())) {
+            CurrentEditedText currentEditedText = currentEditedTexts.get(player.getUniqueId());
+            if (currentEditedText.getTextInstance().isDragToMove()) {
+                player.sendMessage(MessagesManager.getMessage("refresh.deniedBecauseDragToMoveActivated"));
+                return true;
+            }
+            currentEditedText.refreshBlocksByPlayersSight();
+            player.sendMessage(MessagesManager.getMessage("refresh.success", currentEditedText.getTextInstance().getText()));
+            return true;
+        }
+        player.sendMessage(MessagesManager.getMessage("refresh.deniedBecauseNotEditingSomething"));
         return true;
     }
 

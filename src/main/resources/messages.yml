@@ -10,7 +10,7 @@ destroy:
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to destroy!"
 confirm:
   success: "♦success♦&rYou have build \"{0}\"!"
-  deniedBecauseNotValidPosition: "♦denied♦&rThe text \"{0}\" was not build, because it would override other blocks!"
+  deniedBecauseNotValidPosition: "♦denied♦&rThe text \"{0}\" was not build, because it would override other blocks or build higher/lower than the limit!"
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to confirm!"
 openSettingsMenu:
   denied: "♦denied♦&r You are already editing \"{0}\" so you cannot change the general Text settings! Try /textgenerator confirm/cancel/destroy to not edit it."
@@ -29,8 +29,12 @@ move:
   success: "♦success♦&rYou moved \"{0}\" to these directions: {1}!"
   deniedBecauseInvalidCoordinates: "♦denied♦&rYour coordinates are invalid!"
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to move!"
-  deniedBecauseDragToMoveActivated: "♦denied♦&rYou have the feature \"Drag to move\" and it would not make sense to move it now!"
+  deniedBecauseDragToMoveActivated: "♦denied♦&rYou have enabled the feature \"Drag to move\" and it would not make sense to move it now!"
 changedValueOfCurrentText:
   success: "♦success♦&rYou changed the {0} from your current text to \"{1}\"!"
   deniedBecauseValueAlreadySelected: "♦denied♦&rYou have already selected the {0} \"{1}\"!"
+refresh:
+  success: "♦success♦&rYou refreshed \"{0}\"!"
+  deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to refresh!"
+  deniedBecauseDragToMoveActivated: "♦denied♦&rYou have enabled the feature \"Drag to move\" and it would not make sense to refresh it now!"
 needPermissionForCommand: "♦denied♦&rYou need the \"{1}\" permission to use this command!"
