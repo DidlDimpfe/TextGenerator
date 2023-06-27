@@ -7,9 +7,7 @@ import de.philw.textgenerator.utils.Direction;
 import de.philw.textgenerator.utils.FastBlockUpdate;
 import de.philw.textgenerator.utils.GenerateUtil;
 import de.philw.textgenerator.utils.TextInstance;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -52,6 +50,21 @@ public class CurrentEditedText {
         if (textInstance.isDragToMove()) {
             addDragToMoveTasks();
         }
+        NoMoveWhileGenerateListener.add(player.getUniqueId());
+        checkFirstGenerateDone();
+    }
+
+    private BukkitTask generateTask;
+
+    public void checkFirstGenerateDone() {
+        generateTask = Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
+            if (!blockBuilder.isRunning()) {
+                blinkAroundTheEdge();
+                playSound();
+                NoMoveWhileGenerateListener.remove(player.getUniqueId());
+                generateTask.cancel();
+            }
+        }, 1, 1);
     }
 
     public CurrentEditedText(Player player, TextInstance textInstance) { // For Edit
@@ -80,6 +93,8 @@ public class CurrentEditedText {
                 }
             }
         }
+        blinkAroundTheEdge();
+        playSound();
     }
 
     private Location previosPlayerLocation;
@@ -261,9 +276,59 @@ public class CurrentEditedText {
         return null;
     }
 
+    private void blinkAroundTheEdge() {
+        if (currentlyPreviewedBlocks.size() <= 1) return;
+        ArrayList<Location> toSpawnParticleLocation = new ArrayList<>();
+        Location topLeft = null;
+        if (textInstance.getDirection() == Direction.WEST) {
+            topLeft = textInstance.getTopLeftLocation().clone().add(1.1, 1.1, 0).subtract(0, 0, 0.1);
+        } else if (textInstance.getDirection() == Direction.NORTH) {
+            topLeft = textInstance.getTopLeftLocation().clone().add(1.1, 1.1, 1.1);
+        } else if (textInstance.getDirection() == Direction.SOUTH) {
+            topLeft = textInstance.getTopLeftLocation().clone().add(0, 1.1, 0).subtract(0.1, 0, 0.1);
+        } else if (textInstance.getDirection() == Direction.EAST) {
+            topLeft = textInstance.getTopLeftLocation().clone().add(0, 1.1, 1.1).subtract(0.1, 0, 0);
+        }
+        toSpawnParticleLocation.add(topLeft);
+
+        double distance = 0.15;
+
+        // Top left to top right
+        for (double count = 0; count <= blocks[0].length + 0.2; count += distance) {
+            toSpawnParticleLocation.add(GenerateUtil.editLocation(textInstance, topLeft,
+                    count, 0, 0, 0, 0, 0));
+        }
+        // Bottom left to bottom right
+        for (double count = 0; count <= blocks[0].length + 0.2; count += distance) {
+            toSpawnParticleLocation.add(GenerateUtil.editLocation(textInstance, topLeft,
+                    count, blocks.length + 0.2, 0, 0, 0, 0));
+        }
+        // Top left to bottom left
+        for (double count = 0; count <= blocks.length + 0.2; count += distance) {
+            toSpawnParticleLocation.add(GenerateUtil.editLocation(textInstance, topLeft,
+                    0, count, 0, 0, 0, 0));
+        }
+        // Top right to bottom right
+        for (double count = 0; count <= blocks.length + 0.2; count += distance) {
+            toSpawnParticleLocation.add(GenerateUtil.editLocation(textInstance, topLeft,
+                    blocks[0].length + 0.2, count, 0, 0, 0, 0));
+        }
+
+        for (Location loc : toSpawnParticleLocation) {
+            player.spawnParticle(Particle.REDSTONE, loc, 2, 0, 0, 0, 0,
+                    new Particle.DustOptions(Color.LIME, 1F));
+        }
+    }
+
+    private void playSound() {
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 2F);
+    }
+
     private void updateTopLeftLocation() {
+        int toLeft = blocks[0].length / 2;
+        int toTop = blocks.length / 2;
         textInstance.setTopLeftLocation(GenerateUtil.editLocation(textInstance, textInstance.getMiddleLocation(), 0,
-                0, blocks[0].length / 2, blocks.length / 2, 0, 0));
+                0, toLeft, toTop, 0, 0));
     }
 
     private void updateBlockArray() {
@@ -288,6 +353,7 @@ public class CurrentEditedText {
                 }
                 fastBlockUpdate.run();
                 destroyTask.cancel();
+                playSound();
             }
         }, 1, 1);
     }
@@ -302,6 +368,8 @@ public class CurrentEditedText {
                     for (Location location : currentlyPreviewedBlocks) {
                         location.getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
                     }
+                    blinkAroundTheEdge();
+                    playSound();
                     save();
                 } else {
                     currentlyPreviewedBlocks.get(0).getBlock().setType(Material.AIR);

@@ -222,8 +222,8 @@ public class GenerateUtil {
         return l1.getWorld() == l2.getWorld() && l1.getY() == l2.getY() && l1.getX() == l2.getX() && l1.getZ() == l2.getZ();
     }
 
-    public static Location editLocation(TextInstance textInstance, Location location, int toRight, int toBottom,
-                                        int toLeft, int toTop, int toFront, int toBack) {
+    public static Location editLocation(TextInstance textInstance, Location location, double toRight, double toBottom,
+                                        double toLeft, double toTop, double toFront, double toBack) {
         if (textInstance.getDirection() == Direction.NORTH)
             return location.clone().subtract(toBack, toBottom, toRight).add(toFront, toTop, toLeft);
         if (textInstance.getDirection() == Direction.EAST)
