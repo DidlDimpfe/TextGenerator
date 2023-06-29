@@ -129,6 +129,13 @@ public abstract class SearchUI {
     public void search(String searched) {
         currentSearch = searched.trim();
         updateSearchItem(currentSearch);
+        if (searched.isEmpty()) {
+            searchedItems.clear();
+            updateAllItems();
+            searchedItems = allItems;
+            openPage(1);
+            return;
+        }
         searchedItems = getSearchedItems(currentSearch);
         openPage(1);
     }
@@ -170,6 +177,16 @@ public abstract class SearchUI {
         searchItemMeta.setLore(searchLore);
         searchItemStack.setItemMeta(searchItemMeta);
         inventory.setItem(SEARCH_INDEX, searchItemStack);
+    }
+
+    public void updateCurrentSearchUIItems() {
+        if (currentSearch.isEmpty()) {
+            updateAllItems();
+            openPage(currentPage);
+        } else {
+            search(currentSearch);
+            openPage(currentPage);
+        }
     }
 
     public abstract void updateAllItems();

@@ -148,7 +148,7 @@ public class TextGeneratorCommand extends Command {
             player.sendMessage(MessagesManager.getMessage("cancel.destroy.success",
                     currentEditedText.getTextInstance().getText()));
         } else {
-            currentEditedText.setToPreviousLocation();
+            currentEditedText.moveToPreviousState();
             currentEditedTexts.remove(player.getUniqueId());
             player.sendMessage(MessagesManager.getMessage("cancel.toPreviousLocationSuccess",
                     currentEditedText.getTextInstance().getText()));

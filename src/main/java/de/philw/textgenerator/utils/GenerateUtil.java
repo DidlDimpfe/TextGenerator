@@ -57,6 +57,9 @@ public class GenerateUtil {
     }
 
     public static boolean[][] getBlocks(TextInstance textInstance) {
+        if (textInstance.getFontSize() < 9) {
+
+        }
         ArrayList<BufferedImage> linesAsBufferedImages = stringToBufferedImages(textInstance);
         ArrayList<boolean[][]> lines = new ArrayList<>();
         // find out the biggest width

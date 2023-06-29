@@ -1,6 +1,7 @@
 package de.philw.textgenerator.letters;
 
 import de.philw.textgenerator.TextGenerator;
+import de.philw.textgenerator.listener.NoMoveWhileGenerateListener;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.manager.GeneratedTextsManager;
 import de.philw.textgenerator.utils.Direction;
@@ -127,7 +128,7 @@ public class CurrentEditedText {
         }
     }
 
-    private void save() {
+    public void save() {
         textInstance.setBottomRightLocation(GenerateUtil.editLocation(textInstance, textInstance.getTopLeftLocation(),
                 blocks[0].length - 1, blocks.length - 1, 0, 0, 0, 0));
         GeneratedTextsManager.saveTextInstance(textInstance);
@@ -216,7 +217,7 @@ public class CurrentEditedText {
         updateBlocksInWorld();
     }
 
-    public void setToPreviousLocation() {
+    public void moveToPreviousState() {
         textInstance = textInstance.getPreviousTextInstance();
         updateBlockArray();
         updateTopLeftLocation();

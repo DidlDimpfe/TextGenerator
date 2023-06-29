@@ -141,8 +141,7 @@ public class SearchUIListener implements Listener {
             ConfigManager.setBlock(block);
             for (SearchUI searchUI : this.getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof BlockSearchUI)) continue;
-                searchUI.updateAllItems();
-                searchUI.openPage(searchUI.currentPage);
+                searchUI.updateCurrentSearchUIItems();
             }
         } else {
             CurrentEditedText currentEditedText =
@@ -166,8 +165,7 @@ public class SearchUIListener implements Listener {
             for (SearchUI searchUI :
                     TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof FontSizeSearchUI)) continue;
-                searchUI.updateAllItems();
-                searchUI.openPage(searchUI.currentPage);
+                searchUI.updateCurrentSearchUIItems();
             }
         } else {
             CurrentEditedText currentEditedText =
@@ -191,8 +189,7 @@ public class SearchUIListener implements Listener {
             for (SearchUI searchUI :
                     TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
                 if (!(searchUI instanceof LineSpacingSearchUI)) continue;
-                searchUI.updateAllItems();
-                searchUI.openPage(searchUI.currentPage);
+                searchUI.updateCurrentSearchUIItems();
             }
         } else {
             CurrentEditedText currentEditedText =

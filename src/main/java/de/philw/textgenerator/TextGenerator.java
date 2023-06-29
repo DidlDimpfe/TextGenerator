@@ -1,7 +1,9 @@
 package de.philw.textgenerator;
 
 import de.philw.textgenerator.command.TextGeneratorCommand;
-import de.philw.textgenerator.letters.NoMoveWhileGenerateListener;
+import de.philw.textgenerator.letters.CurrentEditedText;
+import de.philw.textgenerator.listener.LeaveListener;
+import de.philw.textgenerator.listener.NoMoveWhileGenerateListener;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.manager.GeneratedTextsManager;
 import de.philw.textgenerator.manager.MessagesManager;
@@ -19,14 +21,33 @@ public final class TextGenerator extends JavaPlugin {
     @Override
     public void onEnable() {
         INSTANCE = this;
+
+        registerEventsAndCommandAndManager();
+    }
+
+    @Override
+    public void onDisable() {
+        for (CurrentEditedText currentEditedText: textGeneratorCommand.getCurrentEditedTexts().values()) {
+            currentEditedText.save();
+        }
+    }
+
+    private void registerEventsAndCommandAndManager() {
+        // Manager
         ConfigManager.setUpConfig();
         GeneratedTextsManager.setUpManager();
         MessagesManager.setUpManager();
 
+        // Command
         textGeneratorCommand = new TextGeneratorCommand();
+
+        // Events
         searchUIListener = new SearchUIListener();
-        Bukkit.getPluginManager().registerEvents(new SettingsUIListener(), this);
+
         Bukkit.getPluginManager().registerEvents(searchUIListener, this);
+
+        Bukkit.getPluginManager().registerEvents(new LeaveListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SettingsUIListener(), this);
         Bukkit.getPluginManager().registerEvents(new NoMoveWhileGenerateListener(), this);
     }
 

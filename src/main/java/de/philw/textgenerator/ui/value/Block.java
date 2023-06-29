@@ -243,7 +243,78 @@ public enum Block {
     WARPED_NYLIUM(null),
     SOUL_SAND(null),
     SOUL_SOIL(null),
-    BONE_BLOCK(null); // NOCH NICHT FERTIG
+    BONE_BLOCK(null),
+    COAL_ORE(null),
+    DEEPSLATE_COAL_ORE(null),
+    IRON_ORE(null),
+    DEEPSLATE_IRON_ORE(null),
+    COPPER_ORE(null),
+    DEEPSLATE_COPPER_ORE(null),
+    GOLD_ORE(null),
+    DEEPSLATE_GOLD_ORE(null),
+    REDSTONE_ORE(null),
+    DEEPSLATE_REDSTONE_ORE(null),
+    EMERALD_ORE(null),
+    DEEPSLATE_EMERALD_ORE(null),
+    LAPIS_ORE(null),
+    DEEPSLATE_LAPIS_ORE(null),
+    DIAMOND_ORE(null),
+    DEEPSLATE_DIAMOND_ORE(null),
+    NETHER_GOLD_ORE(null),
+    NETHER_QUARTZ_ORE(null),
+    ANCIENT_DEBRIS(null),
+    RAW_IRON_BLOCK(null),
+    RAW_COPPER_BLOCK(null),
+    RAW_GOLD_BLOCK(null),
+    GLOWSTONE(null),
+    BUDDING_AMETHYST(null),
+    MUSHROOM_STEM(null),
+    OAK_LEAVES(null),
+    SPRUCE_LEAVES(null),
+    BIRCH_LEAVES(null),
+    JUNGLE_LEAVES(null),
+    ACACIA_LEAVES(null),
+    DARK_OAK_LEAVES(null),
+    MANGROVE_LEAVES(null),
+    MANGROVE_ROOTS(null),
+    MUDDY_MANGROVE_ROOTS(null),
+    AZALEA_LEAVES(null),
+    FLOWERING_AZALEA_LEAVES(null),
+    BROWN_MUSHROOM_BLOCK(null),
+    RED_MUSHROOM_BLOCK(null),
+    NETHER_WART_BLOCK(null),
+    WARPED_WART_BLOCK(null),
+    SHROOMLIGHT(null),
+    // No undead coral blocks, they would die
+    DEAD_TUBE_CORAL_BLOCK(null),
+    DEAD_BRAIN_CORAL_BLOCK(null),
+    DEAD_BUBBLE_CORAL_BLOCK(null),
+    DEAD_FIRE_CORAL_BLOCK(null),
+    DEAD_HORN_CORAL_BLOCK(null),
+    SPONGE(null),
+    WET_SPONGE(null),
+    MELON(null),
+    PUMPKIN(null),
+    CARVED_PUMPKIN(null),
+    JACK_O_LANTERN(null),
+    HAY_BLOCK(null),
+    BEE_NEST(null),
+    HONEYCOMB_BLOCK(null),
+    SLIME_BLOCK(null),
+    HONEY_BLOCK(null),
+    OCHRE_FROGLIGHT(null),
+    VERDANT_FROGLIGHT(null),
+    PEARLESCENT_FROGLIGHT(null),
+    SCULK(null),
+    SCULK_CATALYST(null),
+    BEDROCK(null),
+    REDSTONE_LAMP(null),
+    BEEHIVE(null),
+    BOOKSHELF(null),
+    TNT(null);
+
+
+
     private final List<String> slabAndStairsID;
 
     Block(List<String> slabAndStairsID) {
@@ -264,7 +335,5 @@ public enum Block {
     public List<String> getSlabAndStairsID() {
         return slabAndStairsID;
     }
-
-    // Get search keywords?
 
 }

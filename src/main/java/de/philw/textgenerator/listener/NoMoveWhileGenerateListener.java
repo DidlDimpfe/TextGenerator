@@ -1,4 +1,4 @@
-package de.philw.textgenerator.letters;
+package de.philw.textgenerator.listener;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
