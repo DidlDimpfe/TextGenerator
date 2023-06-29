@@ -102,28 +102,28 @@ public class ConfigManager {
     }
 
     public static int getPlaceRange() {
-        String placeRange = config.getString("textSettings.placeRange");
+        String placeRange = config.getString("placeRange");
         if (!Validator.isValidPlaceRange(placeRange)) {
             printNotValidMessage(placeRange, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
-                    "textSettings.placeRange")), "place range");
-            return config.getDefaults().getInt("textSettings.placeRange");
+                    "placeRange")), "place range");
+            return config.getDefaults().getInt("placeRange");
         }
         return Integer.parseInt(Objects.requireNonNull(placeRange));
     }
 
     public static boolean isDragToMove(boolean printNotValidMessage) {
-        String dragToMove = config.getString("textSettings.dragToMove");
+        String dragToMove = config.getString("dragToMove");
         if (Validator.isNoValidBoolean(Objects.requireNonNull(dragToMove))) {
             if (printNotValidMessage)
                 printNotValidMessage(dragToMove, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
-                        "textSettings.dragToMove")), "drag to move");
-            return Objects.requireNonNull(config.getDefaults()).getBoolean("textSettings.dragToMove");
+                        "dragToMove")), "drag to move");
+            return Objects.requireNonNull(config.getDefaults()).getBoolean("dragToMove");
         }
         return Boolean.parseBoolean(dragToMove.toLowerCase());
     }
 
     public static void setDragToMove(boolean dragToMove) {
-        config.set("textSettings.dragToMove", dragToMove);
+        config.set("dragToMove", dragToMove);
         saveConfig();
     }
 
@@ -168,13 +168,13 @@ public class ConfigManager {
             config.set("textSettings.lineSpacing", Objects.requireNonNull(config.getDefaults()).get(
                     "textSettings.lineSpacing"));
         }
-        if (!config.isSet("textSettings.placeRange")) {
-            config.set("textSettings.placeRange", Objects.requireNonNull(config.getDefaults()).get(
-                    "textSettings.placeRange"));
+        if (!config.isSet("placeRange")) {
+            config.set("placeRange", Objects.requireNonNull(config.getDefaults()).get(
+                    "placeRange"));
         }
-        if (!config.isSet("textSettings.dragToMove")) {
-            config.set("textSettings.dragToMove", Objects.requireNonNull(config.getDefaults()).get(
-                    "textSettings.dragToMove"));
+        if (!config.isSet("dragToMove")) {
+            config.set("dragToMove", Objects.requireNonNull(config.getDefaults()).get(
+                    "dragToMove"));
         }
         saveConfig();
     }

@@ -23,7 +23,7 @@ public class CurrentEditedText {
     private TextInstance textInstance;
     private final ArrayList<BukkitTask> dragToMoveTasks;
     private final ArrayList<Location> currentlyPreviewedBlocks;
-    private boolean[][] blocks;
+    private String[][] blocks;
     private FastBlockUpdate blockBuilder;
     private int toUpdateBlocks;
 
@@ -82,7 +82,7 @@ public class CurrentEditedText {
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
                 try {
-                    if (!blocks[heightIndex][widthIndex]) {
+                    if (blocks[heightIndex][widthIndex] == null) {
                         continue;
                     }
                     Location hereIsBlockLocation = GenerateUtil.editLocation(textInstance,
@@ -145,6 +145,9 @@ public class CurrentEditedText {
         Direction playerWantsTextToBeDirection = Direction.valueOf(player.getFacing().toString()).getRightDirection();
         if (textInstance.getDirection() != playerWantsTextToBeDirection) {
             textInstance.setDirection(playerWantsTextToBeDirection);
+            if (textInstance.getFontSize() < 9) {
+                updateBlockArray();
+            }
         }
         textInstance.setMiddleLocation(newMiddleLocation);
         updateBlocksInWorld();
@@ -188,13 +191,13 @@ public class CurrentEditedText {
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
                 try {
-                    if (!blocks[heightIndex][widthIndex]) {
+                    if (blocks[heightIndex][widthIndex] == null) {
                         continue;
                     }
                     Location toPlaceBlockLocation = GenerateUtil.editLocation(textInstance,
                             textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0, 0, 0);
                     blockBuilder.addBlock(toPlaceBlockLocation,
-                            Bukkit.createBlockData(textInstance.getBlock().toString().toLowerCase()));
+                            Bukkit.createBlockData(blocks[heightIndex][widthIndex]));
                     currentlyPreviewedBlocks.add(toPlaceBlockLocation);
                 } catch (IndexOutOfBoundsException ignored) {
                 }
@@ -400,6 +403,7 @@ public class CurrentEditedText {
 
     public void setBlock(de.philw.textgenerator.ui.value.Block block) {
         this.textInstance.setBlock(block);
+        updateBlockArray();
         updateBlocksInWorld();
     }
 

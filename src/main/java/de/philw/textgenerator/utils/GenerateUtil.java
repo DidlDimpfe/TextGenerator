@@ -1,6 +1,7 @@
 package de.philw.textgenerator.utils;
 
 import de.philw.textgenerator.letters.CurrentEditedText;
+import de.philw.textgenerator.letters.specificFontSize.SpecificFontSize;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.manager.GeneratedTextsManager;
 import org.bukkit.Location;
@@ -56,27 +57,26 @@ public class GenerateUtil {
         return linesAsBufferedImages;
     }
 
-    public static boolean[][] getBlocks(TextInstance textInstance) {
+    public static String[][] getBlocks(TextInstance textInstance) {
         if (textInstance.getFontSize() < 9) {
-
+            return getBlocksFromSpecificFontSize(textInstance);
         }
         ArrayList<BufferedImage> linesAsBufferedImages = stringToBufferedImages(textInstance);
-        ArrayList<boolean[][]> lines = new ArrayList<>();
+        ArrayList<String[][]> lines = new ArrayList<>();
         // find out the biggest width
         int width = 0;
         for (BufferedImage bufferedImage : linesAsBufferedImages) {
             if (bufferedImage.getWidth() > width) width = bufferedImage.getWidth();
         }
-        boolean[][] biggest = null;
-        // loop through all linesAsBufferedImages, make 2D-Boolean arrays out of it (what block has to be placed and
-        // what not)
+        String[][] biggest = null;
+        // loop through all linesAsBufferedImages, make 2D-String arrays out of it (If block should be placed, then what block data)
         // and reduce them
         for (BufferedImage bufferedImage : linesAsBufferedImages) {
-            boolean[][] tempLine = new boolean[bufferedImage.getHeight()][width];
+            String[][] tempLine = new String[bufferedImage.getHeight()][width];
             for (int heightIndex = 0; heightIndex < bufferedImage.getHeight(); heightIndex++) {
                 for (int widthIndex = 0; widthIndex < bufferedImage.getWidth(); widthIndex++) {
                     int rgb = bufferedImage.getRGB(widthIndex, heightIndex);
-                    tempLine[heightIndex][widthIndex] = rgb != -1;
+                    tempLine[heightIndex][widthIndex] = rgb != -1 ? textInstance.getBlock().getNormalBlock() : null;
                 }
             }
             int alreadyRemoved = 0;
@@ -94,28 +94,28 @@ public class GenerateUtil {
             }
             lines.add(tempLine);
         }
-        // make all 2D-Boolean arrays the same width
+        // make all 2D-String arrays the same width
         for (int arrayIndex = 0; arrayIndex < lines.size(); arrayIndex++) {
-            boolean[][] oldLine = lines.get(arrayIndex);
+            String[][] oldLine = lines.get(arrayIndex);
             if (oldLine == biggest) continue;
-            boolean[][] doneLine = new boolean[oldLine.length][width];
+            String[][] doneLine = new String[oldLine.length][width];
             for (int column = 0; column < oldLine.length; column++) {
                 System.arraycopy(oldLine[column], 0, doneLine[column], 0, oldLine[0].length);
             }
             lines.set(arrayIndex, doneLine);
         }
-        // merge the 2D-Boolean arrays to a big 2D-Boolean considering the in the textInstance given
+        // merge the 2D-Boolean arrays to a big 2D-String considering the in the textInstance given
         // spaceBetweenEachLine
         int height = 0;
         int spaceBetweenEachLine = textInstance.getLineSpacing();
-        for (boolean[][] doneLine : lines) {
+        for (String[][] doneLine : lines) {
             height += doneLine.length + spaceBetweenEachLine;
         }
         height -= spaceBetweenEachLine;
-        boolean[][] blocks = new boolean[height][width];
+        String[][] blocks = new String[height][width];
         int currentLineIndexCount = 0;
-        for (boolean[][] doneLine : lines) {
-            for (boolean[] booleans : doneLine) {
+        for (String[][] doneLine : lines) {
+            for (String[] booleans : doneLine) {
                 blocks[currentLineIndexCount] = booleans;
                 currentLineIndexCount++;
             }
@@ -124,7 +124,7 @@ public class GenerateUtil {
         return blocks;
     }
 
-    private static ArrayList<Integer> getToRemoveColumns(boolean[][] blocks) {
+    private static ArrayList<Integer> getToRemoveColumns(String[][] blocks) {
         ArrayList<Integer> toRemoveColumns = new ArrayList<>();
 
         // from top to bottom
@@ -132,7 +132,7 @@ public class GenerateUtil {
         for (int column = 0; column < blocks.length; column++) {
             boolean reduce = true;
             for (int row = 0; row < blocks[0].length; row++) {
-                if (blocks[column][row]) {
+                if (blocks[column][row] != null) {
                     reduce = false;
                     break;
                 }
@@ -149,7 +149,7 @@ public class GenerateUtil {
         for (int column = blocks.length - 1; column >= 0; column--) {
             boolean reduce = true;
             for (int row = 0; row < blocks[0].length; row++) {
-                if (blocks[column][row]) {
+                if (blocks[column][row] != null) {
                     reduce = false;
                     break;
                 }
@@ -164,15 +164,15 @@ public class GenerateUtil {
         return toRemoveColumns;
     }
 
-    private static ArrayList<Integer> getToRemoveRows(boolean[][] blocks) {
+    private static ArrayList<Integer> getToRemoveRows(String[][] blocks) {
         ArrayList<Integer> toRemoveRows = new ArrayList<>();
 
         // from left to right
         boolean start = true;
         for (int row = 0; row < blocks[0].length; row++) {
             boolean reduce = true;
-            for (boolean[] block : blocks) {
-                if (block[row]) {
+            for (String[] block : blocks) {
+                if (block[row] != null) {
                     reduce = false;
                     break;
                 }
@@ -188,8 +188,8 @@ public class GenerateUtil {
         start = true;
         for (int row = blocks[0].length - 1; row >= 0; row--) {
             boolean reduce = true;
-            for (boolean[] block : blocks) {
-                if (block[row]) {
+            for (String[] block : blocks) {
+                if (block[row] != null) {
                     reduce = false;
                     break;
                 }
@@ -204,16 +204,16 @@ public class GenerateUtil {
         return toRemoveRows;
     }
 
-    private static boolean[][] removeColumn(boolean[][] blocks, int columnIndex) {
-        boolean[][] newBlocks = new boolean[blocks.length - 1][];
+    private static String[][] removeColumn(String[][] blocks, int columnIndex) {
+        String[][] newBlocks = new String[blocks.length - 1][];
         System.arraycopy(blocks, 0, newBlocks, 0, columnIndex);
         System.arraycopy(blocks, columnIndex + 1, newBlocks, columnIndex, blocks.length - columnIndex - 1);
         return newBlocks;
     }
 
-    private static void removeRow(boolean[][] blocks, int rowIndex) {
+    private static void removeRow(String[][] blocks, int rowIndex) {
         for (int columnIndex = 0; columnIndex < blocks.length; columnIndex++) {
-            boolean[] row = new boolean[blocks[columnIndex].length - 1];
+            String[] row = new String[blocks[columnIndex].length - 1];
             System.arraycopy(blocks[columnIndex], 0, row, 0, rowIndex);
             System.arraycopy(blocks[columnIndex], rowIndex + 1, row, rowIndex,
                     blocks[columnIndex].length - rowIndex - 1);
@@ -270,6 +270,157 @@ public class GenerateUtil {
             }
         }
 
+        return null;
+    }
+
+    private static String[][] getBlocksFromSpecificFontSize(TextInstance textInstance) {
+        SpecificFontSize specificFontSize = SpecificFontSize.getClassFromFontSize(textInstance.getFontSize());
+        String[] linesAsNormalText = textInstance.getText().split("\\\\n");
+
+        ArrayList<String[][]> lines = new ArrayList<>();
+        for (String line: linesAsNormalText) {
+            lines.add(getLine(textInstance, line, specificFontSize));
+        }
+        // find out the biggest width
+        int width = 0;
+        String[][] biggest = null;
+        for (String[][] line: lines) {
+            if (line[0].length > width) {
+                width = line[0].length;
+                biggest = line;
+            }
+        }
+        // make all 2D-String arrays the same width
+        for (int arrayIndex = 0; arrayIndex < lines.size(); arrayIndex++) {
+            String[][] oldLine = lines.get(arrayIndex);
+            if (oldLine == biggest) continue;
+            String[][] doneLine = new String[oldLine.length][width];
+            for (int column = 0; column < oldLine.length; column++) {
+                System.arraycopy(oldLine[column], 0, doneLine[column], 0, oldLine[0].length);
+            }
+            lines.set(arrayIndex, doneLine);
+        }
+        // merge the 2D-Boolean arrays to a big 2D-String considering the in the textInstance given
+        // spaceBetweenEachLine
+        int height = 0;
+        int spaceBetweenEachLine = textInstance.getLineSpacing();
+        for (String[][] doneLine : lines) {
+            height += doneLine.length + spaceBetweenEachLine;
+        }
+        height -= spaceBetweenEachLine;
+        String[][] blocks = new String[height][width];
+        int currentLineIndexCount = 0;
+        for (String[][] doneLine : lines) {
+            for (String[] booleans : doneLine) {
+                blocks[currentLineIndexCount] = booleans;
+                currentLineIndexCount++;
+            }
+            currentLineIndexCount += spaceBetweenEachLine;
+        }
+        return blocks;
+    }
+
+
+    private static String[][] getLine(TextInstance textInstance, String text, SpecificFontSize specificFontSize) {
+        int height = Objects.requireNonNull(getLetter('a', textInstance, specificFontSize)).length;
+        int width = 0;
+        for (char character: text.toLowerCase().toCharArray()) {
+            if (character == ' ') {
+                width += 3;
+                continue;
+            }
+            width += (Objects.requireNonNull(getLetter(character, textInstance, specificFontSize))[0].length + 1);
+        }
+        String[][] line = new String[height][width];
+        int currentWidth = 0;
+        for (char character: text.toLowerCase().toCharArray()) {
+            if (character == ' ') {
+                currentWidth += 3;
+                continue;
+            }
+            String[][] letter =  getLetter(character, textInstance, specificFontSize);
+            // Loop through the letter
+            for (int heightIndex = 0; heightIndex < Objects.requireNonNull(letter).length; heightIndex++) {
+                System.arraycopy(letter[heightIndex], 0, line[heightIndex], currentWidth, letter[0].length);
+            }
+            currentWidth += (letter[0].length + 1);
+        }
+        return line;
+    }
+
+    private static String[][] getLetter(Character character, TextInstance textInstance, SpecificFontSize specificFontSize) {
+        switch (character) {
+            case 'a':
+                return specificFontSize.getA(textInstance.getBlock(), textInstance.getDirection());
+            case 'b':
+                return specificFontSize.getB(textInstance.getBlock(), textInstance.getDirection());
+            case 'c':
+                return specificFontSize.getC(textInstance.getBlock(), textInstance.getDirection());
+            case 'd':
+                return specificFontSize.getD(textInstance.getBlock(), textInstance.getDirection());
+            case 'e':
+                return specificFontSize.getE(textInstance.getBlock(), textInstance.getDirection());
+            case 'f':
+                return specificFontSize.getF(textInstance.getBlock(), textInstance.getDirection());
+            case 'g':
+                return specificFontSize.getG(textInstance.getBlock(), textInstance.getDirection());
+            case 'h':
+                return specificFontSize.getH(textInstance.getBlock(), textInstance.getDirection());
+            case 'i':
+                return specificFontSize.getI(textInstance.getBlock(), textInstance.getDirection());
+            case 'j':
+                return specificFontSize.getJ(textInstance.getBlock(), textInstance.getDirection());
+            case 'k':
+                return specificFontSize.getK(textInstance.getBlock(), textInstance.getDirection());
+            case 'l':
+                return specificFontSize.getL(textInstance.getBlock(), textInstance.getDirection());
+            case 'm':
+                return specificFontSize.getM(textInstance.getBlock(), textInstance.getDirection());
+            case 'n':
+                return specificFontSize.getN(textInstance.getBlock(), textInstance.getDirection());
+            case 'o':
+                return specificFontSize.getO(textInstance.getBlock(), textInstance.getDirection());
+            case 'p':
+                return specificFontSize.getP(textInstance.getBlock(), textInstance.getDirection());
+            case 'q':
+                return specificFontSize.getQ(textInstance.getBlock(), textInstance.getDirection());
+            case 'r':
+                return specificFontSize.getR(textInstance.getBlock(), textInstance.getDirection());
+            case 's':
+                return specificFontSize.getS(textInstance.getBlock(), textInstance.getDirection());
+            case 't':
+                return specificFontSize.getT(textInstance.getBlock(), textInstance.getDirection());
+            case 'u':
+                return specificFontSize.getU(textInstance.getBlock(), textInstance.getDirection());
+            case 'v':
+                return specificFontSize.getV(textInstance.getBlock(), textInstance.getDirection());
+            case 'w':
+                return specificFontSize.getW(textInstance.getBlock(), textInstance.getDirection());
+            case 'x':
+                return specificFontSize.getX(textInstance.getBlock(), textInstance.getDirection());
+            case 'y':
+                return specificFontSize.getY(textInstance.getBlock(), textInstance.getDirection());
+            case 'z':
+                return specificFontSize.getZ(textInstance.getBlock(), textInstance.getDirection());
+            case '1':
+                return specificFontSize.get1(textInstance.getBlock(), textInstance.getDirection());
+            case '2':
+                return specificFontSize.get2(textInstance.getBlock(), textInstance.getDirection());
+            case '3':
+                return specificFontSize.get3(textInstance.getBlock(), textInstance.getDirection());
+            case '4':
+                return specificFontSize.get4(textInstance.getBlock(), textInstance.getDirection());
+            case '5':
+                return specificFontSize.get5(textInstance.getBlock(), textInstance.getDirection());
+            case '6':
+                return specificFontSize.get6(textInstance.getBlock(), textInstance.getDirection());
+            case '7':
+                return specificFontSize.get7(textInstance.getBlock(), textInstance.getDirection());
+            case '8':
+                return specificFontSize.get8(textInstance.getBlock(), textInstance.getDirection());
+            case '9':
+                return specificFontSize.get9(textInstance.getBlock(), textInstance.getDirection());
+        }
         return null;
     }
 

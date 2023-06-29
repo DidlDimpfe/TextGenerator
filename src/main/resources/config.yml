@@ -1,3 +1,5 @@
+placeRange: 30
+dragToMove: false
 textSettings:
   block: quartz_block
   fontName: SansSerif
@@ -5,5 +7,3 @@ textSettings:
   fontStyle: BOLD
   underline: false
   lineSpacing: 2
-  placeRange: 30
-  dragToMove: false

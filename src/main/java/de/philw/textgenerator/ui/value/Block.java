@@ -336,4 +336,8 @@ public enum Block {
         return slabAndStairsID;
     }
 
+    public String getNormalBlock() {
+        return "minecraft:" + toString().toLowerCase();
+    }
+
 }
