@@ -94,6 +94,10 @@ public class GenerateUtil {
             }
             lines.add(tempLine);
         }
+        return combineLines(lines, textInstance, width, biggest);
+    }
+
+    private static String[][] combineLines(ArrayList<String[][]> lines, TextInstance textInstance, int width, String[][] biggest) {
         // make all 2D-String arrays the same width
         for (int arrayIndex = 0; arrayIndex < lines.size(); arrayIndex++) {
             String[][] oldLine = lines.get(arrayIndex);
@@ -290,34 +294,7 @@ public class GenerateUtil {
                 biggest = line;
             }
         }
-        // make all 2D-String arrays the same width
-        for (int arrayIndex = 0; arrayIndex < lines.size(); arrayIndex++) {
-            String[][] oldLine = lines.get(arrayIndex);
-            if (oldLine == biggest) continue;
-            String[][] doneLine = new String[oldLine.length][width];
-            for (int column = 0; column < oldLine.length; column++) {
-                System.arraycopy(oldLine[column], 0, doneLine[column], 0, oldLine[0].length);
-            }
-            lines.set(arrayIndex, doneLine);
-        }
-        // merge the 2D-Boolean arrays to a big 2D-String considering the in the textInstance given
-        // spaceBetweenEachLine
-        int height = 0;
-        int spaceBetweenEachLine = textInstance.getLineSpacing();
-        for (String[][] doneLine : lines) {
-            height += doneLine.length + spaceBetweenEachLine;
-        }
-        height -= spaceBetweenEachLine;
-        String[][] blocks = new String[height][width];
-        int currentLineIndexCount = 0;
-        for (String[][] doneLine : lines) {
-            for (String[] booleans : doneLine) {
-                blocks[currentLineIndexCount] = booleans;
-                currentLineIndexCount++;
-            }
-            currentLineIndexCount += spaceBetweenEachLine;
-        }
-        return blocks;
+        return combineLines(lines, textInstance, width, biggest);
     }
 
 

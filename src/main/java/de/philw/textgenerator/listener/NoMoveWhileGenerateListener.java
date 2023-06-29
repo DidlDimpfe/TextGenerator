@@ -20,7 +20,7 @@ public class NoMoveWhileGenerateListener implements Listener {
     }
 
     @EventHandler
-    public void noMove(PlayerMoveEvent e) {
+    public void onPlayerMove(PlayerMoveEvent e) {
         if (disallowedToMove.contains(e.getPlayer().getUniqueId())) {
             e.setCancelled(true);
         }

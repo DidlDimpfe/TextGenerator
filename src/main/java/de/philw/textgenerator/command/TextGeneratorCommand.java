@@ -130,9 +130,10 @@ public class TextGeneratorCommand extends Command {
                     player.sendMessage(MessagesManager.getMessage("edit.this.success",
                             currentEditedText.getTextInstance().getText()));
                 }
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private boolean checkCancel(Player player, String[] args) {

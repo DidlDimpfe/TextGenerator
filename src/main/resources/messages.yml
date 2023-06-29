@@ -38,3 +38,4 @@ refresh:
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to refresh!"
   deniedBecauseDragToMoveActivated: "♦denied♦&rYou have enabled the feature \"Drag to move\" and it would not make sense to refresh it now!"
 needPermissionForCommand: "♦denied♦&rYou need the \"{1}\" permission to use this command!"
+blockBreakFromCurrentEditedTextDisabled: "♦denied♦&rYou cannot destroy a block from a text that is currently edited!"
