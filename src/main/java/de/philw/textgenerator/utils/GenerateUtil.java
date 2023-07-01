@@ -308,6 +308,7 @@ public class GenerateUtil {
             }
             width += (Objects.requireNonNull(getLetter(character, textInstance, specificFontSize))[0].length + 1);
         }
+        width--;
         String[][] line = new String[height][width];
         int currentWidth = 0;
         for (char character: text.toLowerCase().toCharArray()) {
@@ -323,6 +324,11 @@ public class GenerateUtil {
             currentWidth += (letter[0].length + 1);
         }
         return line;
+    }
+
+    // Currently allowed a-z 1-9 ,.#-'!?()
+    public static boolean isNotTextValidForSpecificFontSize(String text) {
+        return !text.matches("[,.#\\-'!?()a-zA-Z1-9]+");
     }
 
     private static String[][] getLetter(Character character, TextInstance textInstance, SpecificFontSize specificFontSize) {

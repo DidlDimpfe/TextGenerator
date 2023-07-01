@@ -19,6 +19,11 @@ import java.util.Objects;
 
 public class CurrentEditedText {
 
+    // That variables are for the specific text, so we know the reason
+    public static int BLOCK_HAS_NO_SLAB_OR_STAIR = 0;
+    public static int TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE = 1;
+    public static int VALID = 2;
+
     private final Player player;
     private TextInstance textInstance;
     private final ArrayList<BukkitTask> dragToMoveTasks;
@@ -26,6 +31,8 @@ public class CurrentEditedText {
     private String[][] blocks;
     private FastBlockUpdate blockBuilder;
     private int toUpdateBlocks;
+    private int generateSuccess;
+
 
     public CurrentEditedText(Player player, String wantedText) { // For first Generate
         this.player = player;
@@ -46,6 +53,16 @@ public class CurrentEditedText {
                 .withPlaceRange(placeRange)
                 .withDragToMove(ConfigManager.isDragToMove(true))
                 .build();
+        if (textInstance.getFontSize() < 9) {
+            if (GenerateUtil.isNotTextValidForSpecificFontSize(wantedText)) {
+                generateSuccess = TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE;
+                return;
+            }
+            if (textInstance.getBlock().getSlabAndStairsID() == null) {
+                generateSuccess = BLOCK_HAS_NO_SLAB_OR_STAIR;
+                return;
+            }
+        }
         updateBlockArray();
         updateBlocksInWorld();
         if (textInstance.isDragToMove()) {
@@ -53,6 +70,7 @@ public class CurrentEditedText {
         }
         NoMoveWhileGenerateListener.add(player.getUniqueId());
         checkFirstGenerateDone();
+        generateSuccess = VALID;
     }
 
     private BukkitTask generateTask;
@@ -389,10 +407,15 @@ public class CurrentEditedText {
         return true;
     }
 
-    public void setFontSize(int size) {
+    public int setFontSize(int size) {
+        if (size < 9) {
+            if (textInstance.getBlock().getSlabAndStairsID() == null) return BLOCK_HAS_NO_SLAB_OR_STAIR;
+            if (GenerateUtil.isNotTextValidForSpecificFontSize(textInstance.getText())) return TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE;
+        }
         textInstance.setFontSize(size);
         updateBlockArray();
         updateBlocksInWorld();
+        return VALID;
     }
 
     public void setLineSpacing(int lineSpacing) {
@@ -401,10 +424,22 @@ public class CurrentEditedText {
         updateBlocksInWorld();
     }
 
-    public void setBlock(de.philw.textgenerator.ui.value.Block block) {
+    public boolean setBlock(de.philw.textgenerator.ui.value.Block block) {
+        if (textInstance.getFontSize() < 9 && block.getSlabAndStairsID() == null) return false;
         this.textInstance.setBlock(block);
         updateBlockArray();
         updateBlocksInWorld();
+        return true;
+    }
+
+    public boolean setText(String newText) {
+        if (textInstance.getFontSize() < 9) {
+            if (GenerateUtil.isNotTextValidForSpecificFontSize(newText)) return false;
+        }
+        this.textInstance.setText(newText);
+        updateBlockArray();
+        updateBlocksInWorld();
+        return true;
     }
 
     public void setDragToMoveTasks(boolean dragToMoveTasks) {
@@ -422,4 +457,7 @@ public class CurrentEditedText {
         return textInstance;
     }
 
+    public int getGenerateSuccess() {
+        return generateSuccess;
+    }
 }

@@ -24,7 +24,7 @@ public class SettingsUI {
 
         inventory.setItem(FONT_SIZE_INDEX, UIUtil.getSkullByString(SkullData.FONT_SIZE));
         inventory.setItem(LINE_SPACING_INDEX, UIUtil.getSkullByString(SkullData.LINE_SPACING));
-        inventory.setItem(BLOCKS_INDEX, UIUtil.getSkullByString(SkullData.BLOCKS));
+        inventory.setItem(BLOCKS_INDEX, UIUtil.getSkullByString(SkullData.CHANGE_BLOCKS));
         inventory.setItem(DRAG_PREVIEW_INDEX, UIUtil.getSkullByString(SkullData.DRAG_PREVIEW));
         player.openInventory(inventory);
     }

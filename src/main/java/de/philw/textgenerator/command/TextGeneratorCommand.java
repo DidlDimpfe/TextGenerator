@@ -48,6 +48,7 @@ public class TextGeneratorCommand extends Command {
         if (checkMove(player, args)) return;
         if (checkDestroy(player, args)) return;
         if (checkRefresh(player, args)) return;
+        if (checkSetText(player, args)) return;
 
         helpRequested(player);
     }
@@ -65,9 +66,15 @@ public class TextGeneratorCommand extends Command {
         if (!currentEditedTexts.containsKey(player.getUniqueId())) {
             CurrentEditedText currentEditedText = new CurrentEditedText(player, builder.substring(0,
                     builder.toString().length() - 1));
-            currentEditedTexts.put(player.getUniqueId(), currentEditedText);
-            player.sendMessage(MessagesManager.getMessage("generate.success",
-                    currentEditedText.getTextInstance().getText()));
+            if (currentEditedText.getGenerateSuccess() == CurrentEditedText.VALID) {
+                currentEditedTexts.put(player.getUniqueId(), currentEditedText);
+                player.sendMessage(MessagesManager.getMessage("generate.success",
+                        currentEditedText.getTextInstance().getText()));
+            } else if (currentEditedText.getGenerateSuccess() == CurrentEditedText.BLOCK_HAS_NO_SLAB_OR_STAIR) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", currentEditedText.getTextInstance().getBlock().getDisplay()));
+            } else if (currentEditedText.getGenerateSuccess() ==CurrentEditedText.TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid", currentEditedText.getTextInstance().getText()));
+            }
         } else {
             player.sendMessage(MessagesManager.getMessage("generate.deniedBecauseAlreadyEditingSomething",
                     currentEditedTexts.get(player.getUniqueId()).getTextInstance().getText()));
@@ -206,6 +213,27 @@ public class TextGeneratorCommand extends Command {
             return true;
         }
         player.sendMessage(MessagesManager.getMessage("refresh.deniedBecauseNotEditingSomething"));
+        return true;
+    }
+
+    private boolean checkSetText(Player player, String[] args) {
+        if (!(args.length > 1 && args[0].equalsIgnoreCase("settext"))) return false;
+        if( currentEditedTexts.containsKey(player.getUniqueId())) {
+            StringBuilder builder = new StringBuilder();
+            for (int index = 1; index < args.length; index++) {
+                builder.append(args[index]).append(" ");
+            }
+            String newText = builder.substring(0, builder.toString().length() - 1);
+
+            CurrentEditedText currentEditedText = currentEditedTexts.get(player.getUniqueId());
+            if (!currentEditedText.setText(newText)) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid", newText));
+            } else {
+                player.sendMessage(MessagesManager.getMessage("setText.success", newText));
+            }
+        } else {
+            player.sendMessage(MessagesManager.getMessage("setText.deniedBecauseNotEditingSomething"));
+        }
         return true;
     }
 

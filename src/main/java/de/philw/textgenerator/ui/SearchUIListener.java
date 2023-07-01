@@ -150,9 +150,12 @@ public class SearchUIListener implements Listener {
                 player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
                         ".deniedBecauseValueAlreadySelected", "block", block.getDisplay()));
             } else {
-                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "block",
-                        block.getDisplay()));
-                currentEditedText.setBlock(block);
+                if (!currentEditedText.setBlock(block)) {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", currentEditedText.getTextInstance().getBlock().getDisplay()));
+                } else {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "block",
+                            block.getDisplay()));
+                }
             }
             player.closeInventory();
         }
@@ -174,9 +177,15 @@ public class SearchUIListener implements Listener {
                 player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
                         ".deniedBecauseValueAlreadySelected", "font size", fontSize));
             } else {
-                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font size",
-                        fontSize));
-                currentEditedText.setFontSize(fontSize);
+                int changeValid = currentEditedText.setFontSize(fontSize);
+                if (changeValid == CurrentEditedText.VALID) {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font size",
+                            fontSize));
+                } else if (changeValid == CurrentEditedText.BLOCK_HAS_NO_SLAB_OR_STAIR) {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", currentEditedText.getTextInstance().getBlock().getDisplay())); // TESTEN
+                } else if (changeValid == CurrentEditedText.TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE) {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid", currentEditedText.getTextInstance().getText())); // TESTEN
+                }
             }
             player.closeInventory();
         }
