@@ -314,6 +314,17 @@ public class SizeSix extends SpecificFontSize {
         return blockDataStrings;
     }
 
+    public String[][] get0(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][2];
+
+        blockDataStrings[1][0] = getRightTopNothingStair(block, direction);
+        blockDataStrings[0][0] = getRightBottomNothingStair(block, direction);
+        blockDataStrings[1][1] = getNormalBlock(block);
+        blockDataStrings[0][1] = getNormalBlock(block);
+
+        return blockDataStrings;
+    }
+
     @Override
     public String[][] get1(Block block, Direction direction) {
         String[][] blockDataStrings = new String[2][2];
@@ -421,4 +432,93 @@ public class SizeSix extends SpecificFontSize {
 
         return blockDataStrings;
     }
+
+    @Override
+    public String[][] getFullStop(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][1];
+
+        blockDataStrings[0][0] = null;
+        blockDataStrings[1][0] = getBottomSlap(block);
+
+        return blockDataStrings;
+    }
+
+    @Override
+    public String[][] getComma(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][2];
+
+        blockDataStrings[0][0] = null;
+        blockDataStrings[0][1] = null;
+        blockDataStrings[1][0] = getBottomSlap(block);
+        blockDataStrings[1][1] = getTopSlap(block);
+
+        return blockDataStrings;
+    }
+
+    @Override
+    public String[][] getSemicolon(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][2];
+
+        blockDataStrings[0][0] = null;
+        blockDataStrings[0][1] = getTopSlap(block);
+        blockDataStrings[1][0] = getBottomSlap(block);
+        blockDataStrings[1][1] = getTopSlap(block);
+
+        return blockDataStrings;
+    }
+
+    @Override
+    public String[][] getColon(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][1];
+
+        blockDataStrings[0][0] = getBottomSlap(block);
+        blockDataStrings[1][0] = getBottomSlap(block);
+
+        return blockDataStrings;
+    }
+
+    @Override
+    public String[][] getQuestionMark(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][2];
+
+        blockDataStrings[0][0] = getRightBottomNothingStair(block, direction);
+        blockDataStrings[0][1] = getLeftBottomNothingStair(block, direction);
+        blockDataStrings[1][0] = null;
+        blockDataStrings[1][1] = getBottomSlap(block);
+
+        return blockDataStrings;
+    }
+
+    @Override
+    public String[][] getExclamationMark(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][1];
+
+        blockDataStrings[0][0] = getNormalBlock(block);
+        blockDataStrings[1][0] = getBottomSlap(block);
+
+        return blockDataStrings;
+    }
+
+    @Override
+    public String[][] getApostrophe(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][1];
+
+        blockDataStrings[0][0] = getTopSlap(block);
+        blockDataStrings[1][0] = null;
+
+        return blockDataStrings;
+    }
+
+    public String[][] getBackslash(Block block, Direction direction) {
+        String[][] blockDataStrings = new String[2][2];
+
+        blockDataStrings[1][0] = null;
+        blockDataStrings[0][0] = getNormalBlock(block);
+        blockDataStrings[1][1] = getNormalBlock(block);
+        blockDataStrings[0][1] = null;
+
+        return blockDataStrings;
+    }
+
+
 }

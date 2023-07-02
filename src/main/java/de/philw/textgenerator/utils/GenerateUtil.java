@@ -326,9 +326,9 @@ public class GenerateUtil {
         return line;
     }
 
-    // Currently allowed a-z 1-9 ,.#-'!?()
+    // Currently allowed a-z 1-9 .,;:?!'\
     public static boolean isNotTextValidForSpecificFontSize(String text) {
-        return !text.matches("[,.#\\-'!?()a-zA-Z1-9]+");
+        return !text.matches("[ .,;:?!'\\\\a-zA-Z0-9]+");
     }
 
     private static String[][] getLetter(Character character, TextInstance textInstance, SpecificFontSize specificFontSize) {
@@ -385,6 +385,8 @@ public class GenerateUtil {
                 return specificFontSize.getY(textInstance.getBlock(), textInstance.getDirection());
             case 'z':
                 return specificFontSize.getZ(textInstance.getBlock(), textInstance.getDirection());
+            case '0':
+                return specificFontSize.get0(textInstance.getBlock(), textInstance.getDirection());
             case '1':
                 return specificFontSize.get1(textInstance.getBlock(), textInstance.getDirection());
             case '2':
@@ -403,6 +405,22 @@ public class GenerateUtil {
                 return specificFontSize.get8(textInstance.getBlock(), textInstance.getDirection());
             case '9':
                 return specificFontSize.get9(textInstance.getBlock(), textInstance.getDirection());
+            case '.':
+                return specificFontSize.getFullStop(textInstance.getBlock(), textInstance.getDirection());
+            case ',':
+                return specificFontSize.getComma(textInstance.getBlock(), textInstance.getDirection());
+            case ';':
+                return specificFontSize.getSemicolon(textInstance.getBlock(), textInstance.getDirection());
+            case ':':
+                return specificFontSize.getColon(textInstance.getBlock(), textInstance.getDirection());
+            case '?':
+                return specificFontSize.getQuestionMark(textInstance.getBlock(), textInstance.getDirection());
+            case '!':
+                return specificFontSize.getExclamationMark(textInstance.getBlock(), textInstance.getDirection());
+            case '\'':
+                return specificFontSize.getApostrophe(textInstance.getBlock(), textInstance.getDirection());
+            case '\\':
+                return specificFontSize.getBackslash(textInstance.getBlock(), textInstance.getDirection());
         }
         return null;
     }

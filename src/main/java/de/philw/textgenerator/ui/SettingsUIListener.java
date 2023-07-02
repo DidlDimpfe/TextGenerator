@@ -15,7 +15,8 @@ public class SettingsUIListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (!ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.GREEN +
-                "TextGenerator Settings")) {
+                "TextGenerator settings") && !ChatColor.translateAlternateColorCodes('&', e.getView().getTitle()).equals(ChatColor.GREEN +
+                "TextGenerator edit menu")) {
             return;
         }
         if (e.getCurrentItem() == null) return;

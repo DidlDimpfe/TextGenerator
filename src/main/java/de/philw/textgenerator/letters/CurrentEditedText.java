@@ -163,6 +163,7 @@ public class CurrentEditedText {
         Direction playerWantsTextToBeDirection = Direction.valueOf(player.getFacing().toString()).getRightDirection();
         if (textInstance.getDirection() != playerWantsTextToBeDirection) {
             textInstance.setDirection(playerWantsTextToBeDirection);
+            // This is for the block data of the stairs. They need to be updated for the direction.
             if (textInstance.getFontSize() < 9) {
                 updateBlockArray();
             }

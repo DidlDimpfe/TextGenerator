@@ -50,7 +50,11 @@ public class SearchUIListener implements Listener {
         e.setCancelled(true);
         switch (e.getRawSlot()) {
             case SearchUI.RETURN_ARROW_INDEX:
-                new SettingsUI(player);
+                if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
+                    new SettingsUI(player, "TextGenerator edit menu");
+                } else {
+                    new SettingsUI(player, "TextGenerator settings");
+                }
                 searchUISToListenTo.remove(player.getUniqueId());
                 break;
             case SearchUI.PREVIOUS_PAGE_INDEX:
@@ -117,14 +121,12 @@ public class SearchUIListener implements Listener {
             notRemove.remove(e.getPlayer().getUniqueId());
             return;
         }
-        UUID toRemove = null;
         for (UUID uuid : searchUISToListenTo.keySet()) {
             if (player.getUniqueId().equals(uuid) && e.getView().getTitle().contains(searchUISToListenTo.get(uuid).inventoryDisplay)) {
-                toRemove = uuid;
-                break;
+                searchUISToListenTo.remove(uuid);
+                return;
             }
         }
-        searchUISToListenTo.remove(toRemove);
     }
 
     public void addSearchUI(UUID uuid, SearchUI searchUI) {
@@ -151,7 +153,7 @@ public class SearchUIListener implements Listener {
                         ".deniedBecauseValueAlreadySelected", "block", block.getDisplay()));
             } else {
                 if (!currentEditedText.setBlock(block)) {
-                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", currentEditedText.getTextInstance().getBlock().getDisplay()));
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", block.getDisplay()));
                 } else {
                     player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "block",
                             block.getDisplay()));
@@ -182,9 +184,9 @@ public class SearchUIListener implements Listener {
                     player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font size",
                             fontSize));
                 } else if (changeValid == CurrentEditedText.BLOCK_HAS_NO_SLAB_OR_STAIR) {
-                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", currentEditedText.getTextInstance().getBlock().getDisplay())); // TESTEN
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", currentEditedText.getTextInstance().getBlock().getDisplay()));
                 } else if (changeValid == CurrentEditedText.TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE) {
-                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid", currentEditedText.getTextInstance().getText())); // TESTEN
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid", currentEditedText.getTextInstance().getText()));
                 }
             }
             player.closeInventory();

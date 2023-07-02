@@ -10,6 +10,8 @@ public abstract class SpecificFontSize {
             return new SizeSix();
         } else if (fontSize == 7) {
             return new SizeSeven();
+        } else if (fontSize == 8) {
+            return new SizeEight();
         }
         return null;
     }
@@ -66,6 +68,8 @@ public abstract class SpecificFontSize {
 
     public abstract String[][] getZ(Block block, Direction direction);
 
+    public abstract String[][] get0(Block block, Direction direction);
+
     public abstract String[][] get1(Block block, Direction direction);
 
     public abstract String[][] get2(Block block, Direction direction);
@@ -83,6 +87,14 @@ public abstract class SpecificFontSize {
     public abstract String[][] get8(Block block, Direction direction);
 
     public abstract String[][] get9(Block block, Direction direction);
+    public abstract String[][] getFullStop(Block block, Direction direction);
+    public abstract String[][] getComma(Block block, Direction direction);
+    public abstract String[][] getSemicolon(Block block, Direction direction);
+    public abstract String[][] getColon(Block block, Direction direction);
+    public abstract String[][] getQuestionMark(Block block, Direction direction);
+    public abstract String[][] getExclamationMark(Block block, Direction direction);
+    public abstract String[][] getApostrophe(Block block, Direction direction);
+    public abstract String[][] getBackslash(Block block, Direction direction);
 
     protected String getRightTopNothingStair(Block block, Direction direction) {
         return "minecraft:" + block.getSlabAndStairsID().get(1).toLowerCase() + "[facing=" +

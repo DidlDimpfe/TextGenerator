@@ -18,8 +18,8 @@ public class SettingsUI {
     private final Inventory inventory;
     private final Player player;
 
-    public SettingsUI(Player player) {
-        inventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + "TextGenerator Settings");
+    public SettingsUI(Player player, String display) {
+        inventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + display);
         this.player = player;
 
         inventory.setItem(FONT_SIZE_INDEX, UIUtil.getSkullByString(SkullData.FONT_SIZE));
