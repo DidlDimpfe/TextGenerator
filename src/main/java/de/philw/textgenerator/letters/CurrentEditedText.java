@@ -4,6 +4,7 @@ import de.philw.textgenerator.TextGenerator;
 import de.philw.textgenerator.listener.NoMoveWhileGenerateListener;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.manager.GeneratedTextsManager;
+import de.philw.textgenerator.manager.MessagesManager;
 import de.philw.textgenerator.utils.Direction;
 import de.philw.textgenerator.utils.FastBlockUpdate;
 import de.philw.textgenerator.utils.GenerateUtil;
@@ -23,6 +24,7 @@ public class CurrentEditedText {
     public static int BLOCK_HAS_NO_SLAB_OR_STAIR = 0;
     public static int TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE = 1;
     public static int VALID = 2;
+    public static int WOULD_OVERRIDE_OTHER_BLOCKS = 3;
 
     private final Player player;
     private TextInstance textInstance;
@@ -63,14 +65,14 @@ public class CurrentEditedText {
                 return;
             }
         }
+        generateSuccess = VALID;
         updateBlockArray();
-        updateBlocksInWorld();
+        updateBlocksInWorld(false);
         if (textInstance.isDragToMove()) {
             addDragToMoveTasks();
         }
         NoMoveWhileGenerateListener.add(player.getUniqueId());
         checkFirstGenerateDone();
-        generateSuccess = VALID;
     }
 
     private BukkitTask generateTask;
@@ -86,6 +88,12 @@ public class CurrentEditedText {
         }, 1, 1);
     }
 
+    private boolean notTheSameAsItWas;
+
+    public boolean isNotTheSameAsItWas() {
+        return notTheSameAsItWas;
+    }
+
     public CurrentEditedText(Player player, TextInstance textInstance) { // For Edit
         GeneratedTextsManager.removeTextInstance(textInstance.getUuid());
         this.player = player;
@@ -97,17 +105,34 @@ public class CurrentEditedText {
         textInstance.setDragToMove(false);
         this.textInstance = textInstance;
         updateBlockArray();
+        this.notTheSameAsItWas = false;
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
                 try {
                     if (blocks[heightIndex][widthIndex] == null) {
+                        Location previewedLocation = GenerateUtil.editLocation(textInstance,
+                                textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0, 0, 0);
+                        assert previewedLocation != null;
+                        if (previewedLocation.getBlock().getType() != Material.AIR) {
+                            currentlyPreviewedBlocks.add(previewedLocation);
+                            notTheSameAsItWas = true;
+                            previewedLocation.getBlock().setMetadata(FastBlockUpdate.metaDataKey, FastBlockUpdate.metaDataValue);
+                        }
                         continue;
                     }
                     Location hereIsBlockLocation = GenerateUtil.editLocation(textInstance,
                             textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0, 0, 0);
+
                     Objects.requireNonNull(hereIsBlockLocation).getBlock().setMetadata(FastBlockUpdate.metaDataKey,
                             FastBlockUpdate.metaDataValue);
                     currentlyPreviewedBlocks.add(hereIsBlockLocation);
+                    if (!hereIsBlockLocation.getBlock().getBlockData().getAsString().contains(blocks[heightIndex][widthIndex])) {
+                        if (hereIsBlockLocation.getBlock().getBlockData().getMaterial() == Material.AIR) {
+                            currentlyPreviewedBlocks.remove(hereIsBlockLocation);
+                            hereIsBlockLocation.getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
+                        }
+                        notTheSameAsItWas = true;
+                    }
                 } catch (IndexOutOfBoundsException ignored) {
                 }
             }
@@ -169,10 +194,10 @@ public class CurrentEditedText {
             }
         }
         textInstance.setMiddleLocation(newMiddleLocation);
-        updateBlocksInWorld();
+        updateBlocksInWorld(true);
     }
 
-    public void updateBlocksInWorld() {
+    public void updateBlocksInWorld(boolean sendMessage) {
         updateTopLeftLocation();
         if (blockBuilder != null) {
             if (blockBuilder.isRunning() && toUpdateBlocks > 10000) {
@@ -195,6 +220,11 @@ public class CurrentEditedText {
 
             currentlyPreviewedBlocks.clear();
             currentlyPreviewedBlocks.add(textInstance.getMiddleLocation());
+            if (sendMessage) {
+                player.sendMessage(MessagesManager.getMessage("textCannotBeBuildBecauseItWouldOverrideOtherBlocks"));
+            } else {
+                generateSuccess = WOULD_OVERRIDE_OTHER_BLOCKS;
+            }
             return;
         }
 
@@ -226,30 +256,62 @@ public class CurrentEditedText {
         this.blockBuilder = blockBuilder;
     }
 
-    public void move(int fromViewX, int fromViewY, int fromViewZ) {
+    public void removeMetaDataFromPreviewedBlocks() {
+        for (Location location : currentlyPreviewedBlocks) {
+            location.getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
+        }
+    }
+
+    private FastBlockUpdate deleteAllPreviousBlocks() {
+        currentlyPreviewedBlocks.clear();
+        FastBlockUpdate airBuilder = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
+        for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
+            for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
+                try {
+                    airBuilder.addBlock(GenerateUtil.editLocation(textInstance,
+                            textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0, 0, 0), Material.AIR.createBlockData());
+                } catch (IndexOutOfBoundsException ignored) {
+                }
+            }
+        }
+        airBuilder.run();
+        return airBuilder;
+    }
+
+    public boolean move(int fromViewX, int fromViewY, int fromViewZ) {
         int toRight = Math.max(fromViewX, 0);
         int toLeft = Math.abs(Math.min(fromViewX, 0));
         int toTop = Math.max(fromViewY, 0);
         int toBottom = Math.abs(Math.min(fromViewY, 0));
         int toFront = Math.max(fromViewZ, 0);
         int toBack = Math.abs(Math.min(fromViewZ, 0));
+        Location wantedMiddleLocation = GenerateUtil.editLocation(textInstance, textInstance.getMiddleLocation(),
+                toRight, toBottom, toLeft, toTop, toFront, toBack);
+        if (wantedMiddleLocation == null) { // If it's outside the minecraft range
+            return false;
+        }
+        if (wantedMiddleLocation.getBlock().getBlockData().getMaterial() != Material.AIR && !wantedMiddleLocation.getBlock().hasMetadata(FastBlockUpdate.metaDataKey)) {
+            return false;
+        }
         textInstance.setMiddleLocation(GenerateUtil.editLocation(textInstance, textInstance.getMiddleLocation(),
                 toRight, toBottom, toLeft, toTop, toFront, toBack));
         updateTopLeftLocation();
-        updateBlocksInWorld();
+        updateBlocksInWorld(true);
+        return true;
     }
 
     public void moveToPreviousState() {
         textInstance = textInstance.getPreviousTextInstance();
         updateBlockArray();
         updateTopLeftLocation();
-        updateBlocksInWorld();
-        confirm();
+        updateBlocksInWorld(true);
+        confirm(true);
     }
 
     private boolean isEnoughSpaceForText() {
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
+                if (blocks[heightIndex][widthIndex] == null) continue;
                 Block block = Objects.requireNonNull(textInstance.getTopLeftLocation().getWorld()).getBlockAt(
                         Objects.requireNonNull(GenerateUtil.editLocation(textInstance,
                                 textInstance.getTopLeftLocation(), widthIndex,
@@ -383,17 +445,17 @@ public class CurrentEditedText {
 
     private BukkitTask confirmTask;
 
-    public boolean confirm() {
+    public boolean confirm(boolean save) {
         stopDragToMoveTasks();
         confirmTask = Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
             if (!blockBuilder.isRunning()) {
                 if (currentlyPreviewedBlocks.size() > 1) {
-                    for (Location location : currentlyPreviewedBlocks) {
-                        location.getBlock().removeMetadata(FastBlockUpdate.metaDataKey, TextGenerator.getInstance());
+                    removeMetaDataFromPreviewedBlocks();
+                    if (save) {
+                        save();
                     }
                     blinkAroundTheEdge();
                     playSound();
-                    save();
                 } else {
                     currentlyPreviewedBlocks.get(0).getBlock().setType(Material.AIR);
                     currentlyPreviewedBlocks.get(0).getBlock().removeMetadata(FastBlockUpdate.metaDataKey,
@@ -408,6 +470,18 @@ public class CurrentEditedText {
         return true;
     }
 
+    private BukkitTask resetTask;
+
+    public void reset() {
+        FastBlockUpdate airBuilder = deleteAllPreviousBlocks();
+        resetTask = Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
+            if (!airBuilder.isRunning()) {
+                updateBlocksInWorld(true);
+                resetTask.cancel();
+            }
+        }, 1, 1);
+    }
+
     public int setFontSize(int size) {
         if (size < 9) {
             if (textInstance.getBlock().getSlabAndStairsID() == null) return BLOCK_HAS_NO_SLAB_OR_STAIR;
@@ -415,21 +489,21 @@ public class CurrentEditedText {
         }
         textInstance.setFontSize(size);
         updateBlockArray();
-        updateBlocksInWorld();
+        updateBlocksInWorld(true);
         return VALID;
     }
 
     public void setLineSpacing(int lineSpacing) {
         textInstance.setLineSpacing(lineSpacing);
         updateBlockArray();
-        updateBlocksInWorld();
+        updateBlocksInWorld(true);
     }
 
     public boolean setBlock(de.philw.textgenerator.ui.value.Block block) {
         if (textInstance.getFontSize() < 9 && block.getSlabAndStairsID() == null) return false;
         this.textInstance.setBlock(block);
         updateBlockArray();
-        updateBlocksInWorld();
+        updateBlocksInWorld(true);
         return true;
     }
 
@@ -439,7 +513,7 @@ public class CurrentEditedText {
         }
         this.textInstance.setText(newText);
         updateBlockArray();
-        updateBlocksInWorld();
+        updateBlocksInWorld(true);
         return true;
     }
 

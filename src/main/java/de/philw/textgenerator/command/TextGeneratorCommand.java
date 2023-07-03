@@ -5,6 +5,10 @@ import de.philw.textgenerator.manager.MessagesManager;
 import de.philw.textgenerator.ui.SettingsUI;
 import de.philw.textgenerator.utils.GenerateUtil;
 import de.philw.textgenerator.utils.Validator;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -49,6 +53,8 @@ public class TextGeneratorCommand extends Command {
         if (checkDestroy(player, args)) return;
         if (checkRefresh(player, args)) return;
         if (checkSetText(player, args)) return;
+        if (checkReset(player, args)) return;
+        if (checkRemove(player, args)) return;
 
         helpRequested(player);
     }
@@ -66,10 +72,13 @@ public class TextGeneratorCommand extends Command {
         if (!currentEditedTexts.containsKey(player.getUniqueId())) {
             CurrentEditedText currentEditedText = new CurrentEditedText(player, builder.substring(0,
                     builder.toString().length() - 1));
-            if (currentEditedText.getGenerateSuccess() == CurrentEditedText.VALID) {
+            if (currentEditedText.getGenerateSuccess() == CurrentEditedText.VALID || currentEditedText.getGenerateSuccess() == CurrentEditedText.WOULD_OVERRIDE_OTHER_BLOCKS) {
                 currentEditedTexts.put(player.getUniqueId(), currentEditedText);
                 player.sendMessage(MessagesManager.getMessage("generate.success",
                         currentEditedText.getTextInstance().getText()));
+                if (currentEditedText.getGenerateSuccess() == CurrentEditedText.WOULD_OVERRIDE_OTHER_BLOCKS) {
+                    player.sendMessage(MessagesManager.getMessage("textCannotBeBuildBecauseItWouldOverrideOtherBlocks"));
+                }
             } else if (currentEditedText.getGenerateSuccess() == CurrentEditedText.BLOCK_HAS_NO_SLAB_OR_STAIR) {
                 player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", currentEditedText.getTextInstance().getBlock().getDisplay()));
             } else if (currentEditedText.getGenerateSuccess() ==CurrentEditedText.TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE) {
@@ -97,7 +106,7 @@ public class TextGeneratorCommand extends Command {
         if (!(args.length == 1 && args[0].equalsIgnoreCase("confirm"))) return false;
         if (currentEditedTexts.containsKey(player.getUniqueId())) {
             CurrentEditedText currentEditedText = currentEditedTexts.get(player.getUniqueId());
-            if (currentEditedText.confirm()) {
+            if (currentEditedText.confirm(true)) {
                 player.sendMessage(MessagesManager.getMessage("confirm.success",
                         currentEditedText.getTextInstance().getText()));
             } else {
@@ -133,9 +142,23 @@ public class TextGeneratorCommand extends Command {
                 if (currentEditedText == null) {
                     player.sendMessage(MessagesManager.getMessage("edit.this.deniedBecauseNotLookingAtSomething"));
                 } else {
-                    currentEditedTexts.put(player.getUniqueId(), currentEditedText);
-                    player.sendMessage(MessagesManager.getMessage("edit.this.success",
-                            currentEditedText.getTextInstance().getText()));
+                    if (currentEditedText.isNotTheSameAsItWas()) {
+                        currentEditedTexts.put(player.getUniqueId(), currentEditedText);
+                        player.sendMessage(MessagesManager.getMessage("edit.this.success",
+                                currentEditedText.getTextInstance().getText()));
+                        TextComponent info = new TextComponent(MessagesManager.getMessage("edit.this.infoNotTheSameAsItWas").replace('&', '§'));
+                        TextComponent reset = new TextComponent("§r§l§2[RESET] ");
+                        reset.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to reset the text to it's previous form")));
+                        reset.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tg reset"));
+                        TextComponent remove = new TextComponent("§r§l§c[REMOVE]");
+                        remove.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to remove the text from the plugin")));
+                        remove.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tg remove"));
+                        player.spigot().sendMessage(info, reset, remove);
+                    } else {
+                        currentEditedTexts.put(player.getUniqueId(), currentEditedText);
+                        player.sendMessage(MessagesManager.getMessage("edit.this.success",
+                                currentEditedText.getTextInstance().getText()));
+                    }
                 }
                 return true;
             }
@@ -175,10 +198,13 @@ public class TextGeneratorCommand extends Command {
                     player.sendMessage(MessagesManager.getMessage("move.deniedBecauseDragToMoveActivated"));
                     return true;
                 }
-                currentEditedText.move(Integer.parseInt(args[1]), Integer.parseInt(args[2]),
-                        Integer.parseInt(args[3]));
-                player.sendMessage(MessagesManager.getMessage("move.success",
-                        currentEditedText.getTextInstance().getText(), args[1] + ", " + args[2] + ", " + args[3]));
+                if (currentEditedText.move(Integer.parseInt(args[1]), Integer.parseInt(args[2]),
+                        Integer.parseInt(args[3]))) {
+                    player.sendMessage(MessagesManager.getMessage("move.success",
+                            currentEditedText.getTextInstance().getText(), args[1] + ", " + args[2] + ", " + args[3]));
+                } else {
+                    player.sendMessage(MessagesManager.getMessage("move.deniedBecauseLocationNotValid"));
+                }
             }
             return true;
         }
@@ -218,7 +244,7 @@ public class TextGeneratorCommand extends Command {
 
     private boolean checkSetText(Player player, String[] args) {
         if (!(args.length > 1 && args[0].equalsIgnoreCase("settext"))) return false;
-        if( currentEditedTexts.containsKey(player.getUniqueId())) {
+        if(currentEditedTexts.containsKey(player.getUniqueId())) {
             StringBuilder builder = new StringBuilder();
             for (int index = 1; index < args.length; index++) {
                 builder.append(args[index]).append(" ");
@@ -233,6 +259,31 @@ public class TextGeneratorCommand extends Command {
             }
         } else {
             player.sendMessage(MessagesManager.getMessage("setText.deniedBecauseNotEditingSomething"));
+        }
+        return true;
+    }
+
+    private boolean checkRemove(Player player, String[] args) {
+        if (!(args.length == 1 && args[0].equalsIgnoreCase("remove"))) return false;
+        if(currentEditedTexts.containsKey(player.getUniqueId())) {
+            CurrentEditedText currentEditedText = currentEditedTexts.get(player.getUniqueId());
+            currentEditedText.confirm(false);
+            currentEditedTexts.remove(player.getUniqueId());
+            player.sendMessage(MessagesManager.getMessage("remove.success", currentEditedText.getTextInstance().getText()));
+        } else {
+            player.sendMessage(MessagesManager.getMessage("remove.deniedBecauseNotEditingSomething"));
+        }
+        return true;
+    }
+
+    private boolean checkReset(Player player, String[] args) {
+        if (!(args.length == 1 && args[0].equalsIgnoreCase("reset"))) return false;
+        if(currentEditedTexts.containsKey(player.getUniqueId())) {
+            CurrentEditedText currentEditedText = currentEditedTexts.get(player.getUniqueId());
+            currentEditedText.reset();
+            player.sendMessage(MessagesManager.getMessage("reset.success", currentEditedText.getTextInstance().getText()));
+        } else {
+            player.sendMessage(MessagesManager.getMessage("reset.deniedBecauseNotEditingSomething"));
         }
         return true;
     }

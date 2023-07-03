@@ -12,7 +12,7 @@ public class LeaveListener implements Listener {
     public void onPlayerLeave(PlayerQuitEvent e) {
         if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(e.getPlayer().getUniqueId())) {
             CurrentEditedText currentEditedText = TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(e.getPlayer().getUniqueId());
-            currentEditedText.confirm();
+            currentEditedText.confirm(true);
             TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().remove(e.getPlayer().getUniqueId());
         }
     }

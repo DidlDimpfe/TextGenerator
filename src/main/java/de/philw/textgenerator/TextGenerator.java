@@ -30,6 +30,7 @@ public final class TextGenerator extends JavaPlugin {
     public void onDisable() {
         for (CurrentEditedText currentEditedText: textGeneratorCommand.getCurrentEditedTexts().values()) {
             currentEditedText.save();
+            currentEditedText.removeMetaDataFromPreviewedBlocks();
         }
     }
 
