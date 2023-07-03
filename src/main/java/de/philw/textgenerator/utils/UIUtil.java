@@ -2,15 +2,13 @@ package de.philw.textgenerator.utils;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class UIUtil {
 
@@ -59,6 +57,26 @@ public class UIUtil {
             }
         }
         return newItems;
+    }
+
+    public static List<String> getLore(ChatColor chatColor, String lore) {
+        List<String> realLore = new ArrayList<>();
+
+        String[] words = lore.split(" ");
+        String[] lines = new String[words.length % 4 == 0 ? words.length/4 : words.length/4+1];
+        Arrays.fill(lines, String.valueOf(chatColor));
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            int lineFromWord = i / 4;
+            lines[lineFromWord] = lines[lineFromWord] + (i % 4 == 0 ? "" : " ") + word;
+        }
+
+        for (String line: lines) {
+            line.substring(0, line.length()-1);
+            realLore.add(line);
+        }
+        return realLore;
     }
 
 }

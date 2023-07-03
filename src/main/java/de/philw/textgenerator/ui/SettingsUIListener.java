@@ -32,7 +32,7 @@ public class SettingsUIListener implements Listener {
             case SettingsUI.BLOCKS_INDEX:
                 new BlockSearchUI(player);
                 break;
-            case SettingsUI.DRAG_PREVIEW_INDEX:
+            case SettingsUI.DRAG_TO_MOVE_INDEX:
                 toggleDragToMove(player);
                 break;
         }
@@ -42,6 +42,7 @@ public class SettingsUIListener implements Listener {
         if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
             boolean dragToMove = !ConfigManager.isDragToMove(false);
             ConfigManager.setDragToMove(dragToMove);
+            new SettingsUI(player);
         } else {
             CurrentEditedText currentEditedText =
                     TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());

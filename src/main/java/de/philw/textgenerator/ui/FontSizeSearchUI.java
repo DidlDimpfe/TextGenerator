@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 public class FontSizeSearchUI extends SearchUI {
@@ -47,18 +46,16 @@ public class FontSizeSearchUI extends SearchUI {
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + String.valueOf(size));
         if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(uuid)) {
             if (size == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(uuid).getTextInstance().getFontSize()) {
-                itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + size);
-                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+                itemMeta.setLore(UIUtil.getLore(ChatColor.RED, "You have already assigned this value"));
             } else {
-                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the font size from you" +
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to change the font size of your" +
                         " current edited text to " + size));
             }
         } else {
             if (size == ConfigManager.getFontSize()) {
-                itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + size);
-                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+                itemMeta.setLore(UIUtil.getLore(ChatColor.RED, "You have already assigned this value"));
             } else {
-                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default font size " +
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to change the default font size " +
                         "to " + size));
             }
         }

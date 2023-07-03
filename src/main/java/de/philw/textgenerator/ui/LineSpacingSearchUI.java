@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 public class LineSpacingSearchUI extends SearchUI {
@@ -49,18 +48,16 @@ public class LineSpacingSearchUI extends SearchUI {
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + String.valueOf(lineSpacingNumber));
         if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(uuid)) {
             if (lineSpacingNumber == TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(uuid).getTextInstance().getLineSpacing()) {
-                itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + lineSpacingNumber);
-                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+                itemMeta.setLore(UIUtil.getLore(ChatColor.RED, "You have already assigned this value"));
             } else {
-                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the font size from you" +
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to change the line spacing of your" +
                         " current edited text to " + lineSpacingNumber));
             }
         } else {
             if (lineSpacingNumber == ConfigManager.getLineSpacing()) {
-                itemMeta.setDisplayName(String.valueOf(ChatColor.RED) + lineSpacingNumber);
-                itemMeta.setLore(Collections.singletonList(ChatColor.GRAY + "You have already assigned this value"));
+                itemMeta.setLore(UIUtil.getLore(ChatColor.RED, "You have already assigned this value"));
             } else {
-                itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "Click to change the default font size " +
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to change the default line spacing " +
                         "to " + lineSpacingNumber));
             }
         }

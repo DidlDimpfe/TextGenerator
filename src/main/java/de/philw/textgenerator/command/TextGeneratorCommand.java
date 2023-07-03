@@ -94,7 +94,7 @@ public class TextGeneratorCommand extends Command {
     private boolean checkSettingsMenu(Player player, String[] args) {
         if (!(args.length == 1 && args[0].equalsIgnoreCase("settings"))) return false;
         if (!currentEditedTexts.containsKey(player.getUniqueId())) {
-            new SettingsUI(player, "TextGenerator settings");
+            new SettingsUI(player);
         } else {
             player.sendMessage(MessagesManager.getMessage("openSettingsMenu.denied",
                     currentEditedTexts.get(player.getUniqueId()).getTextInstance().getText()));
@@ -127,7 +127,7 @@ public class TextGeneratorCommand extends Command {
             if (!currentEditedTexts.containsKey(player.getUniqueId())) {
                 player.sendMessage(MessagesManager.getMessage("edit.openMenuDenied"));
             } else {
-                new SettingsUI(player, "TextGenerator edit menu");
+                new SettingsUI(player);
             }
             return true;
         }

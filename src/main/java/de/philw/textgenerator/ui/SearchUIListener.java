@@ -50,11 +50,7 @@ public class SearchUIListener implements Listener {
         e.setCancelled(true);
         switch (e.getRawSlot()) {
             case SearchUI.RETURN_ARROW_INDEX:
-                if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
-                    new SettingsUI(player, "TextGenerator edit menu");
-                } else {
-                    new SettingsUI(player, "TextGenerator settings");
-                }
+                new SettingsUI(player);
                 searchUISToListenTo.remove(player.getUniqueId());
                 break;
             case SearchUI.PREVIOUS_PAGE_INDEX:

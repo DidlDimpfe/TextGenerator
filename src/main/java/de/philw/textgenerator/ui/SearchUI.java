@@ -66,7 +66,7 @@ public abstract class SearchUI {
         for (int index : SPACE_INDEXES) {
             ItemStack itemStack = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
             ItemMeta itemMeta = itemStack.getItemMeta();
-            Objects.requireNonNull(itemMeta).setDisplayName("Space");
+            Objects.requireNonNull(itemMeta).setDisplayName(" ");
             itemStack.setItemMeta(itemMeta);
             inventory.setItem(index, itemStack);
         }
@@ -92,7 +92,7 @@ public abstract class SearchUI {
         } else {
             nextPageItemStack = UIUtil.getSkullByString(SkullData.NEXT_PAGE_DISALLOWED);
             ItemMeta itemMeta = Objects.requireNonNull(nextPageItemStack).getItemMeta();
-            Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.RED + "Next Page");
+            Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Next Page");
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "(" + currentPage + "/" + UIUtil.getMaxPage(searchedItems, SPACES) + ")");
             lore.add("");
@@ -114,7 +114,7 @@ public abstract class SearchUI {
         } else {
             previousPageItemStack = UIUtil.getSkullByString(SkullData.PREVIOUS_PAGE_DISALLOWED);
             ItemMeta itemMeta = Objects.requireNonNull(previousPageItemStack).getItemMeta();
-            Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.RED + "Previous Page");
+            Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Previous Page");
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "(" + currentPage + "/" + UIUtil.getMaxPage(searchedItems, SPACES) + ")");
             lore.add("");
