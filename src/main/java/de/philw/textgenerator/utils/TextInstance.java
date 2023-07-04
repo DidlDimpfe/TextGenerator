@@ -109,11 +109,11 @@ public class TextInstance implements Cloneable {
         return underline;
     }
 
-    public void setPlaceRange(int placeRange) {
+    public void setPlacementRange(int placeRange) {
         this.placeRange = placeRange;
     }
 
-    public int getPlaceRange() {
+    public int getPlacementRange() {
         return placeRange;
     }
 
@@ -166,7 +166,7 @@ public class TextInstance implements Cloneable {
         private String text;
         private boolean underline;
         private int lineSpacing = 2;
-        private int placeRange = 0;
+        private int placementRange = 0;
         private boolean dragToMove = false;
 
         public TextInstanceBuilder withUuid(UUID uuid) {
@@ -229,8 +229,8 @@ public class TextInstance implements Cloneable {
             return this;
         }
 
-        public TextInstanceBuilder withPlaceRange(int placeRange) {
-            this.placeRange = placeRange;
+        public TextInstanceBuilder withPlacementRange(int placementRange) {
+            this.placementRange = placementRange;
             return this;
         }
 
@@ -253,7 +253,7 @@ public class TextInstance implements Cloneable {
             textInstance.setText(text);
             textInstance.setUnderline(underline);
             textInstance.setLineSpacing(lineSpacing);
-            textInstance.setPlaceRange(placeRange);
+            textInstance.setPlacementRange(placementRange);
             textInstance.setDragToMove(dragToMove);
             return textInstance;
         }

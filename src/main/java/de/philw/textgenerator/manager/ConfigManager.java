@@ -101,14 +101,19 @@ public class ConfigManager {
         saveConfig();
     }
 
-    public static int getPlaceRange() {
-        String placeRange = config.getString("placeRange");
-        if (!Validator.isValidPlaceRange(placeRange)) {
-            printNotValidMessage(placeRange, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
-                    "placeRange")), "place range");
-            return config.getDefaults().getInt("placeRange");
+    public static int getPlacementRange() {
+        String placementRange = config.getString("placementRange");
+        if (!Validator.isValidPlacementRange(placementRange)) {
+            printNotValidMessage(placementRange, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
+                    "placementRange")), "place range");
+            return config.getDefaults().getInt("placementRange");
         }
-        return Integer.parseInt(Objects.requireNonNull(placeRange));
+        return Integer.parseInt(Objects.requireNonNull(placementRange));
+    }
+
+    public static void setPlacementRange(int placementRange) {
+        config.set("placementRange", placementRange);
+        saveConfig();
     }
 
     public static boolean isDragToMove(boolean printNotValidMessage) {
@@ -168,9 +173,9 @@ public class ConfigManager {
             config.set("textSettings.lineSpacing", Objects.requireNonNull(config.getDefaults()).get(
                     "textSettings.lineSpacing"));
         }
-        if (!config.isSet("placeRange")) {
-            config.set("placeRange", Objects.requireNonNull(config.getDefaults()).get(
-                    "placeRange"));
+        if (!config.isSet("placementRange")) {
+            config.set("placementRange", Objects.requireNonNull(config.getDefaults()).get(
+                    "placementRange"));
         }
         if (!config.isSet("dragToMove")) {
             config.set("dragToMove", Objects.requireNonNull(config.getDefaults()).get(

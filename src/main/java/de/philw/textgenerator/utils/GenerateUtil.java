@@ -261,7 +261,7 @@ public class GenerateUtil {
 
         Vector normalVector = player.getLocation().getDirection().normalize();
 
-        for (int i = 1; i <= ConfigManager.getPlaceRange(); i++) {
+        for (int i = 1; i <= ConfigManager.getPlacementRange(); i++) {
             int x = playerLocationX + (int) normalVector.clone().multiply(i).getX();
             int y = playerLocationY + (int) normalVector.clone().multiply(i).getY();
             int z = playerLocationZ + (int) normalVector.clone().multiply(i).getZ();

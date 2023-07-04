@@ -1,4 +1,4 @@
-placeRange: 30
+placementRange: 30
 dragToMove: false
 textSettings:
   block: quartz_block

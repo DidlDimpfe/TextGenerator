@@ -19,6 +19,7 @@ public class SettingsUI {
     protected final static int LINE_SPACING_INDEX = 1;
     protected final static int BLOCKS_INDEX = 2;
     protected final static int DRAG_TO_MOVE_INDEX = 3;
+    protected final static int PLACE_RANGE_INDEX = 4;
 
     private final Player player;
 
@@ -30,6 +31,7 @@ public class SettingsUI {
         inventory.setItem(LINE_SPACING_INDEX, getLineSpacingItemStack());
         inventory.setItem(BLOCKS_INDEX, getChangeBlocksItemStack());
         inventory.setItem(DRAG_TO_MOVE_INDEX, getDragToMoveItemStack());
+        inventory.setItem(PLACE_RANGE_INDEX, getPlacementRangeItemStack());
         player.openInventory(inventory);
     }
 
@@ -92,6 +94,19 @@ public class SettingsUI {
             } else {
                 itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Make default texts follow your view"));
             }
+        }
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+
+    private ItemStack getPlacementRangeItemStack() {
+        ItemStack itemStack = UIUtil.getSkullByString(SkullData.PLACE_RANGE);
+        ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
+        Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Placement range");
+        if (!isEditMode()) {
+            itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Change the default distance between the player and the text"));
+        } else {
+            itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Change the distance between you and your current edited text"));
         }
         itemStack.setItemMeta(itemMeta);
         return itemStack;

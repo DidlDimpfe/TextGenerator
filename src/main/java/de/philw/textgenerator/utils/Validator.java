@@ -3,7 +3,7 @@ package de.philw.textgenerator.utils;
 import de.philw.textgenerator.ui.value.Block;
 import de.philw.textgenerator.ui.value.FontSize;
 import de.philw.textgenerator.ui.value.LineSpacing;
-import de.philw.textgenerator.ui.value.PlaceRange;
+import de.philw.textgenerator.ui.value.PlacementRange;
 
 import java.awt.*;
 
@@ -59,9 +59,9 @@ public class Validator {
         return number >= LineSpacing.getMinLineSpacing() && number <= LineSpacing.getMaxLineSpacing();
     }
 
-    public static boolean isValidPlaceRange(String placeRange) {
-        if (isNoInteger(placeRange)) return false;
-        int number = Integer.parseInt(placeRange);
-        return Integer.parseInt(placeRange) >= PlaceRange.getMinPlaceRange() && number <= PlaceRange.getMaxPlaceRange();
+    public static boolean isValidPlacementRange(String placementRange) {
+        if (isNoInteger(placementRange)) return false;
+        int number = Integer.parseInt(placementRange);
+        return Integer.parseInt(placementRange) >= PlacementRange.getMinPlaceRange() && number <= PlacementRange.getMaxPlaceRange();
     }
 }

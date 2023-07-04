@@ -106,6 +106,9 @@ public class SearchUIListener implements Listener {
                     case SearchUI.LINE_SPACING_SEARCH_UI:
                         lineSpacingSearchUIValueClicked(player, information);
                         break;
+                    case SearchUI.PLACEMENT_RANGE_SEARCH_UI:
+                        placementRangeSearchUIValueClicked(player, information);
+                        break;
                 }
         }
     }
@@ -208,6 +211,30 @@ public class SearchUIListener implements Listener {
                 player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "line spacing",
                         lineSpacing));
                 currentEditedText.setLineSpacing(lineSpacing);
+            }
+            player.closeInventory();
+        }
+    }
+
+    private void placementRangeSearchUIValueClicked(Player player, String[] information) {
+        int placementRange = Integer.parseInt(information[1]);
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
+            ConfigManager.setPlacementRange(placementRange);
+            for (SearchUI searchUI :
+                    TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
+                if (!(searchUI instanceof PlacementRangeSearchUI)) continue;
+                searchUI.updateCurrentSearchUIItems();
+            }
+        } else {
+            CurrentEditedText currentEditedText =
+                    TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());
+            if (placementRange == currentEditedText.getTextInstance().getPlacementRange()) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
+                        ".deniedBecauseValueAlreadySelected", "placement range", placementRange));
+            } else {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "placement range",
+                        placementRange));
+                currentEditedText.setPlacementRange(placementRange);
             }
             player.closeInventory();
         }

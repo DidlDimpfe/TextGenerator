@@ -41,7 +41,7 @@ public class CurrentEditedText {
         this.dragToMoveTasks = new ArrayList<>();
         this.currentlyPreviewedBlocks = new ArrayList<>();
         this.previosPlayerLocation = player.getLocation();
-        int placeRange = ConfigManager.getPlaceRange();
+        int placementRange = ConfigManager.getPlacementRange();
         this.textInstance = TextInstance.getTextInstanceBuilder()
                 .withBlock(ConfigManager.getBlock())
                 .withFontSize(ConfigManager.getFontSize())
@@ -49,10 +49,10 @@ public class CurrentEditedText {
                 .withFontStyle(ConfigManager.getFontStyle())
                 .withUnderline(ConfigManager.isUnderline())
                 .withLineSpacing(ConfigManager.getLineSpacing())
-                .withMiddleLocation(getMiddleLocationFromPlayersSight(player, placeRange))
+                .withMiddleLocation(getMiddleLocationFromPlayersSight(player, placementRange))
                 .withText(wantedText)
                 .withDirection(Direction.valueOf(player.getFacing().toString()).getRightDirection())
-                .withPlaceRange(placeRange)
+                .withPlacementRange(placementRange)
                 .withDragToMove(ConfigManager.isDragToMove(true))
                 .build();
         if (textInstance.getFontSize() < 9) {
@@ -101,7 +101,7 @@ public class CurrentEditedText {
         this.currentlyPreviewedBlocks = new ArrayList<>();
         this.previosPlayerLocation = player.getLocation();
         this.blockBuilder = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
-        textInstance.setPlaceRange(ConfigManager.getPlaceRange());
+        textInstance.setPlacementRange(ConfigManager.getPlacementRange());
         textInstance.setDragToMove(false);
         this.textInstance = textInstance;
         updateBlockArray();
@@ -178,7 +178,7 @@ public class CurrentEditedText {
     }
 
     public void refreshBlocksByPlayersSight() {
-        Location newMiddleLocation = getMiddleLocationFromPlayersSight(player, textInstance.getPlaceRange());
+        Location newMiddleLocation = getMiddleLocationFromPlayersSight(player, textInstance.getPlacementRange());
         if (newMiddleLocation == null) {
             return;
         }
@@ -497,6 +497,11 @@ public class CurrentEditedText {
         textInstance.setLineSpacing(lineSpacing);
         updateBlockArray();
         updateBlocksInWorld(true);
+    }
+
+    public void setPlacementRange(int placementRange) {
+        textInstance.setPlacementRange(placementRange);
+        refreshBlocksByPlayersSight();
     }
 
     public boolean setBlock(de.philw.textgenerator.ui.value.Block block) {

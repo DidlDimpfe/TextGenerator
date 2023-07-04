@@ -35,6 +35,9 @@ public class SettingsUIListener implements Listener {
             case SettingsUI.DRAG_TO_MOVE_INDEX:
                 toggleDragToMove(player);
                 break;
+            case SettingsUI.PLACE_RANGE_INDEX:
+                placeRangeIndexClicked(player);
+                break;
         }
     }
 
@@ -51,6 +54,19 @@ public class SettingsUIListener implements Listener {
             player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "drag to move",
                     dragToMove));
             player.closeInventory();
+        }
+    }
+
+    private void placeRangeIndexClicked(Player player) {
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
+            new PlacementRangeSearchUI(player);
+        } else {
+            if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId()).getTextInstance().isDragToMove()) {
+                new PlacementRangeSearchUI(player);
+            } else {
+                player.sendMessage(MessagesManager.getMessage("placementRangeIndexUIDenied"));
+                player.closeInventory();
+            }
         }
     }
 

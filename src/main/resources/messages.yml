@@ -1,6 +1,7 @@
 prefix: "&l&a[TextGenerator] "
 success: "♦prefix♦&l&2SUCCESS: "
 denied: "♦prefix♦&l&cDENIED: "
+info: "♦prefix♦&l&6INFO: "
 
 generate:
   success: "♦success♦&rYou generated \"{0}\"! You can adjust it with commands and the edit menu. Do not forget to type /textgenerator confirm when you are done."
@@ -10,7 +11,7 @@ destroy:
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to destroy!"
 confirm:
   success: "♦success♦&rYou have build \"{0}\"!"
-  deniedBecauseNotValidPosition: "♦denied♦&rThe text \"{0}\" was not build, because it would override other blocks or build higher/lower than the limit!"
+  deniedBecauseNotValidPosition: "♦denied♦&rThe text \"{0}\" was destroyed, because it would override other blocks or build higher/lower than the limit!"
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to confirm!"
 openSettingsMenu:
   denied: "♦denied♦&r You are already editing \"{0}\" so you cannot change the general Text settings! Try /textgenerator confirm/cancel/destroy to not edit it."
@@ -18,8 +19,9 @@ edit:
   openMenuDenied: "♦denied♦&rYou are not editing something to change!"
   this:
     success: "♦success♦&rYou are now editing \"{0}\"! You can adjust it with commands and the edit menu. Do not forget to type /textgenerator confirm when you are done."
-    deniedBecauseAlreadyEditingSomething: "♦denied♦&r You are already editing \"{0}\" so you edit another Text! Try /textgenerator confirm/cancel/destroy to not edit it."
-    deniedBecauseNotLookingAtSomething: "♦denied♦&r You are not looking at a previously generated Text so you cannot edit it."
+    deniedBecauseAlreadyEditingSomething: "♦denied♦&rYou are already editing \"{0}\" so you edit another Text! Try /textgenerator confirm/cancel/destroy to not edit it."
+    deniedBecauseNotLookingAtSomething: "♦denied♦&rYou are not looking at a previously generated Text so you cannot edit it."
+    infoNotTheSameAsItWas: "♦info♦&rThe text you want to edit is not like it was before. You can reset it or remove the text from the plugin: "
 cancel:
   destroy:
     success: "♦success♦&rYou cancelled \"{0}\" by destroying it!"
@@ -30,12 +32,26 @@ move:
   deniedBecauseInvalidCoordinates: "♦denied♦&rYour coordinates are invalid!"
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to move!"
   deniedBecauseDragToMoveActivated: "♦denied♦&rYou have enabled the feature \"Drag to move\" and it would not make sense to move it now!"
+  deniedBecauseLocationNotValid: "♦denied♦&rThe text would override another block or go outside of the minecraft world!"
 changedValueOfCurrentText:
-  success: "♦success♦&rYou changed the {0} from your current text to \"{1}\"!"
+  success: "♦success♦&rYou changed the {0} of your current text to \"{1}\"!"
   deniedBecauseValueAlreadySelected: "♦denied♦&rYou have already selected the {0} \"{1}\"!"
+  deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected: "♦denied♦&rThe block \"{0}\" has no slab or stair to generate it so small. Pick another block or another font size!"
+  deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid: "♦denied♦&rThe text \"{0}\" has invalid characters for the small font size. Pick another text or another font size!"
+setText:
+  success: "♦success♦&rYou changed the text to \"{0}\"!"
+  deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to change the text!"
 refresh:
   success: "♦success♦&rYou refreshed \"{0}\"!"
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to refresh!"
   deniedBecauseDragToMoveActivated: "♦denied♦&rYou have enabled the feature \"Drag to move\" and it would not make sense to refresh it now!"
+remove:
+  success: "♦success♦&rYou removed \"{0}\" from the plugin!"
+  deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to remove!"
+reset:
+  success: "♦success♦&rYou reset \"{0}\"!"
+  deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to reset!"
 needPermissionForCommand: "♦denied♦&rYou need the \"{1}\" permission to use this command!"
 blockBreakFromCurrentEditedTextDisabled: "♦denied♦&rYou cannot destroy a block from a text that is currently edited!"
+textCannotBeBuildBecauseItWouldOverrideOtherBlocks: "♦info♦&rThe text cannot be build because it would override other Blocks. Try another Location!"
+placementRangeIndexUIDenied: "♦denied♦&rYou cannot change the distance between you and the text when \"Drag to move\" is not activated. Activate it first!"
