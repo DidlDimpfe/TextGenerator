@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
 import java.util.Objects;
 
 public class SettingsUI {
@@ -20,6 +21,8 @@ public class SettingsUI {
     protected final static int BLOCKS_INDEX = 2;
     protected final static int DRAG_TO_MOVE_INDEX = 3;
     protected final static int PLACE_RANGE_INDEX = 4;
+    protected final static int FONT_STYLE_INDEX = 5;
+    protected final static int UNDERLINE_INDEX = 6;
 
     private final Player player;
 
@@ -32,6 +35,8 @@ public class SettingsUI {
         inventory.setItem(BLOCKS_INDEX, getChangeBlocksItemStack());
         inventory.setItem(DRAG_TO_MOVE_INDEX, getDragToMoveItemStack());
         inventory.setItem(PLACE_RANGE_INDEX, getPlacementRangeItemStack());
+        inventory.setItem(FONT_STYLE_INDEX, getFontStyleItemStack());
+        inventory.setItem(UNDERLINE_INDEX, getUnderlineItemStack());
         player.openInventory(inventory);
     }
 
@@ -82,17 +87,21 @@ public class SettingsUI {
         ItemStack itemStack = UIUtil.getSkullByString(SkullData.DRAG_TO_MOVE);
         ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
         Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Drag to move");
+        List<String> carefulLore = UIUtil.getLore(ChatColor.RED, "Careful: Enabling this feature with a text containing many blocks, this can cause issues!");
+        carefulLore.add("");
         if (isEditMode()) {
             if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId()).getTextInstance().isDragToMove()) {
-                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Stop your current edited text follow your view"));
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to stop your current edited text follow your view"));
             } else {
-                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Make your current edited text follow your view"));
+                carefulLore.addAll(UIUtil.getLore(ChatColor.YELLOW, "Click to make your current edited text follow your view"));
+                itemMeta.setLore(carefulLore);
             }
         } else {
-            if (ConfigManager.isDragToMove(false)) {
-                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Stop default texts follow your view"));
+            if (ConfigManager.isDragToMove()) {
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to stop default texts follow your view"));
             } else {
-                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Make default texts follow your view"));
+                carefulLore.addAll(UIUtil.getLore(ChatColor.YELLOW, "Click to make default texts follow your view"));
+                itemMeta.setLore(carefulLore);
             }
         }
         itemStack.setItemMeta(itemMeta);
@@ -112,5 +121,38 @@ public class SettingsUI {
         return itemStack;
     }
 
+    private ItemStack getFontStyleItemStack() {
+        ItemStack itemStack = UIUtil.getSkullByString(SkullData.FONT_STYLE);
+        ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
+        Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Font style");
+        if (!isEditMode()) {
+            itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Change the default font style"));
+        } else {
+            itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Change the font style of your current edited text"));
+        }
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+
+    private ItemStack getUnderlineItemStack() {
+        ItemStack itemStack = UIUtil.getSkullByString(SkullData.UNDERLINE);
+        ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
+        Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Underline");
+        if (isEditMode()) {
+            if (TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId()).getTextInstance().isUnderline()) {
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to remove the underline of your current edited text"));
+            } else {
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to add underline to your current edited text"));
+            }
+        } else {
+            if (ConfigManager.isUnderline()) {
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to remove underline from your default texts"));
+            } else {
+                itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to add underline from your default texts"));
+            }
+        }
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
 
 }

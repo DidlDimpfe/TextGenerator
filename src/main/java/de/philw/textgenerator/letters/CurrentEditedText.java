@@ -36,6 +36,26 @@ public class CurrentEditedText {
     private int generateSuccess;
 
 
+    // Utility for Constructors
+    private BukkitTask generateTask;
+
+    public void checkFirstGenerateDone() {
+        generateTask = Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
+            if (!blockBuilder.isRunning()) {
+                blinkAroundTheEdge();
+                playSound();
+                NoMoveWhileGenerateListener.remove(player.getUniqueId());
+                generateTask.cancel();
+            }
+        }, 1, 1);
+    }
+
+    private boolean notTheSameAsItWas;
+
+    public boolean isNotTheSameAsItWas() {
+        return notTheSameAsItWas;
+    }
+
     public CurrentEditedText(Player player, String wantedText) { // For first Generate
         this.player = player;
         this.dragToMoveTasks = new ArrayList<>();
@@ -53,7 +73,7 @@ public class CurrentEditedText {
                 .withText(wantedText)
                 .withDirection(Direction.valueOf(player.getFacing().toString()).getRightDirection())
                 .withPlacementRange(placementRange)
-                .withDragToMove(ConfigManager.isDragToMove(true))
+                .withDragToMove(ConfigManager.isDragToMove())
                 .build();
         if (textInstance.getFontSize() < 9) {
             if (GenerateUtil.isNotTextValidForSpecificFontSize(wantedText)) {
@@ -73,25 +93,6 @@ public class CurrentEditedText {
         }
         NoMoveWhileGenerateListener.add(player.getUniqueId());
         checkFirstGenerateDone();
-    }
-
-    private BukkitTask generateTask;
-
-    public void checkFirstGenerateDone() {
-        generateTask = Bukkit.getScheduler().runTaskTimer(TextGenerator.getInstance(), () -> {
-            if (!blockBuilder.isRunning()) {
-                blinkAroundTheEdge();
-                playSound();
-                NoMoveWhileGenerateListener.remove(player.getUniqueId());
-                generateTask.cancel();
-            }
-        }, 1, 1);
-    }
-
-    private boolean notTheSameAsItWas;
-
-    public boolean isNotTheSameAsItWas() {
-        return notTheSameAsItWas;
     }
 
     public CurrentEditedText(Player player, TextInstance textInstance) { // For Edit
@@ -311,16 +312,18 @@ public class CurrentEditedText {
     private boolean isEnoughSpaceForText() {
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-                if (blocks[heightIndex][widthIndex] == null) continue;
-                Block block = Objects.requireNonNull(textInstance.getTopLeftLocation().getWorld()).getBlockAt(
-                        Objects.requireNonNull(GenerateUtil.editLocation(textInstance,
-                                textInstance.getTopLeftLocation(), widthIndex,
-                                heightIndex, 0, 0, 0, 0)));
-                if (block.getBlockData().getMaterial() != Material.AIR) {
-                    if (!block.hasMetadata(FastBlockUpdate.metaDataKey)) {
-                        return false;
+                try {
+                    if (blocks[heightIndex][widthIndex] == null) continue;
+                    Block block = Objects.requireNonNull(textInstance.getTopLeftLocation().getWorld()).getBlockAt(
+                            Objects.requireNonNull(GenerateUtil.editLocation(textInstance,
+                                    textInstance.getTopLeftLocation(), widthIndex,
+                                    heightIndex, 0, 0, 0, 0)));
+                    if (block.getBlockData().getMaterial() != Material.AIR) {
+                        if (!block.hasMetadata(FastBlockUpdate.metaDataKey)) {
+                            return false;
                     }
                 }
+            } catch (IndexOutOfBoundsException ignored) {}
             }
         }
         return true;
@@ -504,6 +507,14 @@ public class CurrentEditedText {
         refreshBlocksByPlayersSight();
     }
 
+    public boolean setFontStyle(int fontStyle) {
+        if (textInstance.getFontSize() < 9) return false;
+        textInstance.setFontStyle(fontStyle);
+        updateBlockArray();
+        updateBlocksInWorld(true);
+        return true;
+    }
+
     public boolean setBlock(de.philw.textgenerator.ui.value.Block block) {
         if (textInstance.getFontSize() < 9 && block.getSlabAndStairsID() == null) return false;
         this.textInstance.setBlock(block);
@@ -527,6 +538,12 @@ public class CurrentEditedText {
         this.textInstance.setDirection(Direction.valueOf(player.getFacing().toString()).getRightDirection());
         if (dragToMoveTasks) addDragToMoveTasks();
         else stopDragToMoveTasks();
+    }
+
+    public void setUnderline(boolean underline) {
+        this.textInstance.setUnderline(underline);
+        updateBlockArray();
+        updateBlocksInWorld(true);
     }
 
     public boolean isFirstGenerate() {

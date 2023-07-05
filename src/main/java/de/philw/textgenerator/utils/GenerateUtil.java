@@ -300,6 +300,7 @@ public class GenerateUtil {
 
     private static String[][] getLine(TextInstance textInstance, String text, SpecificFontSize specificFontSize) {
         int height = Objects.requireNonNull(getLetter('a', textInstance, specificFontSize)).length;
+        if (textInstance.isUnderline()) height++;
         int width = 0;
         for (char character: text.toLowerCase().toCharArray()) {
             if (character == ' ') {
@@ -322,6 +323,12 @@ public class GenerateUtil {
                 System.arraycopy(letter[heightIndex], 0, line[heightIndex], currentWidth, letter[0].length);
             }
             currentWidth += (letter[0].length + 1);
+        }
+        int lowestRow = height - 1;
+        if (textInstance.isUnderline()) {
+            for (int i = 0; i < width; i++) {
+                line[lowestRow][i] = textInstance.getBlock().getBottomSlap();
+            }
         }
         return line;
     }

@@ -75,6 +75,11 @@ public class ConfigManager {
         return FileUtil.fromFontStyleStringToInt(fontStyle);
     }
 
+    public static void setFontStyle(String fontStyle) {
+        config.set("textSettings.fontStyle", fontStyle);
+        saveConfig();
+    }
+
     public static boolean isUnderline() {
         String bool = config.getString("textSettings.underline");
         if (Validator.isNoValidBoolean(Objects.requireNonNull(bool))) {
@@ -83,6 +88,11 @@ public class ConfigManager {
             return config.getDefaults().getBoolean("textSettings.underline");
         }
         return Boolean.parseBoolean(bool.toLowerCase());
+    }
+
+    public static void setUnderline(boolean underline) {
+        config.set("textSettings.underline", underline);
+        saveConfig();
     }
 
     public static int getLineSpacing() {
@@ -116,12 +126,11 @@ public class ConfigManager {
         saveConfig();
     }
 
-    public static boolean isDragToMove(boolean printNotValidMessage) {
+    public static boolean isDragToMove() {
         String dragToMove = config.getString("dragToMove");
         if (Validator.isNoValidBoolean(Objects.requireNonNull(dragToMove))) {
-            if (printNotValidMessage)
-                printNotValidMessage(dragToMove, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
-                        "dragToMove")), "drag to move");
+            printNotValidMessage(dragToMove, String.valueOf(Objects.requireNonNull(config.getDefaults()).getInt(
+                    "dragToMove")), "drag to move");
             return Objects.requireNonNull(config.getDefaults()).getBoolean("dragToMove");
         }
         return Boolean.parseBoolean(dragToMove.toLowerCase());

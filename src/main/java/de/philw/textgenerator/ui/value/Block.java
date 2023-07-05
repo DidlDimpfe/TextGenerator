@@ -340,4 +340,8 @@ public enum Block {
         return "minecraft:" + toString().toLowerCase();
     }
 
+    public String getBottomSlap() {
+        return "minecraft:" + getSlabAndStairsID().get(0).toLowerCase() + "[type=bottom,waterlogged=false]";
+    }
+
 }

@@ -5,6 +5,7 @@ import de.philw.textgenerator.letters.CurrentEditedText;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.manager.MessagesManager;
 import de.philw.textgenerator.ui.value.Block;
+import de.philw.textgenerator.utils.FileUtil;
 import de.philw.textgenerator.utils.UIUtil;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Material;
@@ -108,6 +109,9 @@ public class SearchUIListener implements Listener {
                         break;
                     case SearchUI.PLACEMENT_RANGE_SEARCH_UI:
                         placementRangeSearchUIValueClicked(player, information);
+                        break;
+                    case SearchUI.FONT_STYLE_SEARCH_UI:
+                        fontStyleSearchUIValueClicked(player, information);
                         break;
                 }
         }
@@ -235,6 +239,37 @@ public class SearchUIListener implements Listener {
                 player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "placement range",
                         placementRange));
                 currentEditedText.setPlacementRange(placementRange);
+            }
+            player.closeInventory();
+        }
+    }
+
+    private void fontStyleSearchUIValueClicked(Player player, String[] information) {
+        String fontStyle = information[1];
+        int fontStyleAsNumber = FileUtil.fromFontStyleStringToInt(information[1]);
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
+            ConfigManager.setFontStyle(fontStyle);
+            for (SearchUI searchUI :
+                    TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
+                if (!(searchUI instanceof FontStyleSearchUI)) continue;
+                searchUI.updateCurrentSearchUIItems();
+            }
+        } else {
+            CurrentEditedText currentEditedText =
+                    TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());
+            if (fontStyleAsNumber == currentEditedText.getTextInstance().getFontStyle()) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
+                        ".deniedBecauseValueAlreadySelected", "font style", fontStyle));
+            } else {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font style",
+                        fontStyle));
+                if (currentEditedText.setFontStyle(fontStyleAsNumber)) {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font style",
+                            fontStyle));
+                } else {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseItWouldNotMakeADifference", "font style",
+                            fontStyle));
+                }
             }
             player.closeInventory();
         }

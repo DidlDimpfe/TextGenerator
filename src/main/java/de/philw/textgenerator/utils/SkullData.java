@@ -25,6 +25,20 @@ public class SkullData {
             "";
     public static final String PLACE_RANGE =
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjZjYTlmNGJiOWExM2Q4YjJlYzkxOTFlYWZmMjJkM2U4ODcwZGI1OTRmOTE5NDI0ODViOTc3MmE3MzI0ZTkzZiJ9fX0=";
+    public static final String FONT_STYLE =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGQyMTBhOTgxZmZiNGUzOGM5MWJhZmZmYzg2MzA5NTkyN2Q3YTNkMjg3NjlkNDFhZDg3NTY1ZGQ5OTg4OTY2OCJ9fX0=";
+    public static final String UNDERLINE =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTgxYWY5MzljMTZmNzMyZDJkMDQ3NzQxODQ0ZmEyN2UwYjNjMjViNjdjYzNjMjg0OWViZjc1ZmU4YzU0ODI0ZCJ9fX0=";
+
+    // Text styles
+    public static final String PLAIN =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWU0NmQzYmJjMzc5ZWI1NWEzZmU5NmFkMjQzNjRjNmE3M2U2N2UyNjk1YjVkZDA5NzQyZDhjMzc3NzM5NDBkYiJ9fX0=";
+    public static final String BOLD =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0Y2VmZDc1ODZmYWUxMDYzMmMzOGQwYWJmMGExNTI5ZDQxYjkyMDQ3NmI2NjhkYmNiOWQzMDVlY2NlYjE1NyJ9fX0=";
+    public static final String ITALIC =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjJmMThkZGFkZjM2YmFiODhkNWI0MGVhNzE3MmMwZDhmNWJiODM5YzAzZjg2YTQ0NzljMjgwYTdkMTI3OWU4NiJ9fX0=";
+    public static final String BOLD_ITALIC =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmY2Y2QyOTQxNjU1ZGY3NDliYmY2MTBiMWE1MGNlYzQ1NjA0NTg0NDc0Y2E4MGYzYWEwMjUzY2U3Yzg5MTE2OCJ9fX0=";
 
     // Numbers
     public static final String ZERO =

@@ -38,12 +38,18 @@ public class SettingsUIListener implements Listener {
             case SettingsUI.PLACE_RANGE_INDEX:
                 placeRangeIndexClicked(player);
                 break;
+            case SettingsUI.FONT_STYLE_INDEX:
+                new FontStyleSearchUI(player);
+                break;
+            case SettingsUI.UNDERLINE_INDEX:
+                toggleUnderline(player);
+                break;
         }
     }
 
     private void toggleDragToMove(Player player) {
         if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
-            boolean dragToMove = !ConfigManager.isDragToMove(false);
+            boolean dragToMove = !ConfigManager.isDragToMove();
             ConfigManager.setDragToMove(dragToMove);
             new SettingsUI(player);
         } else {
@@ -67,6 +73,22 @@ public class SettingsUIListener implements Listener {
                 player.sendMessage(MessagesManager.getMessage("placementRangeIndexUIDenied"));
                 player.closeInventory();
             }
+        }
+    }
+
+    private void toggleUnderline(Player player) {
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
+            boolean underline = !ConfigManager.isUnderline();
+            ConfigManager.setUnderline(underline);
+            new SettingsUI(player);
+        } else {
+            CurrentEditedText currentEditedText =
+                    TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());
+            boolean underline = !currentEditedText.getTextInstance().isUnderline();
+            currentEditedText.setUnderline(underline);
+            player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "underline",
+                    underline));
+            player.closeInventory();
         }
     }
 
