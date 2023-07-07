@@ -44,6 +44,8 @@ public class SettingsUIListener implements Listener {
             case SettingsUI.UNDERLINE_INDEX:
                 toggleUnderline(player);
                 break;
+            case SettingsUI.FONT_INDEX:
+                new FontSearchUI(player);
         }
     }
 

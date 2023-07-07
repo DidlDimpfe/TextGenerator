@@ -2,7 +2,7 @@ placementRange: 30
 dragToMove: false
 textSettings:
   block: quartz_block
-  fontName: SansSerif
+  fontName: Arial
   fontSize: 15
   fontStyle: BOLD
   underline: false

@@ -23,6 +23,7 @@ public class SettingsUI {
     protected final static int PLACE_RANGE_INDEX = 4;
     protected final static int FONT_STYLE_INDEX = 5;
     protected final static int UNDERLINE_INDEX = 6;
+    protected final static int FONT_INDEX = 7;
 
     private final Player player;
 
@@ -37,6 +38,7 @@ public class SettingsUI {
         inventory.setItem(PLACE_RANGE_INDEX, getPlacementRangeItemStack());
         inventory.setItem(FONT_STYLE_INDEX, getFontStyleItemStack());
         inventory.setItem(UNDERLINE_INDEX, getUnderlineItemStack());
+        inventory.setItem(FONT_INDEX, getFontItemStack());
         player.openInventory(inventory);
     }
 
@@ -150,6 +152,19 @@ public class SettingsUI {
             } else {
                 itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to add underline from your default texts"));
             }
+        }
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+
+    private ItemStack getFontItemStack() {
+        ItemStack itemStack = UIUtil.getSkullByString(SkullData.FONT);
+        ItemMeta itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
+        Objects.requireNonNull(itemMeta).setDisplayName(ChatColor.GREEN + "Font");
+        if (!isEditMode()) {
+            itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Change the default font"));
+        } else {
+            itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Change the font of your current edited text"));
         }
         itemStack.setItemMeta(itemMeta);
         return itemStack;

@@ -23,6 +23,7 @@ public abstract class SearchUI {
     public final static int LINE_SPACING_SEARCH_UI = 2;
     public final static int PLACEMENT_RANGE_SEARCH_UI = 3;
     public final static int FONT_STYLE_SEARCH_UI = 4;
+    public final static int FONT_SEARCH_UI = 5;
 
     protected final static int SPACES = 45;
     protected final static int RETURN_ARROW_INDEX = 45;

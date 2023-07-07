@@ -113,6 +113,9 @@ public class SearchUIListener implements Listener {
                     case SearchUI.FONT_STYLE_SEARCH_UI:
                         fontStyleSearchUIValueClicked(player, information);
                         break;
+                    case SearchUI.FONT_SEARCH_UI:
+                        fontSearchUIValueClicked(player, information);
+                        break;
                 }
         }
     }
@@ -269,6 +272,36 @@ public class SearchUIListener implements Listener {
                 } else {
                     player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseItWouldNotMakeADifference", "font style",
                             fontStyle));
+                }
+            }
+            player.closeInventory();
+        }
+    }
+
+    private void fontSearchUIValueClicked(Player player, String[] information) {
+        String fontName = information[1];
+        if (!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId())) {
+            ConfigManager.setFontName(fontName);
+            for (SearchUI searchUI :
+                    TextGenerator.getInstance().getSearchUIListener().getSearchUISToListenTo().values()) {
+                if (!(searchUI instanceof FontSearchUI)) continue;
+                searchUI.updateCurrentSearchUIItems();
+            }
+        } else {
+            CurrentEditedText currentEditedText =
+                    TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().get(player.getUniqueId());
+            if (Objects.equals(fontName, currentEditedText.getTextInstance().getFontName())) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
+                        ".deniedBecauseValueAlreadySelected", "font", fontName));
+            } else {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font",
+                        fontName));
+                if (currentEditedText.setFont(fontName)) {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font",
+                            fontName));
+                } else {
+                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseItWouldNotMakeADifference", "font",
+                            fontName));
                 }
             }
             player.closeInventory();

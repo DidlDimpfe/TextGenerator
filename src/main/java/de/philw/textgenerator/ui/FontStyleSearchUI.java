@@ -16,7 +16,7 @@ import java.util.Objects;
 public class FontStyleSearchUI extends SearchUI {
 
     public FontStyleSearchUI(Player player) {
-        super(ChatColor.GREEN + "Select font style", "Search a font style...", player);
+        super(ChatColor.GREEN + "Select a font style", "Search a font style...", player);
     }
 
     @Override

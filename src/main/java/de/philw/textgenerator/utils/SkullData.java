@@ -29,6 +29,22 @@ public class SkullData {
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGQyMTBhOTgxZmZiNGUzOGM5MWJhZmZmYzg2MzA5NTkyN2Q3YTNkMjg3NjlkNDFhZDg3NTY1ZGQ5OTg4OTY2OCJ9fX0=";
     public static final String UNDERLINE =
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTgxYWY5MzljMTZmNzMyZDJkMDQ3NzQxODQ0ZmEyN2UwYjNjMjViNjdjYzNjMjg0OWViZjc1ZmU4YzU0ODI0ZCJ9fX0=";
+    public static final String FONT =
+            "";
+
+    // Fonts
+    public static final String ARIAL =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjZiNzkzMjdmY2M3MTBjNDNmMzU5OGY4ZjAyMGFlZWEyODdjNjNlMTllMWE3NmNiMjUwYzE2MDhkYTdiNDhjOSJ9fX0=";
+    public static final String TIMES_NEW_ROMAN =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWZjZDY2NzMxZDU2NzVjMTE4OWU5NDA1MmEzYWYyNDUxNjI4MTU4MTQzN2NmNzVlYTMzZTZlMTI5NWQ4ZjQ2NyJ9fX0=";
+    public static final String COURIER_NEW =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTk1YzUyYjI2NzkyZjY1YTI5NTE0MTZlOTRkMzhmZDNiZGExZjY2NDhjMmNkNjk2NTBjM2EwZjNiZGU1ZGNiZSJ9fX0=";
+    public static final String PAPYRUS =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGEzZGJiZTI2NTk5ZDE2MzVkNTZjNjAxYmQ1OGJhYjlkYWFjZWU5NjIyOGU1N2QxMTU3ZWY1ZWEyNmVkZjMyZSJ9fX0=";
+    public static final String VIVALDI =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzY3YjJlNDRmZjhlNWJmNzY5NGMxZjY2MDIxZWYwOWVkNzRiZmUxMmRiODgxYTM1ZmQ2MDZmZDI2NTRlZDUzNiJ9fX0=";
+    public static final String RAVIE =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjIzMzM0NjdhYjJkYWVjMjJjMjg4Y2VkNmUzOTM1MTI0ZWJkNzY3YWY3OWI5ZDg1NTM1MmY1NDJkNmJiZDE1ZCJ9fX0=";
 
     // Text styles
     public static final String PLAIN =

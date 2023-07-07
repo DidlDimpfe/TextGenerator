@@ -11,6 +11,9 @@ public enum FontStyle {
 
     private final String display;
     private final String skullData;
+    public String getSkullData() {
+        return skullData;
+    }
     FontStyle(String display, String skullData) {
         this.display = display;
         this.skullData = skullData;
@@ -20,9 +23,6 @@ public enum FontStyle {
         return display;
     }
 
-    public String getSkullData() {
-        return skullData;
-    }
 
     public String getSavedInFile() {
         String[] words = name().split("_");

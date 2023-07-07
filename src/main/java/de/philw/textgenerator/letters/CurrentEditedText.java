@@ -515,6 +515,14 @@ public class CurrentEditedText {
         return true;
     }
 
+    public boolean setFont(String fontName) {
+        if (textInstance.getFontSize() < 9) return false;
+        textInstance.setFontName(fontName);
+        updateBlockArray();
+        updateBlocksInWorld(true);
+        return true;
+    }
+
     public boolean setBlock(de.philw.textgenerator.ui.value.Block block) {
         if (textInstance.getFontSize() < 9 && block.getSlabAndStairsID() == null) return false;
         this.textInstance.setBlock(block);

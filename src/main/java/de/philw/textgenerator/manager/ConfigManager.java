@@ -50,6 +50,11 @@ public class ConfigManager {
         return fontName;
     }
 
+    public static void setFontName(String fontName) {
+        config.set("textSettings.fontName", fontName);
+        saveConfig();
+    }
+
     public static int getFontSize() {
         String size = config.getString("textSettings.fontSize");
         if (!Validator.isValidFontSize(size)) {

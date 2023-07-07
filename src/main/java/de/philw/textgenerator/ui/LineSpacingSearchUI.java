@@ -16,7 +16,7 @@ public class LineSpacingSearchUI extends SearchUI {
 
 
     public LineSpacingSearchUI(Player player) {
-        super(ChatColor.GREEN + "Select line spacing", "Search a line spacing...", player);
+        super(ChatColor.GREEN + "Select a line spacing", "Search a line spacing...", player);
     }
 
     @Override
