@@ -22,7 +22,7 @@ public class SkullData {
     public static final String CHANGE_BLOCKS =
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWE0YzQ2OGE2ZGZiZWU5OTdhMmM1MmQzMDY3YTc4ODUzM2ZhNmQ4NmE5MzBlMTM0ODQ4ODBhMzlkNTU4NmZlOSJ9fX0=";
     public static final String DRAG_TO_MOVE =
-            "";
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2RjZDE0Y2I5NmM1YmU1NTQ3OGVhYTczMTgxYjA2ZDg4MThiNjE5YmJkNTcxMTM3NTRlMDcwZGU1MDI5Y2JiNCJ9fX0=";
     public static final String PLACE_RANGE =
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjZjYTlmNGJiOWExM2Q4YjJlYzkxOTFlYWZmMjJkM2U4ODcwZGI1OTRmOTE5NDI0ODViOTc3MmE3MzI0ZTkzZiJ9fX0=";
     public static final String FONT_STYLE =
@@ -30,7 +30,7 @@ public class SkullData {
     public static final String UNDERLINE =
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTgxYWY5MzljMTZmNzMyZDJkMDQ3NzQxODQ0ZmEyN2UwYjNjMjViNjdjYzNjMjg0OWViZjc1ZmU4YzU0ODI0ZCJ9fX0=";
     public static final String FONT =
-            "";
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjczZmRjOGVjNzE1MzQ2MDJjZWE4ZDA3ZDczZmU4YWYzN2MyY2M5YjIwMTFjMzRhYTQxMzIxZWNmNTQ0OTlhYSJ9fX0=";
 
     // Fonts
     public static final String ARIAL =

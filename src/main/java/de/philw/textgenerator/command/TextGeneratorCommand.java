@@ -12,10 +12,9 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TextGeneratorCommand extends Command {
 
@@ -29,6 +28,25 @@ public class TextGeneratorCommand extends Command {
     }
 
     public List<String> onTabComplete(CommandSender sender, String[] args) {
+        Player player = ((Player) sender);
+        // General
+        if (args.length == 1) {
+            if (currentEditedTexts.containsKey(player.getUniqueId())) {
+                return StringUtil.copyPartialMatches(args[0], Arrays.asList("edit", "confirm", "cancel", "move", "destroy", "refresh", "settext", "reset", "remove"), new ArrayList<>());
+            } else {
+                return StringUtil.copyPartialMatches(args[0], Arrays.asList("settings", "generate", "edit"), new ArrayList<>());
+            }
+        }
+        // edit
+        if (args.length == 2 && args[0].equalsIgnoreCase("edit")) {
+            if (currentEditedTexts.containsKey(player.getUniqueId())) {
+                return StringUtil.copyPartialMatches(args[1], Collections.singletonList("menu"), new ArrayList<>());
+            } else {
+                return StringUtil.copyPartialMatches(args[1], Collections.singletonList("this"), new ArrayList<>());
+            }
+        }
+
+
         return null;
     }
 

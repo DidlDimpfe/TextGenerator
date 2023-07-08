@@ -6,6 +6,7 @@ import de.philw.textgenerator.utils.SkullData;
 import de.philw.textgenerator.utils.UIUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,20 +17,21 @@ import java.util.Objects;
 
 public class SettingsUI {
 
-    protected final static int FONT_SIZE_INDEX = 0;
-    protected final static int LINE_SPACING_INDEX = 1;
-    protected final static int BLOCKS_INDEX = 2;
-    protected final static int DRAG_TO_MOVE_INDEX = 3;
-    protected final static int PLACE_RANGE_INDEX = 4;
-    protected final static int FONT_STYLE_INDEX = 5;
-    protected final static int UNDERLINE_INDEX = 6;
-    protected final static int FONT_INDEX = 7;
+    protected final static int FONT_SIZE_INDEX = 9;
+    protected final static int LINE_SPACING_INDEX = 13;
+    protected final static int BLOCKS_INDEX = 11;
+    protected final static int DRAG_TO_MOVE_INDEX = 15;
+    protected final static int PLACE_RANGE_INDEX = 14;
+    protected final static int FONT_STYLE_INDEX = 12;
+    protected final static int UNDERLINE_INDEX = 16;
+    protected final static int FONT_INDEX = 10;
+    private final static int[] SPACE_INDEXES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
 
     private final Player player;
 
     public SettingsUI(Player player) {
         this.player = player;
-        Inventory inventory = Bukkit.createInventory(null, 54, ChatColor.GREEN + (isEditMode() ? "TextGenerator edit menu" : "TextGenerator settings"));
+        Inventory inventory = Bukkit.createInventory(null, 27, ChatColor.GREEN + (isEditMode() ? "TextGenerator edit menu" : "TextGenerator settings"));
 
         inventory.setItem(FONT_SIZE_INDEX, getFontSizeItemStack());
         inventory.setItem(LINE_SPACING_INDEX, getLineSpacingItemStack());
@@ -39,6 +41,13 @@ public class SettingsUI {
         inventory.setItem(FONT_STYLE_INDEX, getFontStyleItemStack());
         inventory.setItem(UNDERLINE_INDEX, getUnderlineItemStack());
         inventory.setItem(FONT_INDEX, getFontItemStack());
+        for (int spaceIndex: SPACE_INDEXES) {
+            ItemStack itemStack = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            Objects.requireNonNull(itemMeta).setDisplayName(" ");
+            itemStack.setItemMeta(itemMeta);
+            inventory.setItem(spaceIndex, itemStack);
+        }
         player.openInventory(inventory);
     }
 

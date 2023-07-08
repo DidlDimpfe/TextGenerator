@@ -36,8 +36,10 @@ move:
 changedValueOfCurrentText:
   success: "♦success♦&rYou changed the {0} of your current text to \"{1}\"!"
   deniedBecauseValueAlreadySelected: "♦denied♦&rYou have already selected the {0} \"{1}\"!"
-  deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected: "♦denied♦&rThe block \"{0}\" has no slab or stair to generate it so small. Pick another block or another font size!"
-  deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid: "♦denied♦&rThe text \"{0}\" has invalid characters for the small font size. Pick another text or another font size!"
+  deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected: "♦denied♦&rThe block \"{0}\" has no slab or stair to generate it so small. Pick another block or at least 9 as a font size!"
+  deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid: "♦denied♦&rThe text \"{0}\" has invalid characters for the small font size. Pick another text or at least 9 as a font size!"
+  deniedBecauseItWouldNotMakeADifference: "♦denied♦&rChanging the {0} to \"{1}\" would not make a difference, because a small font size is selected. Pick at least 9 as a font size!"
+  specificFontSizeInfo: "♦info♦&rYou selected a specific for Minecraft designed font size with slabs and stairs. This font size does not differ between large and lower case, and you can't change the font and font style. Pick at least 9 as a font size, if you do not want this."
 setText:
   success: "♦success♦&rYou changed the text to \"{0}\"!"
   deniedBecauseNotEditingSomething: "♦denied♦&rYou are not editing something to change the text!"

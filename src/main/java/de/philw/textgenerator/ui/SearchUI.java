@@ -67,7 +67,7 @@ public abstract class SearchUI {
 
         //Add fill items
         for (int index : SPACE_INDEXES) {
-            ItemStack itemStack = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+            ItemStack itemStack = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
             ItemMeta itemMeta = itemStack.getItemMeta();
             Objects.requireNonNull(itemMeta).setDisplayName(" ");
             itemStack.setItemMeta(itemMeta);
