@@ -1,4 +1,5 @@
 name: TextGenerator
-version: '${project.version}'
+version: 1.0.0
 main: de.philw.textgenerator.TextGenerator
 api-version: 1.19
+description: Create beautiful texts in your Minecraft world and customize it however you want!

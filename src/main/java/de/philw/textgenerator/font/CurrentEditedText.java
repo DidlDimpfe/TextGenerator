@@ -1,4 +1,4 @@
-package de.philw.textgenerator.letters;
+package de.philw.textgenerator.font;
 
 import de.philw.textgenerator.TextGenerator;
 import de.philw.textgenerator.listener.NoMoveWhileGenerateListener;
@@ -111,14 +111,6 @@ public class CurrentEditedText {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
                 try {
                     if (blocks[heightIndex][widthIndex] == null) {
-                        Location previewedLocation = GenerateUtil.editLocation(textInstance,
-                                textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0, 0, 0);
-                        assert previewedLocation != null;
-                        if (previewedLocation.getBlock().getType() != Material.AIR) {
-                            currentlyPreviewedBlocks.add(previewedLocation);
-                            notTheSameAsItWas = true;
-                            previewedLocation.getBlock().setMetadata(FastBlockUpdate.metaDataKey, FastBlockUpdate.metaDataValue);
-                        }
                         continue;
                     }
                     Location hereIsBlockLocation = GenerateUtil.editLocation(textInstance,
@@ -268,6 +260,9 @@ public class CurrentEditedText {
         FastBlockUpdate airBuilder = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
+                if (blocks[heightIndex][widthIndex] == null) {
+                    continue;
+                }
                 try {
                     airBuilder.addBlock(GenerateUtil.editLocation(textInstance,
                             textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0, 0, 0), Material.AIR.createBlockData());

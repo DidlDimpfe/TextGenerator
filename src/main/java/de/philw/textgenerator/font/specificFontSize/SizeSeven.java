@@ -1,4 +1,4 @@
-package de.philw.textgenerator.letters.specificFontSize;
+package de.philw.textgenerator.font.specificFontSize;
 
 import de.philw.textgenerator.ui.value.Block;
 import de.philw.textgenerator.utils.Direction;

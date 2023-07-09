@@ -11,7 +11,7 @@
 
     <name>TextGenerator</name>
 
-    <description>TextGenerator Plugin!</description>
+    <description>Create beautiful texts in your Minecraft world and customize it however you want!</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

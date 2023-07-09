@@ -1,7 +1,7 @@
 package de.philw.textgenerator.utils;
 
-import de.philw.textgenerator.letters.CurrentEditedText;
-import de.philw.textgenerator.letters.specificFontSize.SpecificFontSize;
+import de.philw.textgenerator.font.CurrentEditedText;
+import de.philw.textgenerator.font.specificFontSize.SpecificFontSize;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.manager.GeneratedTextsManager;
 import org.bukkit.Location;

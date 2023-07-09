@@ -1,7 +1,7 @@
 package de.philw.textgenerator.listener;
 
 import de.philw.textgenerator.TextGenerator;
-import de.philw.textgenerator.letters.CurrentEditedText;
+import de.philw.textgenerator.font.CurrentEditedText;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;

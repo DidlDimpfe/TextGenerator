@@ -1,7 +1,7 @@
 package de.philw.textgenerator;
 
 import de.philw.textgenerator.command.TextGeneratorCommand;
-import de.philw.textgenerator.letters.CurrentEditedText;
+import de.philw.textgenerator.font.CurrentEditedText;
 import de.philw.textgenerator.listener.BlockDestroyListener;
 import de.philw.textgenerator.listener.LeaveListener;
 import de.philw.textgenerator.listener.NoMoveWhileGenerateListener;

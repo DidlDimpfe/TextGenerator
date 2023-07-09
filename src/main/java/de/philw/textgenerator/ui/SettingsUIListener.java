@@ -1,7 +1,7 @@
 package de.philw.textgenerator.ui;
 
 import de.philw.textgenerator.TextGenerator;
-import de.philw.textgenerator.letters.CurrentEditedText;
+import de.philw.textgenerator.font.CurrentEditedText;
 import de.philw.textgenerator.manager.ConfigManager;
 import de.philw.textgenerator.manager.MessagesManager;
 import org.bukkit.ChatColor;

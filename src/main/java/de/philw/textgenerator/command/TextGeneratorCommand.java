@@ -1,6 +1,6 @@
 package de.philw.textgenerator.command;
 
-import de.philw.textgenerator.letters.CurrentEditedText;
+import de.philw.textgenerator.font.CurrentEditedText;
 import de.philw.textgenerator.manager.MessagesManager;
 import de.philw.textgenerator.ui.SettingsUI;
 import de.philw.textgenerator.utils.GenerateUtil;
