@@ -9,7 +9,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -51,9 +50,7 @@ public class TextGeneratorCommand extends Command {
     }
 
     private void helpRequested(Player player) {
-        player.sendMessage(ChatColor.GREEN + "The textgenerator command has the following options:");
-        player.sendMessage(ChatColor.GREEN + "/textgenerator help");
-        player.sendMessage(ChatColor.GREEN + "/textgenerator generate <input>");
+        player.sendMessage(MessagesManager.getMessage("helpRequested"));
     }
 
     @Override

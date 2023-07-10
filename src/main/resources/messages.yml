@@ -57,3 +57,4 @@ needPermissionForCommand: "♦denied♦&rYou need the \"{1}\" permission to use 
 blockBreakFromCurrentEditedTextDisabled: "♦denied♦&rYou cannot destroy a block from a text that is currently edited!"
 textCannotBeBuildBecauseItWouldOverrideOtherBlocks: "♦info♦&rThe text cannot be build because it would override other Blocks. Try another Location!"
 placementRangeIndexUIDenied: "♦denied♦&rYou cannot change the distance between you and the text when \"Drag to move\" is not activated. Activate it first!"
+helpRequested: "♦info♦&rSee the available commands here: https://modrinth.com/plugin/textgenerator"

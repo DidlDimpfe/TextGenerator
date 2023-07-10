@@ -189,7 +189,7 @@ public class SearchUIListener implements Listener {
                 if (changeValid == CurrentEditedText.VALID) {
                     player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font size",
                             fontSize));
-                    player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.specificFontSizeInfo"));
+                    if (currentEditedText.getTextInstance().getFontSize() < 9) player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.specificFontSizeInfo"));
                 } else if (changeValid == CurrentEditedText.BLOCK_HAS_NO_SLAB_OR_STAIR) {
                     player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseBlockHasNoSlabOrStairAndSpecificFontSizeIsSelected", currentEditedText.getTextInstance().getBlock().getDisplay()));
                 } else if (changeValid == CurrentEditedText.TEXT_IS_NOT_VALID_FOR_SPECIFIC_FONT_SIZE) {
@@ -265,8 +265,6 @@ public class SearchUIListener implements Listener {
                 player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
                         ".deniedBecauseValueAlreadySelected", "font style", fontStyle));
             } else {
-                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font style",
-                        fontStyle));
                 if (currentEditedText.setFontStyle(fontStyleAsNumber)) {
                     player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font style",
                             fontStyle));

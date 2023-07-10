@@ -260,10 +260,10 @@ public class CurrentEditedText {
         FastBlockUpdate airBuilder = new FastBlockUpdate(TextGenerator.getInstance(), 100000);
         for (int heightIndex = 0; heightIndex < blocks.length; heightIndex++) {
             for (int widthIndex = 0; widthIndex < blocks[0].length; widthIndex++) {
-                if (blocks[heightIndex][widthIndex] == null) {
-                    continue;
-                }
                 try {
+                    if (blocks[heightIndex][widthIndex] == null) {
+                        continue;
+                    }
                     airBuilder.addBlock(GenerateUtil.editLocation(textInstance,
                             textInstance.getTopLeftLocation(), widthIndex, heightIndex, 0, 0, 0, 0), Material.AIR.createBlockData());
                 } catch (IndexOutOfBoundsException ignored) {
