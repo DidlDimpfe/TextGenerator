@@ -29,7 +29,7 @@
 <p>/tg cancel - Destroys the text (when it was previously generated) or sets the text to its previous state (when it was edited)</p>
 <p>/tg destroy - Destroys the text</p>
 <p>/tg reset - Destroys all build blocks and builds it again</p>
-<p>/tg destroy - Removes the text from the plugin (the text cannot be edited anymore)</p>
+<p>/tg remove - Removes the text from the plugin (the text cannot be edited anymore)</p>
 <p>/tg setText [Your text] - Changes the text </p>
 
 <h2>The configuration file </h2>
