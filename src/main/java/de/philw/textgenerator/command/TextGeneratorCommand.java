@@ -267,6 +267,10 @@ public class TextGeneratorCommand extends Command {
             String newText = builder.substring(0, builder.toString().length() - 1);
 
             CurrentEditedText currentEditedText = currentEditedTexts.get(player.getUniqueId());
+            if (currentEditedText.getTextInstance().getText().equals(newText)) {
+                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseValueAlreadySelected", "text", newText));
+                return true;
+            }
             if (!currentEditedText.setText(newText)) {
                 player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.deniedBecauseSpecificFontSizeIsSelectedButTextIsNotValid", newText));
             } else {
