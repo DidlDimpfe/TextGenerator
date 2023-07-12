@@ -30,7 +30,7 @@
 <p>/tg destroy - Destroys the text</p>
 <p>/tg reset - Destroys all build blocks and builds it again</p>
 <p>/tg destroy - Removes the text from the plugin (the text cannot be edited anymore)</p>
-<p>/tg setText [Your text] - Changes the text</p>
+<p>/tg setText [Your text] - Changes the text </p>
 
 <h2>The configuration file </h2>
 <pre>
