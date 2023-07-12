@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Objects;
 
@@ -21,13 +20,8 @@ public class MessagesManager {
         File file = new File(TextGenerator.getInstance().getDataFolder(), "messages.yml");
 
         if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                System.err.println(TextGenerator.getMessageBeginning() + "Could not load file messages.yml");
-            }
+            TextGenerator.getInstance().saveResource("messages.yml", true);
         }
-
         messages = YamlConfiguration.loadConfiguration(file);
     }
 
