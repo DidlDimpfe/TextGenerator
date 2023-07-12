@@ -293,8 +293,6 @@ public class SearchUIListener implements Listener {
                 player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText" +
                         ".deniedBecauseValueAlreadySelected", "font", fontName));
             } else {
-                player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font",
-                        fontName));
                 if (currentEditedText.setFont(fontName)) {
                     player.sendMessage(MessagesManager.getMessage("changedValueOfCurrentText.success", "font",
                             fontName));
