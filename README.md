@@ -12,10 +12,10 @@
 </ul>
 
 <h2>Examples of texts</h2>
-<img src="https://cdn.modrinth.com/data/KR9zve3W/images/c1c4155f1f91d9aba6e9c7d0b7122c8678ffbadc.png"  alt="" width="420" height="315"/>
-<img src="https://cdn.modrinth.com/data/KR9zve3W/images/13911893531aa7abb54cd5d446e26d9422b8da7e.png"  alt="" width="420" height="315"/>
-<img src="https://cdn.modrinth.com/data/KR9zve3W/images/6bced5cc1aa3f86538870677cef70b0bd2a22d5d.png"  alt="" width="420" height="315"/>
-<img src="https://cdn.modrinth.com/data/KR9zve3W/images/08a702a06177475e0f4b384a832069042d602421.png"  alt="" width="420" height="315"/>
+<img src="https://cdn.modrinth.com/data/KR9zve3W/images/c1c4155f1f91d9aba6e9c7d0b7122c8678ffbadc.png"  alt="" width="400" height="250"/>
+<img src="https://cdn.modrinth.com/data/KR9zve3W/images/13911893531aa7abb54cd5d446e26d9422b8da7e.png"  alt="" width="400" height="250"/>
+<img src="https://cdn.modrinth.com/data/KR9zve3W/images/6bced5cc1aa3f86538870677cef70b0bd2a22d5d.png"  alt="" width="400" height="250"/>
+<img src="https://cdn.modrinth.com/data/KR9zve3W/images/08a702a06177475e0f4b384a832069042d602421.png"  alt="" width="400" height="250"/>
 <h2>Commands</h2>
 <h3>When not editing a text:</h3>
 <p>/tg generate [Your text] - Generates a text with your text settings in front of the player</p>
