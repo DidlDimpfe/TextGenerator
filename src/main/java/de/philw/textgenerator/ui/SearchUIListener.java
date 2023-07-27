@@ -72,10 +72,11 @@ public class SearchUIListener implements Listener {
                     AtomicBoolean completed = new AtomicBoolean(false);
                     SearchUI finalClickedSearchUI = clickedSearchUI;
                     new AnvilGUI.Builder()
-                            .onClick((slot, stateSnapshot) -> { // Either use sync or async variant, not both
+                            .onClick((slot, stateSnapshot) -> {
                                 if(slot != AnvilGUI.Slot.OUTPUT) {
                                     return Collections.emptyList();
                                 }
+                                // Search and open the Search UI
                                 finalClickedSearchUI.search(stateSnapshot.getText());
                                 completed.set(true);
                                 return Collections.singletonList(AnvilGUI.ResponseAction.openInventory(finalClickedSearchUI.inventory));
