@@ -16,10 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SearchUIListener implements Listener {
@@ -35,7 +32,6 @@ public class SearchUIListener implements Listener {
         notRemove = new ArrayList<>();
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         SearchUI clickedSearchUI = null;
@@ -76,10 +72,13 @@ public class SearchUIListener implements Listener {
                     AtomicBoolean completed = new AtomicBoolean(false);
                     SearchUI finalClickedSearchUI = clickedSearchUI;
                     new AnvilGUI.Builder()
-                            .onComplete((target, text) -> {
-                                finalClickedSearchUI.search(text);
+                            .onClick((slot, stateSnapshot) -> { // Either use sync or async variant, not both
+                                if(slot != AnvilGUI.Slot.OUTPUT) {
+                                    return Collections.emptyList();
+                                }
+                                finalClickedSearchUI.search(stateSnapshot.getText());
                                 completed.set(true);
-                                return AnvilGUI.Response.openInventory(finalClickedSearchUI.inventory);
+                                return Collections.singletonList(AnvilGUI.ResponseAction.openInventory(finalClickedSearchUI.inventory));
                             })
                             .onClose(stateSnapshot -> {
                                 if (!completed.get()) searchUISToListenTo.remove(player.getUniqueId());
