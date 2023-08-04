@@ -32,6 +32,9 @@
 <p>/tg remove - Removes the text from the plugin (the text cannot be edited anymore)</p>
 <p>/tg setText [Your text] - Changes the text </p>
 
+<h2>PlaceHolderAPI</h2>
+<p>%textgeneratorGeneratedTexts% - Returns a list of all texts ever generated</p>
+
 <h2>The configuration file </h2>
 <pre>
 placementRange: 30

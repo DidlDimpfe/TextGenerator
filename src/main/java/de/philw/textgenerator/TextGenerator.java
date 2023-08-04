@@ -2,6 +2,7 @@ package de.philw.textgenerator;
 
 import de.philw.textgenerator.command.TextGeneratorCommand;
 import de.philw.textgenerator.font.CurrentEditedText;
+import de.philw.textgenerator.holder.GeneratedTextsHolder;
 import de.philw.textgenerator.listener.BlockDestroyListener;
 import de.philw.textgenerator.listener.LeaveListener;
 import de.philw.textgenerator.listener.NoMoveWhileGenerateListener;
@@ -55,6 +56,9 @@ public final class TextGenerator extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SettingsUIListener(), this);
         Bukkit.getPluginManager().registerEvents(new NoMoveWhileGenerateListener(), this);
         Bukkit.getPluginManager().registerEvents(new BlockDestroyListener(), this);
+
+        // Holder
+        new GeneratedTextsHolder().register();
     }
 
     public static TextGenerator getInstance() {

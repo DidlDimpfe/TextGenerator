@@ -57,7 +57,9 @@ public abstract class SearchUI {
         ItemMeta returnArrowItemMeta = Objects.requireNonNull(returnArrowItemStack).getItemMeta();
         Objects.requireNonNull(returnArrowItemMeta).setDisplayName(ChatColor.GREEN + "Return");
         List<String> returnArrowLore = new ArrayList<>();
-        returnArrowLore.add(ChatColor.YELLOW + "Click to go back to TextGenerator settings");
+        returnArrowLore.add(!TextGenerator.getInstance().getTextGeneratorCommand().getCurrentEditedTexts().containsKey(player.getUniqueId()) ?
+                ChatColor.YELLOW + "Click to go back to TextGenerator settings" :
+                ChatColor.YELLOW + "Click to go back to TextGenerator edit menu");
         returnArrowItemMeta.setLore(returnArrowLore);
         returnArrowItemStack.setItemMeta(returnArrowItemMeta);
         inventory.setItem(RETURN_ARROW_INDEX, returnArrowItemStack);
@@ -152,7 +154,7 @@ public abstract class SearchUI {
     }
 
     public void openPage(int page) {
-        if (searchedItems.size() == 0) {
+        if (searchedItems.isEmpty()) {
             clearPage();
             return;
         }

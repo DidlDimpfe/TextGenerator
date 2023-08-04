@@ -115,6 +115,10 @@ public class GeneratedTextsManager {
         saveCraftingTables();
     }
 
+    public static YamlConfiguration getGeneratedTexts() {
+        return generatedTexts;
+    }
+
     /**
      * This method converts a location to a String how the location is stored in the generatedTexts.yml file.
      *
