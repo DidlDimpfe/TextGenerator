@@ -58,6 +58,7 @@ public final class TextGenerator extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BlockDestroyListener(), this);
 
         // Holder
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) return;
         new GeneratedTextsHolder().register();
     }
 

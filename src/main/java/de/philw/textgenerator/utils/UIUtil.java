@@ -16,7 +16,7 @@ public class UIUtil {
         ItemStack skullItemStack = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullItemMeta = (SkullMeta) skullItemStack.getItemMeta();
 
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        GameProfile profile = new GameProfile(UUID.randomUUID(), "Test");
         profile.getProperties().put("textures", new Property("textures", string));
         Field field;
         try {
