@@ -11,6 +11,12 @@
 <li>The text cannot override other blocks</li>
 </ul>
 
+<h2>Build instructions</h2>
+
+```./mvnw clean package```
+
+<p>The output .jar will be in target/</p>
+
 <h2>Examples of texts</h2>
 <img src="https://cdn.modrinth.com/data/KR9zve3W/images/c1c4155f1f91d9aba6e9c7d0b7122c8678ffbadc.png"  alt="" width="400" height="250"/>
 <img src="https://cdn.modrinth.com/data/KR9zve3W/images/13911893531aa7abb54cd5d446e26d9422b8da7e.png"  alt="" width="400" height="250"/>
