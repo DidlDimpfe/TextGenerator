@@ -339,6 +339,7 @@ public class CurrentEditedText {
             int nextY = playerLocationY + (int) normalVector.clone().multiply(i).getY();
             int nextZ = playerLocationZ + (int) normalVector.clone().multiply(i).getZ();
 
+            // Max/Min height
             if (nextY > 319 || nextY < -64) {
                 return null;
             }
@@ -374,7 +375,7 @@ public class CurrentEditedText {
         }
         toSpawnParticleLocation.add(topLeft);
 
-        double distance = 0.15;
+        double distance = 0.25;
 
         // Top left to top right
         for (double count = 0; count <= blocks[0].length + 0.2; count += distance) {
@@ -398,7 +399,7 @@ public class CurrentEditedText {
         }
 
         for (Location loc : toSpawnParticleLocation) {
-            player.spawnParticle(Particle.REDSTONE, loc, 2, 0, 0, 0, 0,
+            player.spawnParticle(Particle.REDSTONE, loc, 1, 0, 0, 0, 0,
                     new Particle.DustOptions(Color.LIME, 1F));
         }
     }

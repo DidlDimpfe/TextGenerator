@@ -11,9 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static org.bukkit.ChatColor.stripColor;
 
 public class BlockSearchUI extends SearchUI {
 
@@ -63,7 +66,8 @@ public class BlockSearchUI extends SearchUI {
                 itemMeta.setLore(UIUtil.getLore(ChatColor.YELLOW, "Click to change the default Block to " + display));
             }
         }
-        itemMeta.setLocalizedName(SearchUI.BLOCK_SEARCH_UI + ";" + block.name());
+        String data = SearchUI.BLOCK_SEARCH_UI + ";" + stripColor(block.name());
+        itemMeta.getPersistentDataContainer().set(TextGenerator.UI_DATA_KEY, PersistentDataType.STRING, data);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

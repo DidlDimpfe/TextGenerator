@@ -34,8 +34,6 @@ public class GenerateUtil {
 
         graphicsTool.setFont(font);
         FontMetrics fontMetrics = graphicsTool.getFontMetrics();
-        graphicsTool.dispose();
-
         ArrayList<BufferedImage> linesAsBufferedImages = new ArrayList<>();
 
         for (String line : lines) {
@@ -339,97 +337,53 @@ public class GenerateUtil {
     }
 
     private static String[][] getLetter(Character character, TextInstance textInstance, SpecificFontSize specificFontSize) {
-        switch (character) {
-            case 'a':
-                return specificFontSize.getA(textInstance.getBlock(), textInstance.getDirection());
-            case 'b':
-                return specificFontSize.getB(textInstance.getBlock(), textInstance.getDirection());
-            case 'c':
-                return specificFontSize.getC(textInstance.getBlock(), textInstance.getDirection());
-            case 'd':
-                return specificFontSize.getD(textInstance.getBlock(), textInstance.getDirection());
-            case 'e':
-                return specificFontSize.getE(textInstance.getBlock(), textInstance.getDirection());
-            case 'f':
-                return specificFontSize.getF(textInstance.getBlock(), textInstance.getDirection());
-            case 'g':
-                return specificFontSize.getG(textInstance.getBlock(), textInstance.getDirection());
-            case 'h':
-                return specificFontSize.getH(textInstance.getBlock(), textInstance.getDirection());
-            case 'i':
-                return specificFontSize.getI(textInstance.getBlock(), textInstance.getDirection());
-            case 'j':
-                return specificFontSize.getJ(textInstance.getBlock(), textInstance.getDirection());
-            case 'k':
-                return specificFontSize.getK(textInstance.getBlock(), textInstance.getDirection());
-            case 'l':
-                return specificFontSize.getL(textInstance.getBlock(), textInstance.getDirection());
-            case 'm':
-                return specificFontSize.getM(textInstance.getBlock(), textInstance.getDirection());
-            case 'n':
-                return specificFontSize.getN(textInstance.getBlock(), textInstance.getDirection());
-            case 'o':
-                return specificFontSize.getO(textInstance.getBlock(), textInstance.getDirection());
-            case 'p':
-                return specificFontSize.getP(textInstance.getBlock(), textInstance.getDirection());
-            case 'q':
-                return specificFontSize.getQ(textInstance.getBlock(), textInstance.getDirection());
-            case 'r':
-                return specificFontSize.getR(textInstance.getBlock(), textInstance.getDirection());
-            case 's':
-                return specificFontSize.getS(textInstance.getBlock(), textInstance.getDirection());
-            case 't':
-                return specificFontSize.getT(textInstance.getBlock(), textInstance.getDirection());
-            case 'u':
-                return specificFontSize.getU(textInstance.getBlock(), textInstance.getDirection());
-            case 'v':
-                return specificFontSize.getV(textInstance.getBlock(), textInstance.getDirection());
-            case 'w':
-                return specificFontSize.getW(textInstance.getBlock(), textInstance.getDirection());
-            case 'x':
-                return specificFontSize.getX(textInstance.getBlock(), textInstance.getDirection());
-            case 'y':
-                return specificFontSize.getY(textInstance.getBlock(), textInstance.getDirection());
-            case 'z':
-                return specificFontSize.getZ(textInstance.getBlock(), textInstance.getDirection());
-            case '0':
-                return specificFontSize.get0(textInstance.getBlock(), textInstance.getDirection());
-            case '1':
-                return specificFontSize.get1(textInstance.getBlock(), textInstance.getDirection());
-            case '2':
-                return specificFontSize.get2(textInstance.getBlock(), textInstance.getDirection());
-            case '3':
-                return specificFontSize.get3(textInstance.getBlock(), textInstance.getDirection());
-            case '4':
-                return specificFontSize.get4(textInstance.getBlock(), textInstance.getDirection());
-            case '5':
-                return specificFontSize.get5(textInstance.getBlock(), textInstance.getDirection());
-            case '6':
-                return specificFontSize.get6(textInstance.getBlock(), textInstance.getDirection());
-            case '7':
-                return specificFontSize.get7(textInstance.getBlock(), textInstance.getDirection());
-            case '8':
-                return specificFontSize.get8(textInstance.getBlock(), textInstance.getDirection());
-            case '9':
-                return specificFontSize.get9(textInstance.getBlock(), textInstance.getDirection());
-            case '.':
-                return specificFontSize.getFullStop(textInstance.getBlock(), textInstance.getDirection());
-            case ',':
-                return specificFontSize.getComma(textInstance.getBlock(), textInstance.getDirection());
-            case ';':
-                return specificFontSize.getSemicolon(textInstance.getBlock(), textInstance.getDirection());
-            case ':':
-                return specificFontSize.getColon(textInstance.getBlock(), textInstance.getDirection());
-            case '?':
-                return specificFontSize.getQuestionMark(textInstance.getBlock(), textInstance.getDirection());
-            case '!':
-                return specificFontSize.getExclamationMark(textInstance.getBlock(), textInstance.getDirection());
-            case '\'':
-                return specificFontSize.getApostrophe(textInstance.getBlock(), textInstance.getDirection());
-            case '\\':
-                return specificFontSize.getBackslash(textInstance.getBlock(), textInstance.getDirection());
-        }
-        return null;
+        return switch (character) {
+            case 'a' -> specificFontSize.getA(textInstance.getBlock(), textInstance.getDirection());
+            case 'b' -> specificFontSize.getB(textInstance.getBlock(), textInstance.getDirection());
+            case 'c' -> specificFontSize.getC(textInstance.getBlock(), textInstance.getDirection());
+            case 'd' -> specificFontSize.getD(textInstance.getBlock(), textInstance.getDirection());
+            case 'e' -> specificFontSize.getE(textInstance.getBlock(), textInstance.getDirection());
+            case 'f' -> specificFontSize.getF(textInstance.getBlock(), textInstance.getDirection());
+            case 'g' -> specificFontSize.getG(textInstance.getBlock(), textInstance.getDirection());
+            case 'h' -> specificFontSize.getH(textInstance.getBlock(), textInstance.getDirection());
+            case 'i' -> specificFontSize.getI(textInstance.getBlock(), textInstance.getDirection());
+            case 'j' -> specificFontSize.getJ(textInstance.getBlock(), textInstance.getDirection());
+            case 'k' -> specificFontSize.getK(textInstance.getBlock(), textInstance.getDirection());
+            case 'l' -> specificFontSize.getL(textInstance.getBlock(), textInstance.getDirection());
+            case 'm' -> specificFontSize.getM(textInstance.getBlock(), textInstance.getDirection());
+            case 'n' -> specificFontSize.getN(textInstance.getBlock(), textInstance.getDirection());
+            case 'o' -> specificFontSize.getO(textInstance.getBlock(), textInstance.getDirection());
+            case 'p' -> specificFontSize.getP(textInstance.getBlock(), textInstance.getDirection());
+            case 'q' -> specificFontSize.getQ(textInstance.getBlock(), textInstance.getDirection());
+            case 'r' -> specificFontSize.getR(textInstance.getBlock(), textInstance.getDirection());
+            case 's' -> specificFontSize.getS(textInstance.getBlock(), textInstance.getDirection());
+            case 't' -> specificFontSize.getT(textInstance.getBlock(), textInstance.getDirection());
+            case 'u' -> specificFontSize.getU(textInstance.getBlock(), textInstance.getDirection());
+            case 'v' -> specificFontSize.getV(textInstance.getBlock(), textInstance.getDirection());
+            case 'w' -> specificFontSize.getW(textInstance.getBlock(), textInstance.getDirection());
+            case 'x' -> specificFontSize.getX(textInstance.getBlock(), textInstance.getDirection());
+            case 'y' -> specificFontSize.getY(textInstance.getBlock(), textInstance.getDirection());
+            case 'z' -> specificFontSize.getZ(textInstance.getBlock(), textInstance.getDirection());
+            case '0' -> specificFontSize.get0(textInstance.getBlock(), textInstance.getDirection());
+            case '1' -> specificFontSize.get1(textInstance.getBlock(), textInstance.getDirection());
+            case '2' -> specificFontSize.get2(textInstance.getBlock(), textInstance.getDirection());
+            case '3' -> specificFontSize.get3(textInstance.getBlock(), textInstance.getDirection());
+            case '4' -> specificFontSize.get4(textInstance.getBlock(), textInstance.getDirection());
+            case '5' -> specificFontSize.get5(textInstance.getBlock(), textInstance.getDirection());
+            case '6' -> specificFontSize.get6(textInstance.getBlock(), textInstance.getDirection());
+            case '7' -> specificFontSize.get7(textInstance.getBlock(), textInstance.getDirection());
+            case '8' -> specificFontSize.get8(textInstance.getBlock(), textInstance.getDirection());
+            case '9' -> specificFontSize.get9(textInstance.getBlock(), textInstance.getDirection());
+            case '.' -> specificFontSize.getFullStop(textInstance.getBlock(), textInstance.getDirection());
+            case ',' -> specificFontSize.getComma(textInstance.getBlock(), textInstance.getDirection());
+            case ';' -> specificFontSize.getSemicolon(textInstance.getBlock(), textInstance.getDirection());
+            case ':' -> specificFontSize.getColon(textInstance.getBlock(), textInstance.getDirection());
+            case '?' -> specificFontSize.getQuestionMark(textInstance.getBlock(), textInstance.getDirection());
+            case '!' -> specificFontSize.getExclamationMark(textInstance.getBlock(), textInstance.getDirection());
+            case '\'' -> specificFontSize.getApostrophe(textInstance.getBlock(), textInstance.getDirection());
+            case '\\' -> specificFontSize.getBackslash(textInstance.getBlock(), textInstance.getDirection());
+            default -> null;
+        };
     }
 
 }

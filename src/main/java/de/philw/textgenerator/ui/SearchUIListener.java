@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -95,8 +96,9 @@ public class SearchUIListener implements Listener {
                 if (e.getRawSlot() >= SearchUI.RETURN_ARROW_INDEX) return;
                 if (clickedSearchUI.inventory.getItem(e.getRawSlot()) == null) return;
                 String[] information =
-                        Objects.requireNonNull(Objects.requireNonNull(clickedSearchUI.inventory.getItem(e.getRawSlot())).
-                                getItemMeta()).getLocalizedName().split(";");
+                        Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(clickedSearchUI.inventory.getItem(e.getRawSlot())).
+                                getItemMeta()).getPersistentDataContainer().get(TextGenerator.UI_DATA_KEY, PersistentDataType.STRING)).split(";");
+
                 switch (Integer.parseInt(information[0])) {
                     case SearchUI.BLOCK_SEARCH_UI:
                         blockSearchUIValueClicked(player, information);

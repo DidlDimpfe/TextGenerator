@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -61,7 +62,9 @@ public class LineSpacingSearchUI extends SearchUI {
                         "to " + lineSpacingNumber));
             }
         }
-        itemMeta.setLocalizedName(SearchUI.LINE_SPACING_SEARCH_UI + ";" + lineSpacingNumber);
+        String data = SearchUI.LINE_SPACING_SEARCH_UI + ";" + lineSpacingNumber;
+        itemMeta.getPersistentDataContainer().set(TextGenerator.UI_DATA_KEY, PersistentDataType.STRING, data);
+
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

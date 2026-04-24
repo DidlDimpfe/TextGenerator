@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -59,7 +60,8 @@ public class FontStyleSearchUI extends SearchUI {
                         "to " + fontStyleDisplay));
             }
         }
-        itemMeta.setLocalizedName(SearchUI.FONT_STYLE_SEARCH_UI + ";" + fontStyle.getSavedInFile());
+        String data = SearchUI.FONT_STYLE_SEARCH_UI + ";" + fontStyle.getSavedInFile();
+        itemMeta.getPersistentDataContainer().set(TextGenerator.UI_DATA_KEY, PersistentDataType.STRING, data);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

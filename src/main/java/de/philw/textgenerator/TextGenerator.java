@@ -13,6 +13,7 @@ import de.philw.textgenerator.ui.SearchUIListener;
 import de.philw.textgenerator.ui.SettingsUIListener;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TextGenerator extends JavaPlugin {
@@ -20,10 +21,12 @@ public final class TextGenerator extends JavaPlugin {
     private static TextGenerator INSTANCE;
     private SearchUIListener searchUIListener;
     private TextGeneratorCommand textGeneratorCommand;
+    public static NamespacedKey UI_DATA_KEY;
 
     @Override
     public void onEnable() {
         new Metrics(this, 19024);
+        UI_DATA_KEY = new NamespacedKey(this, "ui-data");
 
         INSTANCE = this;
 
